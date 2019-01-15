@@ -90,6 +90,8 @@ public class TopTrumpsCLIApplication {
 				}catch (IOException e) {
 					e.printStackTrace();
 				}
+		}
+	}//createLogFile-end
 
 // required data sent to print as it is created and appended to log file
 	public void printToFile(String line) {
