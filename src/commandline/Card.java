@@ -11,8 +11,8 @@ import java.util.HashMap;
 public class Card {
 	//use a HashMap to link 40 cards with position 0~39th 
 	private HashMap<Integer, String> card = new HashMap<Integer, String>();
-	//ArrayList cardName used to store the Description of cards 
-	private ArrayList<String> cardName = new ArrayList<String>();
+	//ArrayList deck used to store the Description of cards 
+	private ArrayList<String> deck = new ArrayList<String>();
 	// the following 5 ArrayLists store values of 5 categories
 	private ArrayList<String> Size = new ArrayList<String>();
 	private ArrayList<String> Speed = new ArrayList<String>();
@@ -56,8 +56,8 @@ public class Card {
 	
 	public void shuffleCards() {
 	int index = 0;
-	for (String name: cardName) {
-		card.put(index,cardName.get(index));
+	for (String name: deck) {
+		card.put(index,deck.get(index));
 		cardNumber.add(index);
 		index++;
 	}
