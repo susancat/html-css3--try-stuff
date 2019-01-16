@@ -1,7 +1,5 @@
 package commandline;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -21,10 +19,10 @@ public class TopTrumpsCLIApplication {
 		
 		boolean userWantsToQuit = false; // flag to check whether the user wants to quit the application
 		
-		boolean writeGameLogsToFile = false; // Should we write game logs to file?
+		boolean writeGameLogsToFile = true; // Should we write game logs to file?
 //		if (args[0].equalsIgnoreCase("true")) {
 //			writeGameLogsToFile=true; // Command line selection
-//			topTrumps.createLogFile();
+			
 //		}
 		
 		Scanner input = new Scanner(System.in);
@@ -36,10 +34,10 @@ public class TopTrumpsCLIApplication {
 				+ "\nor type 'quit' to exit application:");
 		String choice = input.next();
 		if(choice.equals("1")) {
-			topTrumps.playGame(writeGameLogsToFile);
+			topTrumps.printStats();
 		}
 		else if(choice.equals("2")) {
-			topTrumps.printStats();
+			topTrumps.playGame(writeGameLogsToFile);
 		}
 		else if(choice.equals("quit")) {
 			userWantsToQuit = true;
@@ -51,18 +49,24 @@ public class TopTrumpsCLIApplication {
 
 	public void playGame(boolean logsToFile) {
 		System.out.println("\nGame start\n");
-//		// State
-//				boolean exitGame = false; // flag to check whether the user wants to exit the game
-//				
-//				// Loop until the user wants to exit the game
-//				while (!exitGame) {
-//					
-//					// ----------------------------------------------------
-//					// Add your game logic here based on the requirements
-//					// ----------------------------------------------------
-//					
-//					exitGame=true; // use this when the user wants to exit the game
-//				}//while-end
+		// State
+		boolean exitGame = false; // flag to check whether the user wants to exit the game
+		Card deck = new Card();
+		deck.readStar();
+		deck.shuffleCards();
+		deck.ShareCards();
+		if(logsToFile) {
+		deck.createLogFile();
+		deck.printToFile(deck.cardLog());
+		}
+		// Loop until the user wants to exit the game
+		while (!exitGame) {
+			int rounds = 1;
+			System.out.println("Round " + rounds);
+					
+				
+					exitGame=true; // use this when the user wants to exit the game
+				}//while-end
 		
 		return;
 	}//playGame-end
@@ -71,44 +75,10 @@ public class TopTrumpsCLIApplication {
 //--------------------------------
 // DATABASE WIZARDRY TO GO HERE	
 //--------------------------------
-		System.out.println("stats");
+		System.out.println("these are stats");
 		return;
 	}//printStats-end
 	
 
-// creates new file and overwrites existing
-	void createLogFile() {
-		FileWriter fileW = null;
-		try {
-			fileW = new FileWriter("toptrumps.log");
-		}catch (IOException e) {
-			e.printStackTrace();
-		}finally {
-			if(fileW!=null) 
-				try {
-					fileW.close();
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-	}//createLogFile-end
-
-// required data sent to print as it is created and appended to log file
-	public void printToFile(String line) {
-		FileWriter fileW = null;
-		try {
-			fileW = new FileWriter("toptrumps.log", true);
-			fileW.append(line);
-		}catch (IOException e) {
-			e.printStackTrace();
-		}finally {
-			if(fileW!=null) 
-				try {
-					fileW.close();
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-	}//printToFile-end
 
 }
