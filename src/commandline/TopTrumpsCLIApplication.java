@@ -58,15 +58,22 @@ public class TopTrumpsCLIApplication {
 		// choose first player randomly
 		Random rand = new Random();
 		int firstPlay = rand.nextInt(5) + 1;
-		System.out.println(firstPlay);	
 		// initialise round 1
 		int round = 1;
 		int activePlayer = firstPlay;
 		// Loop until the user wants to exit the game
 		while (!exitGame) {
-			
 			System.out.println("Round " + round);
 			printWhosTurn(activePlayer);
+			if(logsToFile) {
+				deck.printToFile(deck.playersDeckLog());
+				deck.printToFile(deck.activeCardsLog());
+			}
+			
+			
+			
+			
+			
 		// code for testing		
 			System.out.println("round again?");
 			Scanner input = new Scanner(System.in);
@@ -75,7 +82,6 @@ public class TopTrumpsCLIApplication {
 			activePlayer = input.nextInt();
 			if(answer.equals("n")) {
 				exitGame=true; // use this when the user wants to exit the game
-				deck.printToFile(deck.cardLog());
 			}else {
 				round++;
 			}
@@ -92,19 +98,27 @@ public class TopTrumpsCLIApplication {
 		// if flag selected print info to log
 		if(logsToFile) {
 			deck.createLogFile();
-			deck.printToFile(deck.cardLog());
+			deck.printToFile(deck.fullDeckLog());
 		}
 		return deck;
 	}
 	
 	public void printWhosTurn(int player) {
 		if(player == 1) {
-			System.out.println("It's your turn to choose a category");
+			System.out.println("It's your turn to choose a category, your choices are:\n"
+								+ "\t1. height\n"
+								+ "\t2. weight\n"
+								+ "\t3. length\n"
+								+ "\t4. ferocity\n"
+								+ "\t5. intelligence");
 		}else {
 			System.out.println("It's the computers turn to choose a category");
 		}
 	}
 	
+	public void printActiveCard(boolean logsToFile) {
+		
+	}
 	
 	
 	public void printStats() {

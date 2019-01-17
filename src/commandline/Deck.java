@@ -124,18 +124,49 @@ public class Deck {
 		}
 		
 		
-///////////////////////LOG////////////////////////////////////////
+///////////////////////LOGS////////////////////////////////////////
 		
 		
-		public String cardLog() {
-			String log = "\r\nComplete deck: " + card + "\r\n---------------------------------------"
-					+ "\r\nShuffled deck: " + cardNumber + "\r\n---------------------------------------"
-					+ "\r\nPlayer: " + player + "\r\n---------------------------------------"
+		public String fullDeckLog() {
+			String log = "\r\n------------DECK LOG-------------------"
+					+ "\r\nComplete deck: " + card + "\r\n---------------------------------------"
+					+ "\r\nShuffled deck: " + cardNumber + "\r\n---------------------------------------";
+			return log;
+		}
+		
+		public String playersDeckLog() {
+			String log = "\r\n-----PLAYERS DECK LOG------------------"
+					+"\r\nPlayer: " + player + "\r\n---------------------------------------"
 					+ "\r\nAIPlayer1: " + aiPlayer1 + "\r\n---------------------------------------"
 					+ "\r\nAIPlayer2: " + aiPlayer2 + "\r\n---------------------------------------"
 					+ "\r\nAIPlayer3: " + aiPlayer3 + "\r\n---------------------------------------"
 					+ "\r\nAIPlayer4: " + aiPlayer4 + "\r\n---------------------------------------";
 			return log;		
+		}
+		
+		public String activeCardsLog() {
+			String log = "\r\n---------ACTIVE CARD LOG---------------"
+					+ "\r\nPlayer: " + cardName.get(player.get(0)) + ", size: " + size.get(player.get(0)) 
+					+ ", speed: " + speed.get(player.get(0)) + ", range: " + range.get(player.get(0))
+					+ ", firepower: " + firepower.get(player.get(0)) + ", cargo: " + cargo.get(player.get(0))
+					+ "\r\n---------------------------------------"
+					+ "\r\nAIPlayer1: " + cardName.get(aiPlayer1.get(0)) + ", size: " + size.get(aiPlayer1.get(0)) 
+					+ ", speed: " + speed.get(aiPlayer1.get(0)) + ", range: " + range.get(aiPlayer1.get(0))
+					+ ", firepower: " + firepower.get(aiPlayer1.get(0)) + ", cargo: " + cargo.get(aiPlayer1.get(0))
+					+ "\r\n---------------------------------------"
+					+ "\r\nAIPlayer2: " + cardName.get(aiPlayer2.get(0)) + ", size: " + size.get(aiPlayer2.get(0)) 
+					+ ", speed: " + speed.get(aiPlayer2.get(0)) + ", range: " + range.get(aiPlayer2.get(0))
+					+ ", firepower: " + firepower.get(aiPlayer2.get(0)) + ", cargo: " + cargo.get(aiPlayer2.get(0))
+					+ "\r\n---------------------------------------"
+					+ "\r\nAIPlayer3: " + cardName.get(aiPlayer3.get(0)) + ", size: " + size.get(aiPlayer3.get(0)) 
+					+ ", speed: " + speed.get(aiPlayer3.get(0)) + ", range: " + range.get(aiPlayer3.get(0))
+					+ ", firepower: " + firepower.get(aiPlayer3.get(0)) + ", cargo: " + cargo.get(aiPlayer3.get(0))
+					+ "\r\n---------------------------------------"
+					+ "\r\nAIPlayer4: " + cardName.get(aiPlayer4.get(0)) + ", size: " + size.get(aiPlayer4.get(0)) 
+					+ ", speed: " + speed.get(aiPlayer4.get(0)) + ", range: " + range.get(aiPlayer4.get(0))
+					+ ", firepower: " + firepower.get(aiPlayer4.get(0)) + ", cargo: " + cargo.get(aiPlayer4.get(0))
+					+ "\r\n---------------------------------------";
+			return log;
 		}
 		
 		// creates new file and overwrites existing
