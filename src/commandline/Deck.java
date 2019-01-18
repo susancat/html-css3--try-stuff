@@ -118,7 +118,7 @@ public class Deck {
 		public ArrayList<Integer> getCommonDeck() {
 			return commonDeck;
 		}
-
+// and a setter
 		public void setCommonDeck(ArrayList<Integer> commonDeck) {
 			this.commonDeck = commonDeck;
 		}

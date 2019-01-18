@@ -1,6 +1,5 @@
 package commandline;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -24,7 +23,6 @@ public class TopTrumpsCLIApplication {
 		boolean writeGameLogsToFile = true; // Should we write game logs to file?
 //		if (args[0].equalsIgnoreCase("true")) {
 //			writeGameLogsToFile=true; // Command line selection
-			
 //		}
 		
 		Scanner input = new Scanner(System.in);
@@ -63,7 +61,8 @@ public class TopTrumpsCLIApplication {
 		int activePlayer = firstPlay;
 		// Loop until the user wants to exit the game
 		while (!exitGame) {
-			System.out.println("Round " + round);
+			System.out.println("Round " + round + "\nPlayers have drawn their cards");
+			printActiveCard(deck, logsToFile);
 			printWhosTurn(activePlayer);
 			if(logsToFile) {
 				deck.printToFile(deck.playersDeckLog());
@@ -106,17 +105,25 @@ public class TopTrumpsCLIApplication {
 	public void printWhosTurn(int player) {
 		if(player == 1) {
 			System.out.println("It's your turn to choose a category, your choices are:\n"
-								+ "\t1. height\n"
-								+ "\t2. weight\n"
-								+ "\t3. length\n"
-								+ "\t4. ferocity\n"
-								+ "\t5. intelligence");
+								+ "\t1. Size\n"
+								+ "\t2. Speed\n"
+								+ "\t3. Range\n"
+								+ "\t4. Firepower\n"
+								+ "\t5. Cargo\n"
+								+ "Enter the number for your attribute: ");
 		}else {
 			System.out.println("It's the computers turn to choose a category");
 		}
 	}
 	
-	public void printActiveCard(boolean logsToFile) {
+	public void printActiveCard(Deck deck, boolean logsToFile) {
+		int activeCard = deck.getPlayer().get(0);
+		System.out.println("You drew: " + deck.getCardName().get(activeCard) 
+							+ "\n\t> Size: " + deck.getSize().get(activeCard)
+							+ "\n\t> Speed: " + deck.getSpeed().get(activeCard)
+							+ "\n\t> Range: " + deck.getRange().get(activeCard)
+							+ "\n\t> Firepower: " + deck.getFirepower().get(activeCard)
+							+ "\n\t> Cargo: " + deck.getCargo().get(activeCard));
 		
 	}
 	
