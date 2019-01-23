@@ -127,16 +127,22 @@ public class Deck {
  *		for the ai players
  */
 		public void setCommonDeck() {
+			if(!aiPlayer4.isEmpty()) {
 			commonDeck.add(0, aiPlayer4.get(0));
 			aiPlayer4.remove(0);
+			}if(!aiPlayer3.isEmpty()) {
 			commonDeck.add(0, aiPlayer3.get(0));
 			aiPlayer3.remove(0);
+			}if(!aiPlayer2.isEmpty()) {
 			commonDeck.add(0, aiPlayer2.get(0));
 			aiPlayer2.remove(0);
+			}if(!aiPlayer1.isEmpty()) {
 			commonDeck.add(0, aiPlayer1.get(0));
 			aiPlayer1.remove(0);
+			}if(!player.isEmpty()) {
 			commonDeck.add(0, player.get(0));
 			player.remove(0);
+			}
 		}
 		
 		
@@ -161,27 +167,33 @@ public class Deck {
 		}
 		
 		public String activeCardsLog() {
-			String log = "\r\n---------ACTIVE CARD LOG---------------"
-					+ "\r\nPlayer: " + cardName.get(player.get(0)) + ", size: " + size.get(player.get(0)) 
+			String log = "\r\n---------ACTIVE CARD LOG---------------";
+			if(!player.isEmpty()) {
+				log = log + "\r\nPlayer: " + cardName.get(player.get(0)) + ", size: " + size.get(player.get(0)) 
 					+ ", speed: " + speed.get(player.get(0)) + ", range: " + range.get(player.get(0))
 					+ ", firepower: " + firepower.get(player.get(0)) + ", cargo: " + cargo.get(player.get(0))
-					+ "\r\n---------------------------------------"
-					+ "\r\nAIPlayer1: " + cardName.get(aiPlayer1.get(0)) + ", size: " + size.get(aiPlayer1.get(0)) 
+					+ "\r\n---------------------------------------";
+			}if(!aiPlayer1.isEmpty()) {
+				log = log + "\r\nAIPlayer1: " + cardName.get(aiPlayer1.get(0)) + ", size: " + size.get(aiPlayer1.get(0)) 
 					+ ", speed: " + speed.get(aiPlayer1.get(0)) + ", range: " + range.get(aiPlayer1.get(0))
 					+ ", firepower: " + firepower.get(aiPlayer1.get(0)) + ", cargo: " + cargo.get(aiPlayer1.get(0))
-					+ "\r\n---------------------------------------"
-					+ "\r\nAIPlayer2: " + cardName.get(aiPlayer2.get(0)) + ", size: " + size.get(aiPlayer2.get(0)) 
+					+ "\r\n---------------------------------------";
+			}if(!aiPlayer2.isEmpty()) {
+				log = log + "\r\nAIPlayer2: " + cardName.get(aiPlayer2.get(0)) + ", size: " + size.get(aiPlayer2.get(0)) 
 					+ ", speed: " + speed.get(aiPlayer2.get(0)) + ", range: " + range.get(aiPlayer2.get(0))
 					+ ", firepower: " + firepower.get(aiPlayer2.get(0)) + ", cargo: " + cargo.get(aiPlayer2.get(0))
-					+ "\r\n---------------------------------------"
-					+ "\r\nAIPlayer3: " + cardName.get(aiPlayer3.get(0)) + ", size: " + size.get(aiPlayer3.get(0)) 
+					+ "\r\n---------------------------------------";
+			}if(!aiPlayer3.isEmpty()) {
+				log = log + "\r\nAIPlayer3: " + cardName.get(aiPlayer3.get(0)) + ", size: " + size.get(aiPlayer3.get(0)) 
 					+ ", speed: " + speed.get(aiPlayer3.get(0)) + ", range: " + range.get(aiPlayer3.get(0))
 					+ ", firepower: " + firepower.get(aiPlayer3.get(0)) + ", cargo: " + cargo.get(aiPlayer3.get(0))
-					+ "\r\n---------------------------------------"
-					+ "\r\nAIPlayer4: " + cardName.get(aiPlayer4.get(0)) + ", size: " + size.get(aiPlayer4.get(0)) 
+					+ "\r\n---------------------------------------";
+			}if(!aiPlayer4.isEmpty()) {
+				log = log + "\r\nAIPlayer4: " + cardName.get(aiPlayer4.get(0)) + ", size: " + size.get(aiPlayer4.get(0)) 
 					+ ", speed: " + speed.get(aiPlayer4.get(0)) + ", range: " + range.get(aiPlayer4.get(0))
 					+ ", firepower: " + firepower.get(aiPlayer4.get(0)) + ", cargo: " + cargo.get(aiPlayer4.get(0))
 					+ "\r\n---------------------------------------";
+			}
 			return log;
 		}
 		
