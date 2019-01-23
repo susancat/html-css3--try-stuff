@@ -65,12 +65,13 @@ public class TopTrumpsCLIApplication {
 		dealCards(deck, logsToFile); 
 		// choose first player randomly
 		Random rand = new Random();
-		int firstPlay = rand.nextInt(5) + 1;
+		int firstPlay = rand.nextInt(4);
 		// initialise round 1
 		int round = 1;
 		int activePlayer = firstPlay;
 		// Loop until the user wants to exit the game
 		while (!exitGame) {
+			int winnerIndex = -1;
 			System.out.println("Round " + round + "\nPlayers have drawn their cards");
 			printActiveCard(deck, logsToFile);
 			printWhosTurn(activePlayer);
@@ -82,7 +83,7 @@ public class TopTrumpsCLIApplication {
 			if(logsToFile) deck.printToFile(deck.printCommonDeck());
 			int category = chooseCategory(activePlayer);
 			System.out.println("The category is " + printCategory(category));
-			int winnerIndex = roundWinner(category, deck);
+			winnerIndex = roundWinner(category, deck);
 			if(winnerIndex == -1) {
 				System.out.println("This round was a draw, common pile has " 
 						+ deck.getCommonDeck().size() + " cards");
@@ -90,17 +91,14 @@ public class TopTrumpsCLIApplication {
 				printRoundWinner(winnerIndex, deck);
 				printWinningCard(category, winnerIndex, deck);
 			}
-		
-			
-			
-			
-			
-		// code for testing		
-			System.out.println("round again?");
-			String answer = input.nextLine();
-			System.out.println("who won?");
-			activePlayer = input.nextInt();
-			if(answer.equals("n")) {
+//	add common deck to winners array
+			if(winnerIndex != -1) {
+				addCommonDeck(winnerIndex, deck);
+				activePlayer = winnerIndex;
+			}
+// check for winner		
+			boolean win = checkWin(deck);
+			if(win) {
 				exitGame=true; // use this when the user wants to exit the game
 			}else {
 				round++;
@@ -126,7 +124,7 @@ public class TopTrumpsCLIApplication {
 	
 //////////////////WHOS TURN?////////////////////////////////////
 	private void printWhosTurn(int player) {
-		if(player == 1) {
+		if(player == 0) {
 			System.out.println("It's your turn to choose a category, your choices are:\n"
 								+ "\t1. Size\n"
 								+ "\t2. Speed\n"
@@ -141,6 +139,9 @@ public class TopTrumpsCLIApplication {
 	
 ////////////////////////////ACTIVE CARD///////////////////////////////	
 	private void printActiveCard(Deck deck, boolean logsToFile) {
+		if(deck.getPlayer().isEmpty()) {
+			System.out.println("You have no cards left in your deck, your out!");
+		}else {
 		int activeCard = deck.getPlayer().get(0);
 		System.out.println("You drew: " + deck.getCardName().get(activeCard) 
 							+ "\n\t> Size: " + deck.getSize().get(activeCard)
@@ -148,18 +149,35 @@ public class TopTrumpsCLIApplication {
 							+ "\n\t> Range: " + deck.getRange().get(activeCard)
 							+ "\n\t> Firepower: " + deck.getFirepower().get(activeCard)
 							+ "\n\t> Cargo: " + deck.getCargo().get(activeCard));
+		}
 	}//active-end
+	
+///////////////////ADD COMMON DECK////////////////////////////
+	public void addCommonDeck(int index, Deck deck) {
+		if(index == 0) {
+			for(int card : deck.getCommonDeck()) deck.getPlayer().add(card);
+		}else if(index == 1) {
+			for(int card : deck.getCommonDeck()) deck.getAIPlayer1().add(card);
+		}else if(index == 2) {
+			for(int card : deck.getCommonDeck()) deck.getAIPlayer2().add(card);
+		}else if(index == 3) {
+			for(int card : deck.getCommonDeck()) deck.getAIPlayer3().add(card);
+		}else {
+			for(int card : deck.getCommonDeck()) deck.getAIPlayer4().add(card);
+		}
+		deck.getCommonDeck().clear();
+	}
 	
 //////////////CATEGORY//////////////////
 	private int chooseCategory(int ap) {
 		int cat = -1;
-		if(ap == 1) {
+		if(ap == 0) {
 			cat = input.nextInt();
 		}else {
 			Random rand = new Random();
 			cat = rand.nextInt(5) + 1;
 		}
-		return cat;
+		return cat -1;
 	}//cat-end
 	
 /////////////PRINT CATEGORY/////////////////
@@ -182,21 +200,21 @@ public class TopTrumpsCLIApplication {
 //////////////WINNER OF ROUND/////////////////////
 	private int roundWinner(int cat, Deck deck) {
 		ArrayList<Integer> scores = new ArrayList<Integer>();
-			for(int i=0; i <= 4; i++) {
-				if(cat == 1) {
+			for(int i=0; i <= deck.getCommonDeck().size()-1; i++) {
+				if(cat == 0) {
 					scores.add(deck.getSize().get(deck.getCommonDeck().get(i)));
-				}else if(cat== 2) {
+				}else if(cat== 1) {
 					scores.add(deck.getSpeed().get(deck.getCommonDeck().get(i)));
-				}else if(cat == 3) {
+				}else if(cat == 2) {
 					scores.add(deck.getRange().get(deck.getCommonDeck().get(i)));
-				}else if(cat == 4) {
+				}else if(cat == 3) {
 					scores.add(deck.getFirepower().get(deck.getCommonDeck().get(i)));
-				}else {
+				}else if(cat == 4) {
 					scores.add(deck.getCargo().get(deck.getCommonDeck().get(i)));
 				}
 			}
 		int winner = scores.indexOf(Collections.max(scores));
-		for(int i = 0; i <= 4; i++) {
+		for(int i = 0; i <= deck.getCommonDeck().size() -1; i++) {
 			if(scores.get(i) == scores.get(winner) && i != winner) {
 				winner = -1;
 				break;
@@ -256,6 +274,22 @@ public class TopTrumpsCLIApplication {
 		}
 	
 }
+	
+	public boolean checkWin(Deck deck) {
+		boolean win = false;
+		if(deck.getPlayer().size() == 40) {
+			System.out.println("Congratulations, you win!");
+		}else if(deck.getAIPlayer1().size() == 40) {
+			System.out.println("AI player 1 wins, try again");
+		}else if(deck.getAIPlayer2().size() == 40) {
+			System.out.println("AI player 2 wins, try again");
+		}else if(deck.getAIPlayer3().size() == 40) {
+			System.out.println("AI player 3 wins, try again");
+		}else if(deck.getAIPlayer4().size() == 40) {
+			System.out.println("AI player 4 wins, try again");
+		}
+		return win;
+	}
 
 ///////////////////PRINT GAME STATISTICS////////////////
 	private void printStats() {
