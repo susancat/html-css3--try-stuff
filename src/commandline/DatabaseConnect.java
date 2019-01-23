@@ -1,4 +1,4 @@
-
+package commandline;
 import java.sql.Connection;  
 import java.sql.DriverManager; 
 import java.sql.ResultSet;
@@ -20,6 +20,7 @@ public class DatabaseConnect {
 					"postgres", "Psql8544");         
 			System.out.println("Opened database successfully"); 
 		} catch ( Exception e ) { 
+			e.printStackTrace();
 			System.exit(0); 
 		}
 	} 

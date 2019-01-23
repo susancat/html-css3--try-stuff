@@ -118,9 +118,25 @@ public class Deck {
 		public ArrayList<Integer> getCommonDeck() {
 			return commonDeck;
 		}
-// and a setter
-		public void setCommonDeck(ArrayList<Integer> commonDeck) {
-			this.commonDeck = commonDeck;
+
+		/*
+ * 		setCommonDeck loads the card number of index 0 of each player in to
+ * 		the corresponding indexes of the array. The numbers are loaded in reverse 
+ * 		order in to the lefthand side of the array (0) so that 0-4 of the common deck 
+ * 		always points to the correct player, if we agree that 0 = player and 1-4 are used 
+ *		for the ai players
+ */
+		public void setCommonDeck() {
+			commonDeck.add(0, aiPlayer4.get(0));
+			aiPlayer4.remove(0);
+			commonDeck.add(0, aiPlayer3.get(0));
+			aiPlayer3.remove(0);
+			commonDeck.add(0, aiPlayer2.get(0));
+			aiPlayer2.remove(0);
+			commonDeck.add(0, aiPlayer1.get(0));
+			aiPlayer1.remove(0);
+			commonDeck.add(0, player.get(0));
+			player.remove(0);
 		}
 		
 		
@@ -166,6 +182,12 @@ public class Deck {
 					+ ", speed: " + speed.get(aiPlayer4.get(0)) + ", range: " + range.get(aiPlayer4.get(0))
 					+ ", firepower: " + firepower.get(aiPlayer4.get(0)) + ", cargo: " + cargo.get(aiPlayer4.get(0))
 					+ "\r\n---------------------------------------";
+			return log;
+		}
+		
+		public String printCommonDeck() {
+			String log = "\r\n-------------COMMON DECK---------------"
+					+ "\r\nCommon deck: " + commonDeck + "\r\n---------------------------------------";
 			return log;
 		}
 		
