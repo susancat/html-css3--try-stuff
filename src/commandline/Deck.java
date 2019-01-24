@@ -65,7 +65,7 @@ public class Deck {
 	 
 		
 		public void ShareCards() {	
-			players.add(new Player("player"));
+			players.add(new Player("You"));
 			for(int i = 1; i <= 4; i++) {
 				players.add(new Player("AIPlayer" + i));
 			}
@@ -90,9 +90,6 @@ public class Deck {
 			return commonDeck;
 		}
 		
-	
-
-
 		public ArrayList<Player> getPlayers() {
 			return players;
 		}

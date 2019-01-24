@@ -1,12 +1,14 @@
 package commandline;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
 /**
  * Top Trumps command line application
  */
-public class TopTrumpsCLIApplication {
+public class TopTrumpsCLIApplication  {
 
 	/**
 	 * This main method is called by TopTrumps.java when the user specifies that they want to run in
@@ -69,9 +71,8 @@ public class TopTrumpsCLIApplication {
 		int activePlayer = firstPlay;
 		// Loop until the user wants to exit the game
 		while (!exitGame) {
-			int winnerIndex = -1;
 			System.out.println("\nRound " + round + "\nPlayers have drawn their cards"
-					+ "\nYou card is " + deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).getCardName());
+					+ "\nYour card is " + deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).getCardName());
 			if(!playerOut) {
 				System.out.println(deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).toString(0));
 			}
@@ -84,12 +85,17 @@ public class TopTrumpsCLIApplication {
 			}
 			int category = chooseCategory(activePlayer);
 			System.out.println("The category is " + printCategory(category));
-			
+			int roundWinner = roundWinner(category, deck);
 
-//	add common deck to winners array
-			if(winnerIndex != -1) {
-				addCommonDeck(winnerIndex, deck);
-				activePlayer = winnerIndex;
+//	add common deck to winners array or print draw
+			if(roundWinner == -1) {
+				System.out.println("This round was a draw, the common deck has " + deck.getCommonDeck().size() + " cards");
+			}else {
+				addCommonDeck(roundWinner, deck);
+				activePlayer = roundWinner;
+				System.out.println(deck.getPlayers().get(roundWinner).getPName() + " won this round\n"
+						+ "The winning card was " + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).getCardName()
+						+ "\n" + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).toString(category));
 			}
 			deck.clearActiveCards();
 // check for winner		
@@ -135,11 +141,13 @@ public class TopTrumpsCLIApplication {
 	
 	
 ///////////////////ADD COMMON DECK////////////////////////////
-	public void addCommonDeck(int index, Deck deck) {
-		for(int i  : deck.getCommonDeck()) {
-			deck.getPlayers().get(index).addCard(i);
-			deck.getCommonDeck().clear();
+	public void addCommonDeck(int roundWinner, Deck deck) {
+		int i = 0;
+		for(int j  : deck.getCommonDeck()) {
+			deck.getPlayers().get(roundWinner).getHand().add((deck.getCommonDeck().get(i)));
+			i++;
 		}
+		deck.getCommonDeck().clear();
 	}
 	
 //////////////CHOOSE CATEGORY//////////////////
@@ -171,7 +179,33 @@ public class TopTrumpsCLIApplication {
 		return category;
 	}//print cat-end
 	
-
+//////////////WINNER OF ROUND/////////////////
+	public int roundWinner(int cat, Deck deck) {
+		ArrayList<Integer> scores = new ArrayList<Integer>();
+		
+		int i = 0;
+		for(Player p : deck.getPlayers()) {
+			if(cat == 1) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSize());
+			if(cat == 2) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSpeed());
+			if(cat == 3) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getRange());
+			if(cat == 4) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getFirepower());
+			if(cat == 5) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getCargo());
+			i++;
+		} 
+/*
+ * to determine the name of round winner we ask for the index of the player who holds the card with the max score
+ * we can then match this with the index of the winning player
+ */
+		int maxScoreIndex = scores.indexOf(Collections.max(scores));
+		i = 0;
+		for(int s : scores) {
+			if(scores.get(maxScoreIndex) == scores.get(i) && scores.indexOf(maxScoreIndex) != scores.indexOf(i)) {
+				maxScoreIndex = -1;
+				i++;
+			}
+		}
+		return maxScoreIndex;
+	}
 
 ///////////////////PRINT GAME STATISTICS////////////////
 	private void printStats() {
@@ -181,6 +215,7 @@ public class TopTrumpsCLIApplication {
 		System.out.println("these are stats");
 		return;
 	}//printStats-end
+
 
 
 
