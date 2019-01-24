@@ -199,10 +199,13 @@ public class TopTrumpsCLIApplication  {
 		int maxScoreIndex = scores.indexOf(Collections.max(scores));
 		i = 0;
 		for(int s : scores) {
-			if(scores.get(maxScoreIndex) == scores.get(i) && scores.indexOf(maxScoreIndex) != scores.indexOf(i)) {
+			if(scores.get(maxScoreIndex) == scores.get(i))  {
+				if(scores.indexOf(maxScoreIndex) != scores.indexOf(i)) {
 				maxScoreIndex = -1;
-				i++;
+				break;	
+				}
 			}
+			i++;
 		}
 		return maxScoreIndex;
 	}
