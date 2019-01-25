@@ -9,52 +9,54 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Deck {
-	//use a HashMap to link 40 cards with position 0~39th 
+	//use a HashMap to link 40 cards with position 0~39th for illustration in log
 	private HashMap<Integer, String> card = new HashMap<Integer, String>();
-	//ArrayList deck used to store the Description of cards 
-	private ArrayList<String> cardName = new ArrayList<String>();
-	// the following 5 ArrayLists store values of 5 categories
-	private ArrayList<Integer> size = new ArrayList<Integer>();
-	private ArrayList<Integer> speed = new ArrayList<Integer>();
-	private ArrayList<Integer> range = new ArrayList<Integer>();
-	private ArrayList<Integer> firepower = new ArrayList<Integer>();
-	private ArrayList<Integer> cargo = new ArrayList<Integer>();
+	
+	private ArrayList<Card> cardDeck = new ArrayList<Card>();
+	
+	private ArrayList<Player> players = new ArrayList<Player>();
+	
+
 	//this ArrayList store card number used to be shuffled, its value link to card name one on one 
 	private ArrayList<Integer> cardNumber = new ArrayList<Integer>();
-	//the following 5 ArrayList store cards shared by deck to every player
-	private ArrayList<Integer> player = new ArrayList<Integer>();
-	private ArrayList<Integer> aiPlayer1 = new ArrayList<Integer>();
-	private ArrayList<Integer> aiPlayer2 = new ArrayList<Integer>();
-	private ArrayList<Integer> aiPlayer3 = new ArrayList<Integer>();
-	private ArrayList<Integer> aiPlayer4= new ArrayList<Integer>();
+
 	//common deck
 	private ArrayList<Integer> commonDeck = new ArrayList<Integer>();
+
 	
-	public void readStar() {
-		
+	public void loadDeck() {
+		String cardName = "";
+		int size = 0;
+		int speed = 0;
+		int range = 0;
+		int firepower = 0;
+		int cargo = 0;
 		try { 
 			BufferedReader bfReader = new BufferedReader(new FileReader("StarCitizenDeck.txt"));
 	        bfReader.readLine();//the header will not be read
 	        String line = null; 
-	        while((line=bfReader.readLine())!=null){ 
-	            String item[] = line.split(" ");//data in file is divided by space
-	            cardName.add(item[0]);
-	            size.add(Integer.valueOf(item[1]));
-	            speed.add(Integer.valueOf(item[2]));
-	            range.add(Integer.valueOf(item[3]));
-	            firepower.add(Integer.valueOf(item[4]));
-	            cargo.add(Integer.valueOf(item[5]));
+	        while((line=bfReader.readLine())!=null){     
+	           String item[] = line.split(" ");//data in file is divided by space
+	           cardName = item[0];
+	           size = Integer.valueOf(item[1]);
+	           speed = Integer.valueOf(item[2]);
+	           range = Integer.valueOf(item[3]);
+	           firepower = Integer.valueOf(item[4]);
+	           cargo = Integer.valueOf(item[5]);
+	           Card c = new Card(cardName, size, speed, range, firepower, cargo);
+	           cardDeck.add(c);
 	        }      
 	        bfReader.close();
 	     }catch (Exception e) { 
 	                e.printStackTrace(); 
 	      }
+		
 	}
 	
 	public void shuffleCards() {
 	int index = 0;
-	for (String name: cardName) {
-		card.put(index,cardName.get(index));
+	for (Card c: cardDeck) {
+		card.put(index,cardDeck.get(index).getCardName());
 		cardNumber.add(index);
 		index++;
 	}
@@ -63,60 +65,45 @@ public class Deck {
 	 
 		
 		public void ShareCards() {	
+			players.add(new Player("You"));
+			for(int i = 1; i <= 4; i++) {
+				players.add(new Player("AIPlayer" + i));
+			}
 			for (int i = 0; i < cardNumber.size();i++) {
 				if(i%5==0) {
-					player.add(cardNumber.get(i));
+					players.get(0).addCard(cardNumber.get(i));
 				}else if(i%5==1) {
-					aiPlayer1.add(cardNumber.get(i));
+					players.get(1).addCard(cardNumber.get(i));
 				}else if (i%5==2) {
-					aiPlayer2.add(cardNumber.get(i));
+					players.get(2).addCard(cardNumber.get(i));
 				}else if (i%5==3) {
-					aiPlayer3.add(cardNumber.get(i));
+					players.get(3).addCard(cardNumber.get(i));
 				}else {
-					aiPlayer4.add(cardNumber.get(i));
+					players.get(4).addCard(cardNumber.get(i));
 				}
 			}
-		
 		}
 		
 		
 //////////////GETTERS////////////////////////
-		public ArrayList<String> getCardName() {
-			return cardName;
-		}
-		public ArrayList<Integer> getSize() {
-			return size;
-		}
-		public ArrayList<Integer> getSpeed() {
-			return speed;
-		}
-		public ArrayList<Integer> getRange() {
-			return range;
-		}
-		public ArrayList<Integer> getFirepower() {
-			return firepower;
-		}
-		public ArrayList<Integer> getCargo() {
-			return cargo;
-		}
-		public ArrayList<Integer> getPlayer() {
-			return player;
-		}
-		public ArrayList<Integer> getAIPlayer1() {
-			return aiPlayer1;
-		}	
-		public ArrayList<Integer> getAIPlayer2() {
-			return aiPlayer2;
-		}	
-		public ArrayList<Integer> getAIPlayer3() {
-			return aiPlayer3;
-		}	
-		public ArrayList<Integer> getAIPlayer4() {
-			return aiPlayer4;
-		}
-
 		public ArrayList<Integer> getCommonDeck() {
 			return commonDeck;
+		}
+		
+		public ArrayList<Player> getPlayers() {
+			return players;
+		}
+
+		public void setPlayers(ArrayList<Player> players) {
+			this.players = players;
+		}
+
+		public ArrayList<Card> getCardDeck() {
+			return cardDeck;
+		}
+
+		public void setCardDeck(ArrayList<Card> deck) {
+			this.cardDeck = deck;
 		}
 
 		/*
@@ -127,21 +114,18 @@ public class Deck {
  *		for the ai players
  */
 		public void setCommonDeck() {
-			if(!aiPlayer4.isEmpty()) {
-			commonDeck.add(0, aiPlayer4.get(0));
-			aiPlayer4.remove(0);
-			}if(!aiPlayer3.isEmpty()) {
-			commonDeck.add(0, aiPlayer3.get(0));
-			aiPlayer3.remove(0);
-			}if(!aiPlayer2.isEmpty()) {
-			commonDeck.add(0, aiPlayer2.get(0));
-			aiPlayer2.remove(0);
-			}if(!aiPlayer1.isEmpty()) {
-			commonDeck.add(0, aiPlayer1.get(0));
-			aiPlayer1.remove(0);
-			}if(!player.isEmpty()) {
-			commonDeck.add(0, player.get(0));
-			player.remove(0);
+			int i = 0;
+			for(Player p : players) {
+				commonDeck.add(players.get(i).getHand().get(0));
+				i++;
+			}	
+		}
+		
+		public void clearActiveCards() {
+			int i = 0;
+			for(Player p : players) {
+				players.get(i).getHand().remove(0);
+				i++;
 			}
 		}
 		
@@ -152,54 +136,37 @@ public class Deck {
 		public String fullDeckLog() {
 			String log = "\r\n------------DECK LOG-------------------"
 					+ "\r\nComplete deck: " + card + "\r\n---------------------------------------"
-					+ "\r\nShuffled deck: " + cardNumber + "\r\n---------------------------------------";
+					+ "\r\nShuffled deck: " + cardNumber + "\r\n---------------------------------------\r\n";
 			return log;
 		}
 		
 		public String playersDeckLog() {
-			String log = "\r\n-----PLAYERS DECK LOG------------------"
-					+"\r\nPlayer: " + player + "\r\n---------------------------------------"
-					+ "\r\nAIPlayer1: " + aiPlayer1 + "\r\n---------------------------------------"
-					+ "\r\nAIPlayer2: " + aiPlayer2 + "\r\n---------------------------------------"
-					+ "\r\nAIPlayer3: " + aiPlayer3 + "\r\n---------------------------------------"
-					+ "\r\nAIPlayer4: " + aiPlayer4 + "\r\n---------------------------------------";
+			String log = "\r\n-----PLAYERS DECKS---------------------\r\n";
+			int i = 0;
+			for(Player p : players) {
+				log = log + players.get(i).getPName() + ": " + players.get(i).getHand() 
+						+ "\r\n---------------------------------------\r\n";
+				i++;
+			}
+
 			return log;		
 		}
 		
 		public String activeCardsLog() {
-			String log = "\r\n---------ACTIVE CARD LOG---------------";
-			if(!player.isEmpty()) {
-				log = log + "\r\nPlayer: " + cardName.get(player.get(0)) + ", size: " + size.get(player.get(0)) 
-					+ ", speed: " + speed.get(player.get(0)) + ", range: " + range.get(player.get(0))
-					+ ", firepower: " + firepower.get(player.get(0)) + ", cargo: " + cargo.get(player.get(0))
-					+ "\r\n---------------------------------------";
-			}if(!aiPlayer1.isEmpty()) {
-				log = log + "\r\nAIPlayer1: " + cardName.get(aiPlayer1.get(0)) + ", size: " + size.get(aiPlayer1.get(0)) 
-					+ ", speed: " + speed.get(aiPlayer1.get(0)) + ", range: " + range.get(aiPlayer1.get(0))
-					+ ", firepower: " + firepower.get(aiPlayer1.get(0)) + ", cargo: " + cargo.get(aiPlayer1.get(0))
-					+ "\r\n---------------------------------------";
-			}if(!aiPlayer2.isEmpty()) {
-				log = log + "\r\nAIPlayer2: " + cardName.get(aiPlayer2.get(0)) + ", size: " + size.get(aiPlayer2.get(0)) 
-					+ ", speed: " + speed.get(aiPlayer2.get(0)) + ", range: " + range.get(aiPlayer2.get(0))
-					+ ", firepower: " + firepower.get(aiPlayer2.get(0)) + ", cargo: " + cargo.get(aiPlayer2.get(0))
-					+ "\r\n---------------------------------------";
-			}if(!aiPlayer3.isEmpty()) {
-				log = log + "\r\nAIPlayer3: " + cardName.get(aiPlayer3.get(0)) + ", size: " + size.get(aiPlayer3.get(0)) 
-					+ ", speed: " + speed.get(aiPlayer3.get(0)) + ", range: " + range.get(aiPlayer3.get(0))
-					+ ", firepower: " + firepower.get(aiPlayer3.get(0)) + ", cargo: " + cargo.get(aiPlayer3.get(0))
-					+ "\r\n---------------------------------------";
-			}if(!aiPlayer4.isEmpty()) {
-				log = log + "\r\nAIPlayer4: " + cardName.get(aiPlayer4.get(0)) + ", size: " + size.get(aiPlayer4.get(0)) 
-					+ ", speed: " + speed.get(aiPlayer4.get(0)) + ", range: " + range.get(aiPlayer4.get(0))
-					+ ", firepower: " + firepower.get(aiPlayer4.get(0)) + ", cargo: " + cargo.get(aiPlayer4.get(0))
-					+ "\r\n---------------------------------------";
+			String log = "\r\n---------ACTIVE CARDS------------------\r\n";
+			int i = 0;
+			for(Player p : players) {
+				log = log + players.get(i).getPName() + ": " 
+						+ cardDeck.get(players.get(i).getHand().get(0)).log() 
+						+ "\r\n---------------------------------------\r\n";
+				i++;
 			}
 			return log;
 		}
 		
 		public String printCommonDeck() {
-			String log = "\r\n-------------COMMON DECK---------------"
-					+ "\r\nCommon deck: " + commonDeck + "\r\n---------------------------------------";
+			String log = "\r\n-------------COMMON DECK---------------\r\n"
+					+ "Common deck: " + commonDeck + "\r\n---------------------------------------\r\n";
 			return log;
 		}
 		
@@ -210,7 +177,7 @@ public class Deck {
 				fileW = new FileWriter("toptrumps.log");
 				fileW.write("---------------------------------------"
 						  + "\r\n------------TOP TRUMPS LOG-------------"
-						  + "\r\n---------------------------------------\n");
+						  + "\r\n---------------------------------------\r\n");
 			}catch (IOException e) {
 				e.printStackTrace();
 			}finally {
