@@ -185,13 +185,15 @@ public class TopTrumpsCLIApplication  {
 		
 		int i = 0;
 		for(Player p : deck.getPlayers()) {
-			if(cat == 1) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSize());
-			if(cat == 2) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSpeed());
-			if(cat == 3) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getRange());
-			if(cat == 4) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getFirepower());
-			if(cat == 5) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getCargo());
-			i++;
-		} 
+			if(!deck.getPlayers().get(i).getHand().isEmpty()) {
+				if(cat == 1) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSize());
+				if(cat == 2) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSpeed());
+				if(cat == 3) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getRange());
+				if(cat == 4) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getFirepower());
+				if(cat == 5) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getCargo());
+				i++;
+			} 
+		}
 /*
  * to determine the name of round winner we ask for the index of the player who holds the card with the max score
  * we can then match this with the index of the winning player
