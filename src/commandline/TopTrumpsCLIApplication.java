@@ -18,9 +18,21 @@ public class TopTrumpsCLIApplication  {
 	
 // system in scanner in main scope for use throughout class
 	static Scanner input = new Scanner(System.in);
-	int humanNoCardsLeft = 0;
+	private int humanNoCardsLeft = 0;
+	//=========================================DB
+	   private static int numberOfGames=0;
+	   private static int numberofHumanWin =0;
+	   private static int numberofAIWin = 0;
+	   private static int numberOfDraws =0;
+	   private static int numberOfRounds = 0;
+	 //=========================================DB
 
 ///////////////////MAIN////////////////////////////////////
+/*
+ * The main method gives the user the option of playing the game or viewing statistics
+ * it then calls the relevant method based on the users input. The user can also quit
+ * the application by typing 'quit'
+ */
 	public static void main(String[] args) {
 //		create instance so methods do not have to be static
 		TopTrumpsCLIApplication topTrumps = new TopTrumpsCLIApplication();
@@ -46,19 +58,19 @@ public class TopTrumpsCLIApplication  {
 			
 		}
 		else if(choice.equals("quit")) {
-		 // DatabaseConnect.DatabaseOpen();
-		 // DatabaseConnect.insertValues(NumberofGames,HumanWin,AiWin,NumberofDraws,LengthofGames);
-		 // DatabaseConnect.DatabaseOpen();
+			System.out.println("You exited the game");
 			userWantsToQuit = true;
 		}
 		}
 		input.close();
 		System.exit(0);
 	}//main-end
-
-private int finalWinner;
-private String finalWinningCard;
-private int finalCategory;
+	
+	
+// variables for game information
+	private int finalWinner;
+	private String finalWinningCard;
+	private int finalCategory;
 
 ///////////////////PLAY GAME/////////////////////////
 	private void playGame(boolean logsToFile) {
@@ -78,9 +90,8 @@ private int finalCategory;
 		while (!exitGame) {
 			System.out.println("\nRound " + round + "\nPlayers have drawn their cards"
 					+ "\nYour card is " + deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).getCardName());
-			if(!playerOut) {
-				System.out.println(deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).toString(0));
-			}
+			if(!playerOut) System.out.println(deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).toString(0));
+			
 			printWhosTurn(activePlayer);
 			deck.setCommonDeck();
 			if(logsToFile) {
@@ -96,6 +107,10 @@ private int finalCategory;
 //	add common deck to winners array or print draw
 			if(roundWinner == -1) {
 				System.out.println("This round was a draw, the common deck has " + deck.getCommonDeck().size() + " cards");
+				// Database connection variable
+				//=========================================DB
+				numberOfDraws++;
+				//=========================================DB
 			}else {
 				addCommonDeck(roundWinner, deck);
 				activePlayer = roundWinner;
@@ -104,22 +119,44 @@ private int finalCategory;
 				System.out.println(deck.getPlayers().get(roundWinner).getPName() + " won this round\n"
 						+ "The winning card was " + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).getCardName()
 						+ "\n" + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).toString(category));
+				//=========================================DB
+				String winnerofround = deck.getPlayers().get(roundWinner).getPName();
+				if (winnerofround.startsWith("A")){
+					numberofAIWin++;
+				}else {
+						numberofHumanWin++;
+						//=========================================DB
+				}
 			}
 			humanNoCardsLeft = deck.clearActiveCards();//equals to '1' if human has no cards left
+			
 // check for winner		
-			boolean win = false;//checkWin(deck);
+		boolean win = false;//checkWin(deck);
 			if(win) {
-				exitGame=true; // use this when the user wants to exit the game
-			}else {
-				round++;
-			}
-				}//while-end
+					//=========================================DB
+					numberOfGames++;
+//					DatabaseConnect.DatabaseOpen();
+//					DatabaseConnect.insertValues(numberOfGames,numberofHumanWin,numberofAIWin,numberOfDraws,numberOfRounds);
+//					DatabaseConnect.DatabaseOpen();
+					//=========================================DB
+					exitGame=true; // use this when the user wants to exit the game
+					}else {
+							round++;
+							// Round get increment from here to database
+							// Database connection variable 
+							//=========================================DB
+							numberOfRounds++;
+							//=========================================DB
+					}
+			
+		}//while-end
 		
 //		print final winner and final card
 		System.out.println(deck.getPlayers().get(finalWinner).getPName() + " won this round\n"
 				+ "The winning card was " + deck.getCardDeck().get(deck.getPlayers().get(finalWinner).getHand().get(0)).getCardName()
 				+ "\n" + deck.getCardDeck().get(deck.getPlayers().get(finalWinner).getHand().get(0)).toString(finalCategory));
 		return;
+		
 	}//playGame-end
 
 ///////////////DEAL CARDS////////////////////////////////////
@@ -226,10 +263,11 @@ private int finalCategory;
 
 ///////////////////PRINT GAME STATISTICS////////////////
 	private void printStats() {
-//--------------------------------
-// DATABASE WIZARDRY TO GO HERE	
-//--------------------------------
-		System.out.println("these are stats");
+		//=========================================DB
+//		DatabaseConnect.DatabaseOpen();
+//		DatabaseConnect.GameNumberdb();
+//		DatabaseConnect.DatabaseClose();
+		//=========================================DB
 		return;
 	}//printStats-end
 
