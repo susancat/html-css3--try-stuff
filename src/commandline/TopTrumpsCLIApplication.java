@@ -18,6 +18,7 @@ public class TopTrumpsCLIApplication  {
 	
 // system in scanner in main scope for use throughout class
 	static Scanner input = new Scanner(System.in);
+	int humanNoCardsLeft = 0;
 
 ///////////////////MAIN////////////////////////////////////
 	public static void main(String[] args) {
@@ -55,6 +56,10 @@ public class TopTrumpsCLIApplication  {
 		System.exit(0);
 	}//main-end
 
+private int finalWinner;
+private String finalWinningCard;
+private int finalCategory;
+
 ///////////////////PLAY GAME/////////////////////////
 	private void playGame(boolean logsToFile) {
 		System.out.println("\nGame start\n");
@@ -86,6 +91,7 @@ public class TopTrumpsCLIApplication  {
 			int category = chooseCategory(activePlayer);
 			System.out.println("The category is " + printCategory(category));
 			int roundWinner = roundWinner(category, deck);
+			finalCategory = category;
 
 //	add common deck to winners array or print draw
 			if(roundWinner == -1) {
@@ -93,11 +99,13 @@ public class TopTrumpsCLIApplication  {
 			}else {
 				addCommonDeck(roundWinner, deck);
 				activePlayer = roundWinner;
+				finalWinner = activePlayer;
+				finalWinningCard = deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).getCardName();
 				System.out.println(deck.getPlayers().get(roundWinner).getPName() + " won this round\n"
 						+ "The winning card was " + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).getCardName()
 						+ "\n" + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).toString(category));
 			}
-			deck.clearActiveCards();
+			humanNoCardsLeft = deck.clearActiveCards();//equals to '1' if human has no cards left
 // check for winner		
 			boolean win = false;//checkWin(deck);
 			if(win) {
@@ -107,9 +115,13 @@ public class TopTrumpsCLIApplication  {
 			}
 				}//while-end
 		
+//		print final winner and final card
+		System.out.println(deck.getPlayers().get(finalWinner).getPName() + " won this round\n"
+				+ "The winning card was " + deck.getCardDeck().get(deck.getPlayers().get(finalWinner).getHand().get(0)).getCardName()
+				+ "\n" + deck.getCardDeck().get(deck.getPlayers().get(finalWinner).getHand().get(0)).toString(finalCategory));
 		return;
 	}//playGame-end
-	
+
 ///////////////DEAL CARDS////////////////////////////////////
 	private Deck dealCards(Deck deck, boolean logsToFile) {
 	// load, shuffle, and deal the cards
@@ -153,7 +165,7 @@ public class TopTrumpsCLIApplication  {
 //////////////CHOOSE CATEGORY//////////////////
 	private int chooseCategory(int ap) {
 		int cat = -1;
-		if(ap == 0) {
+		if(ap == 0 && humanNoCardsLeft == 0) {
 			cat = input.nextInt();
 		}else {
 			Random rand = new Random();
