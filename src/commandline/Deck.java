@@ -136,14 +136,14 @@ public class Deck {
 		}
 		
 		
-private void removePlayersWithNoCards() {
-	ArrayList<Player> tempList = new ArrayList<Player>();
-	for(int i=0; i<this.players.size(); i++) {
-		if(!this.players.get(i).getHand().isEmpty()) {
-			tempList.add(this.players.get(i));
-		}
-		}
-	this.players = tempList; 
+		public void removePlayersWithNoCards() {
+			ArrayList<Player> tempList = new ArrayList<Player>();
+			for(int i=0; i<this.players.size(); i++) {
+				if(!this.players.get(i).getHand().isEmpty()) {
+					tempList.add(this.players.get(i));
+				}
+			}
+			this.players = tempList; 
 }
 
 ///////////////////////LOGS////////////////////////////////////////

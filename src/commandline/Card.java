@@ -70,7 +70,7 @@ public class Card {
 		if(cat == 3) line = line + " <----";
 		line = line + "\n\t> Firepower: " + firepower;
 		if(cat == 4) line = line + " <----";
-		line = line +  "\n\t> Cargo: " + cargo;
+		line = line +  "\n\t> Cargo: " + cargo + "\n";
 		if(cat == 5) line = line + " <----";
 		return line;
 	}

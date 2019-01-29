@@ -18,8 +18,9 @@ public class TopTrumpsCLIApplication  {
 	
 // system in scanner in main scope for use throughout class
 	static Scanner input = new Scanner(System.in);
-	private int humanNoCardsLeft = 0;
+	
 	//=========================================DB
+	// variables for database
 	   private static int numberOfGames=0;
 	   private static int numberofHumanWin =0;
 	   private static int numberofAIWin = 0;
@@ -27,7 +28,7 @@ public class TopTrumpsCLIApplication  {
 	   private static int numberOfRounds = 0;
 	 //=========================================DB
 
-///////////////////MAIN////////////////////////////////////
+/////////////////////////////MAIN////////////////////////////////////
 /*
  * The main method gives the user the option of playing the game or viewing statistics
  * it then calls the relevant method based on the users input. The user can also quit
@@ -40,9 +41,9 @@ public class TopTrumpsCLIApplication  {
 		boolean userWantsToQuit = false; // flag to check whether the user wants to quit the application
 		
 		boolean writeGameLogsToFile = false; // Should we write game logs to file?
-		if (args[0].equalsIgnoreCase("true")) {
-			writeGameLogsToFile=true; // Command line selection
-		}
+//		if (args[0].equalsIgnoreCase("true")) {
+//			writeGameLogsToFile=true; // Command line selection
+//		}
 		
 		while(!userWantsToQuit) {
 		System.out.println("Do you want to see past results or play a game?\n"
@@ -68,7 +69,7 @@ public class TopTrumpsCLIApplication  {
 	
 	
 // variables for game information
-	private int finalWinner;
+	private String finalWinner;
 	private String finalWinningCard;
 	private int finalCategory;
 
@@ -77,7 +78,7 @@ public class TopTrumpsCLIApplication  {
 		System.out.println("\nGame start\n");
 		// State
 		boolean exitGame = false; // flag to check whether the user wants to exit the game
-		boolean playerOut = false;
+		boolean playerIn = true;
 		Deck deck = new Deck(); 
 		dealCards(deck, logsToFile); 
 		// choose first player randomly 
@@ -85,78 +86,88 @@ public class TopTrumpsCLIApplication  {
 		int firstPlay = rand.nextInt(4);
 		// initialise round 1
 		int round = 1;
-		int activePlayer = firstPlay;
+		String activePlayer = deck.getPlayers().get(firstPlay).getPName();
 		// Loop until the user wants to exit the game
 		while (!exitGame) {
-			System.out.println("\nRound " + round + "\nPlayers have drawn their cards"
-					+ "\nYour card is " + deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).getCardName());
-			if(!playerOut) System.out.println(deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).toString(0));
-			
-			printWhosTurn(activePlayer);
+// check if player is still in game at the start of each round
+			playerIn = checkPlayerIn(playerIn, deck);
+			System.out.println("\nRound " + round + "\nPlayers have drawn their cards");
+// if player in print card details
+			if(playerIn) {
+				String activeCardName = getActiveCardName(deck);
+				String activeCardStats = getActiveCardStats(deck);
+				System.out.println("\nYour card is " + activeCardName
+											+ "\n" + activeCardStats);
+			}
+// place all players top cards in a common deck
 			deck.setCommonDeck();
+// determine who's turn it is to chose category										
+			printWhosTurn(activePlayer, deck);
+
+			//============================================LOG
 			if(logsToFile) {
 				deck.printToFile(deck.playersDeckLog());
 				deck.printToFile(deck.activeCardsLog());
 				deck.printToFile(deck.printCommonDeck());
 			}
-			int category = chooseCategory(activePlayer);
-			System.out.println("The category is " + printCategory(category));
-			int roundWinner = roundWinner(category, deck);
-			finalCategory = category;
-
-//	add common deck to winners array or print draw
-			if(roundWinner == -1) {
-				System.out.println("This round was a draw, the common deck has " + deck.getCommonDeck().size() + " cards");
+			//=============================================LOG
+			
+//	active player chooses category
+			finalCategory = chooseCategory(activePlayer);
+			System.out.println("The category is " + printCategory(finalCategory));
+			
+// winner is determine from category chosen
+			finalWinner = setFinalWinner(finalCategory, deck);
+			
+//	add common deck to winners array and check for overall win or print draw
+			if(finalWinner.equals("draw")) {
+				System.out.println("This round was a draw, the common deck has " 
+										+ deck.getCommonDeck().size() + " cards");
 				// Database connection variable
 				//=========================================DB
 				numberOfDraws++;
 				//=========================================DB
 			}else {
-				addCommonDeck(roundWinner, deck);
-				activePlayer = roundWinner;
-				finalWinner = activePlayer;
-				finalWinningCard = deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).getCardName();
-				System.out.println(deck.getPlayers().get(roundWinner).getPName() + " won this round\n"
-						+ "The winning card was " + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).getCardName()
-						+ "\n" + deck.getCardDeck().get(deck.getPlayers().get(roundWinner).getHand().get(0)).toString(category));
-				//=========================================DB
-				String winnerofround = deck.getPlayers().get(roundWinner).getPName();
-				if (winnerofround.startsWith("A")){
-					numberofAIWin++;
-				}else {
-						numberofHumanWin++;
-						//=========================================DB
-				}
-			}
-			humanNoCardsLeft = deck.clearActiveCards();//equals to '1' if human has no cards left
-			
-// check for winner		
-		boolean win = false;//checkWin(deck);
-			if(win) {
+				// add common deck to winners array
+				addCommonDeck(finalWinner, deck);
+				activePlayer = finalWinner;
+				int winningCardIndex = winningCardIndex(deck);
+				finalWinningCard = deck.getCardDeck().get(winningCardIndex).getCardName();
+				// check for overall game win
+				if (deck.getPlayers().size() == 1) {
+					System.out.println("\n********GAME OVER********" + "\nThe overall winner was "+ finalWinner
+							+ "\nThe winning card was " + finalWinningCard
+							+ "\n" + deck.getCardDeck().get(winningCardIndex).toString(finalCategory));
+					
 					//=========================================DB
-					numberOfGames++;
-//					DatabaseConnect.DatabaseOpen();
-//					DatabaseConnect.insertValues(numberOfGames,numberofHumanWin,numberofAIWin,numberOfDraws,numberOfRounds);
-//					DatabaseConnect.DatabaseOpen();
+					if (finalWinner.startsWith("A")){
+						numberofAIWin++;
+						}else {
+							numberofHumanWin++;
+							numberOfGames++;
+//							DatabaseConnect.DatabaseOpen();
+//							DatabaseConnect.insertValues(numberOfGames,numberofHumanWin,numberofAIWin,numberOfDraws,numberOfRounds);
+//							DatabaseConnect.DatabaseOpen();
 					//=========================================DB
+						}
 					exitGame=true; // use this when the user wants to exit the game
-					}else {
-							round++;
-							// Round get increment from here to database
-							// Database connection variable 
-							//=========================================DB
-							numberOfRounds++;
-							//=========================================DB
-					}
-			
+				}else {
+					System.out.println(finalWinner + " won this round\n"
+							+ "The winning card was " + finalWinningCard
+							+ "\n" + deck.getCardDeck().get(winningCardIndex).toString(finalCategory));
+				}
+
+			}
+			round++;
+			// Round get increment from here to database
+			// Database connection variable 
+			//=========================================DB
+			numberOfRounds++;
+			//=========================================DB
+		// clear players top cards 
+			deck.clearActiveCards();
 		}//while-end
-		
-//		print final winner and final card
-		System.out.println(deck.getPlayers().get(finalWinner).getPName() + " won this round\n"
-				+ "The winning card was " + deck.getCardDeck().get(deck.getPlayers().get(finalWinner).getHand().get(0)).getCardName()
-				+ "\n" + deck.getCardDeck().get(deck.getPlayers().get(finalWinner).getHand().get(0)).toString(finalCategory));
-		return;
-		
+			
 	}//playGame-end
 
 ///////////////DEAL CARDS////////////////////////////////////
@@ -165,17 +176,18 @@ public class TopTrumpsCLIApplication  {
 		deck.loadDeck();
 		deck.shuffleCards();
 		deck.ShareCards();
-		// if flag selected print info to log
+	//=============================================LOG
 		if(logsToFile) {
 			deck.createLogFile();
 			deck.printToFile(deck.fullDeckLog());
 		}
+	//=============================================LOG
 		return deck;
 	}//deal-end
 	
 //////////////////WHOS TURN?////////////////////////////////////
-	private void printWhosTurn(int player) {
-		if(player == 0) {
+	private void printWhosTurn(String activePlayer, Deck deck) {
+		if(!activePlayer.startsWith("A")) {
 			System.out.println("It's your turn to choose a category, your choices are:\n"
 								+ "\t1. Size\n"
 								+ "\t2. Speed\n"
@@ -190,19 +202,23 @@ public class TopTrumpsCLIApplication  {
 	
 	
 ///////////////////ADD COMMON DECK////////////////////////////
-	public void addCommonDeck(int roundWinner, Deck deck) {
+	public void addCommonDeck(String roundWinner, Deck deck) {
 		int i = 0;
-		for(int j  : deck.getCommonDeck()) {
-			deck.getPlayers().get(roundWinner).getHand().add((deck.getCommonDeck().get(i)));
-			i++;
+		for(Player p : deck.getPlayers()) {
+			if(p.getPName().equals(roundWinner)) {
+				for(int j  : deck.getCommonDeck()) {
+					p.getHand().add((deck.getCommonDeck().get(i)));
+					i++;
+				}
+			}
 		}
 		deck.getCommonDeck().clear();
 	}
 	
 //////////////CHOOSE CATEGORY//////////////////
-	private int chooseCategory(int ap) {
+	private int chooseCategory(String activePlayer) {
 		int cat = -1;
-		if(ap == 0 && humanNoCardsLeft == 0) {
+		if(!activePlayer.startsWith("A")) {
 			cat = input.nextInt();
 		}else {
 			Random rand = new Random();
@@ -228,8 +244,8 @@ public class TopTrumpsCLIApplication  {
 		return category;
 	}//print cat-end
 	
-//////////////WINNER OF ROUND/////////////////
-	public int roundWinner(int cat, Deck deck) {
+//////////////SET WINNER/////////////////
+	public String setFinalWinner(int cat, Deck deck) {
 		ArrayList<Integer> scores = new ArrayList<Integer>();
 		
 		int i = 0;
@@ -248,6 +264,7 @@ public class TopTrumpsCLIApplication  {
  * we can then match this with the index of the winning player
  */
 		int maxScoreIndex = scores.indexOf(Collections.max(scores));
+		String winner = deck.getPlayers().get(maxScoreIndex).getPName();
 		i = 0;
 		for(int s : scores) {
 			if(scores.get(maxScoreIndex) == scores.get(i))  {
@@ -258,8 +275,43 @@ public class TopTrumpsCLIApplication  {
 			}
 			i++;
 		}
-		return maxScoreIndex;
-	}
+		if(maxScoreIndex == -1) winner.equals("draw");
+		return winner;
+	}// setWinner-end
+	
+////////////////CHECK PLAYER IN GAME/////////////////////
+	public Boolean checkPlayerIn(boolean playerIn, Deck deck) {
+		playerIn = false;
+		for(Player p : deck.getPlayers()) {
+			if(!p.getPName().startsWith("A")) {
+				playerIn = true;
+			}
+		}
+		return playerIn;
+	}// checkPlayer-end
+	
+//////////////SET WINNING CARD//////////////////////	
+	public int winningCardIndex(Deck deck) {
+		int cardIndex = 0;
+		for(Player p : deck.getPlayers()) {
+			if(p.getPName().equals(this.finalWinner)) {
+				cardIndex = p.getHand().get(0);
+			}
+		}
+		return cardIndex;
+	}// winningCard-end
+	
+/////////////////GET ACTIVE CARD NAME/////////////////
+	public String getActiveCardName(Deck deck) {
+		String activeCardName = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).getCardName();
+		return activeCardName;
+	}// getCardName-end
+	
+//////////////////GET ACTIVE CARD STATS//////////////
+	public String getActiveCardStats(Deck deck) {
+		String activeCardStats = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).toString(0);
+		return activeCardStats;
+	}//getStats-end
 
 ///////////////////PRINT GAME STATISTICS////////////////
 	private void printStats() {
@@ -274,4 +326,4 @@ public class TopTrumpsCLIApplication  {
 
 
 
-}
+}//	TopTrumpsCLIApplication-END
