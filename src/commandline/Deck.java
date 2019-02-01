@@ -121,18 +121,13 @@ public class Deck {
 			}	
 		}
 		
-		public int clearActiveCards() {
-			int i = 0;
-			int humanNoCardsLeft = 0;
+		public void clearActiveCards() {
 			for(Player p : players) {
-				players.get(i).getHand().remove(0);
-				i++;
+				p.getHand().remove(0);
 			}
 			if(this.players.get(0).getHand().isEmpty()) {
-				humanNoCardsLeft = 1;
 			}
 			removePlayersWithNoCards();
-			return humanNoCardsLeft;
 		}
 		
 		
@@ -185,7 +180,7 @@ public class Deck {
 		
 		public String printFinalCategory(String category, int finalCategory ) {
 			String log = "\r\n--------------CATEGORY-----------------\r\n"
-						+ "Category is: " + category + "\r\n"
+						+ "Category is: " + category
 						+"\r\n---------------------------------------\r\n";
 			for(Player p : players) {
 				log = log + p.getPName() + ": " + cardDeck.get(p.getHand().get(0)).getCatScores().get(finalCategory -1) 

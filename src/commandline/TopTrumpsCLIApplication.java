@@ -232,17 +232,11 @@ public class TopTrumpsCLIApplication  {
 /////////////PRINT CATEGORY/////////////////
 	private String printCategory(int cat) {
 		String category = "";
-		if(cat == 1) {
-			category = "Size";
-		}else if(cat == 2) {
-			category = "Speed";
-		}else if(cat == 3) {
-			category = "Range";
-		}else if(cat == 4) {
-			category = "Firepower";
-		}else {
-			category = "Cargo";
-		}
+		if(cat == 1) category = "Size";
+		if(cat == 2) category = "Speed";
+		if(cat == 3) category = "Range";
+		if(cat == 4) category = "Firepower";
+		if(cat == 5) category = "Cargo";
 		return category;
 	}//print cat-end
 	
