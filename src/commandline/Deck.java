@@ -121,18 +121,13 @@ public class Deck {
 			}	
 		}
 		
-		public int clearActiveCards() {
-			int i = 0;
-			int humanNoCardsLeft = 0;
+		public void clearActiveCards() {
 			for(Player p : players) {
-				players.get(i).getHand().remove(0);
-				i++;
+				p.getHand().remove(0);
 			}
 			if(this.players.get(0).getHand().isEmpty()) {
-				humanNoCardsLeft = 1;
 			}
 			removePlayersWithNoCards();
-			return humanNoCardsLeft;
 		}
 		
 		
@@ -168,21 +163,43 @@ public class Deck {
 			return log;		
 		}
 		
+		public String printRoundNumber(int roundNumber) {
+			String log = "\r\n---------ROUND " + roundNumber + "-----------------------\r\n";
+			return log;
+		}
+		
 		public String activeCardsLog() {
 			String log = "\r\n---------ACTIVE CARDS------------------\r\n";
-			int i = 0;
 			for(Player p : players) {
-				log = log + players.get(i).getPName() + ": " 
-						+ cardDeck.get(players.get(i).getHand().get(0)).log() 
+				log = log + p.getPName() + ": " 
+						+ cardDeck.get(p.getHand().get(0)).log() 
 						+ "\r\n---------------------------------------\r\n";
-				i++;
 			}
+			return log;
+		}
+		
+		public String printFinalCategory(String category, int finalCategory ) {
+			String log = "\r\n--------------CATEGORY-----------------\r\n"
+						+ "Category is: " + category
+						+"\r\n---------------------------------------\r\n";
+			for(Player p : players) {
+				log = log + p.getPName() + ": " + cardDeck.get(p.getHand().get(0)).getCatScores().get(finalCategory -1) 
+						+ "\r\n---------------------------------------\r\n";
+ 			}
 			return log;
 		}
 		
 		public String printCommonDeck() {
 			String log = "\r\n-------------COMMON DECK---------------\r\n"
 					+ "Common deck: " + commonDeck + "\r\n---------------------------------------\r\n";
+			return log;
+		}
+		
+		public String printWinner(String winner, int winIndex, String category, int finalCategory) {
+			String log = "\r\n------------------WINNER---------------\r\n" 
+					+ winner + ": " + cardDeck.get(players.get(winIndex).getHand().get(0)).getCardName() 
+					+ " " + category + " " + cardDeck.get(players.get(winIndex).getHand().get(0)).getCatScores().get(finalCategory -1) 
+					+ "\r\n---------------------------------------\r\n";
 			return log;
 		}
 		

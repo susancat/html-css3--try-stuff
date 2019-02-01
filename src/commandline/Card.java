@@ -1,20 +1,19 @@
 package commandline;
 
+import java.util.ArrayList;
+
 public class Card {
 	private String cardName = "";
-	private int size = 0;
-	private int speed = 0;
-	private int range = 0;
-	private int firepower = 0;
-	private int cargo = 0;
+	private ArrayList<Integer> catScores;	
 	
 	public Card(String cardName, int size, int speed, int range, int firepower, int cargo) {
 		this.cardName = cardName;
-		this.size = size;
-		this.speed = speed;
-		this.range = range;
-		this.firepower = firepower;
-		this.cargo = cargo;
+		this.catScores = new ArrayList<Integer> ();
+		catScores.add(size);
+		catScores.add(speed);
+		catScores.add(range);
+		catScores.add(firepower);
+		catScores.add(cargo);
 	}
 	
 	public String getCardName() {
@@ -23,54 +22,30 @@ public class Card {
 	public void setCardName(String cardName) {
 		this.cardName = cardName;
 	}
-	public int getSize() {
-		return size;
-	}
-	public void setSize(int size) {
-		this.size = size;
-	}
-	public int getSpeed() {
-		return speed;
-	}
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-	public int getRange() {
-		return range;
-	}
-	public void setRange(int range) {
-		this.range = range;
-	}
-	public int getFirepower() {
-		return firepower;
-	}
-	public void setFirepower(int firepower) {
-		this.firepower = firepower;
-	}
-
-	public int getCargo() {
-		return cargo;
-	}
-
-	public void setCargo(int cargo) {
-		this.cargo = cargo;
-	}
 	
+	public ArrayList<Integer> getCatScores() {
+		return catScores;
+	}
+
+	public void setCatScores(ArrayList<Integer> catScores) {
+		this.catScores = catScores;
+	}
+
 	public String log() {
-		return cardName + " " + size + " " + speed + " "
-				+ range + " " + firepower + " " + cargo;
+		return cardName + " " + catScores.get(0) + " " + catScores.get(1) + " "
+				+ catScores.get(2) + " " + catScores.get(3) + " " + catScores.get(4);
 	}
 	
 	public String toString(int cat) {
-		String line =  "\t> Size: " + size;
+		String line =  "\t> Size: " + catScores.get(0);
 		if(cat == 1) line = line + " <----";
-		line = line + "\n\t> Speed: " + speed;
+		line = line + "\n\t> Speed: " + catScores.get(1);
 		if(cat == 2) line = line + " <----";
-		line = line + "\n\t> Range: " + range;
+		line = line + "\n\t> Range: " + catScores.get(2);
 		if(cat == 3) line = line + " <----";
-		line = line + "\n\t> Firepower: " + firepower;
+		line = line + "\n\t> Firepower: " + catScores.get(3);
 		if(cat == 4) line = line + " <----";
-		line = line +  "\n\t> Cargo: " + cargo + "\n";
+		line = line +  "\n\t> Cargo: " + catScores.get(4);
 		if(cat == 5) line = line + " <----";
 		return line;
 	}

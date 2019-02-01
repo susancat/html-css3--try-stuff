@@ -46,7 +46,7 @@ public class TopTrumpsCLIApplication  {
 		}
 		
 		while(!userWantsToQuit) {
-		System.out.println("Do you want to see past results or play a game?\n"
+		System.out.println("\nDo you want to see past results or play a game?\n"
 				+ "\t1: Print Game Statistics\n\t2: Play game\n"
 				+ "Enter the number for your selection"
 				+ "\nor type 'quit' to exit application:");
@@ -103,21 +103,23 @@ public class TopTrumpsCLIApplication  {
 			deck.setCommonDeck();
 // determine who's turn it is to chose category										
 			printWhosTurn(activePlayer, deck);
-
-			//============================================LOG
-			if(logsToFile) {
-				deck.printToFile(deck.playersDeckLog());
-				deck.printToFile(deck.activeCardsLog());
-				deck.printToFile(deck.printCommonDeck());
-			}
-			//=============================================LOG
 			
 //	active player chooses category
 			finalCategory = chooseCategory(activePlayer);
 			System.out.println("The category is " + printCategory(finalCategory));
 			
+			//============================================LOG
+			if(logsToFile) {
+				deck.printToFile(deck.printRoundNumber(round));
+				deck.printToFile(deck.playersDeckLog());
+				deck.printToFile(deck.printCommonDeck());
+				deck.printToFile(deck.activeCardsLog());
+				deck.printToFile(deck.printFinalCategory(printCategory(finalCategory), finalCategory));
+			}
+			//=============================================LOG
+			
 // winner is determine from category chosen
-			finalWinner = setFinalWinner(finalCategory, deck);
+			finalWinner = setFinalWinner(deck, logsToFile);
 			
 //	add common deck to winners array and check for overall win or print draw
 			if(finalWinner.equals("draw")) {
@@ -129,7 +131,7 @@ public class TopTrumpsCLIApplication  {
 				//=========================================DB
 			}else {
 				// add common deck to winners array
-				addCommonDeck(finalWinner, deck);
+				addCommonDeck(deck);
 				activePlayer = finalWinner;
 				int winningCardIndex = winningCardIndex(deck);
 				finalWinningCard = deck.getCardDeck().get(winningCardIndex).getCardName();
@@ -202,10 +204,10 @@ public class TopTrumpsCLIApplication  {
 	
 	
 ///////////////////ADD COMMON DECK////////////////////////////
-	public void addCommonDeck(String roundWinner, Deck deck) {
+	public void addCommonDeck(Deck deck) {
 		int i = 0;
 		for(Player p : deck.getPlayers()) {
-			if(p.getPName().equals(roundWinner)) {
+			if(p.getPName().equals(finalWinner)) {
 				for(int j  : deck.getCommonDeck()) {
 					p.getHand().add((deck.getCommonDeck().get(i)));
 					i++;
@@ -230,52 +232,35 @@ public class TopTrumpsCLIApplication  {
 /////////////PRINT CATEGORY/////////////////
 	private String printCategory(int cat) {
 		String category = "";
-		if(cat == 1) {
-			category = "Size";
-		}else if(cat == 2) {
-			category = "Speed";
-		}else if(cat == 3) {
-			category = "Range";
-		}else if(cat == 4) {
-			category = "Firepower";
-		}else {
-			category = "Cargo";
-		}
+		if(cat == 1) category = "Size";
+		if(cat == 2) category = "Speed";
+		if(cat == 3) category = "Range";
+		if(cat == 4) category = "Firepower";
+		if(cat == 5) category = "Cargo";
 		return category;
 	}//print cat-end
 	
 //////////////SET WINNER/////////////////
-	public String setFinalWinner(int cat, Deck deck) {
+	public String setFinalWinner(Deck deck, boolean logsToFile) {
 		ArrayList<Integer> scores = new ArrayList<Integer>();
-		
-		int i = 0;
+		String winner = "";
+
 		for(Player p : deck.getPlayers()) {
-			if(!deck.getPlayers().get(i).getHand().isEmpty()) {
-				if(cat == 1) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSize());
-				if(cat == 2) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getSpeed());
-				if(cat == 3) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getRange());
-				if(cat == 4) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getFirepower());
-				if(cat == 5) scores.add(deck.getCardDeck().get(deck.getPlayers().get(i).getHand().get(0)).getCargo());
-				i++;
-			} 
+			scores.add(deck.getCardDeck().get(p.getHand().get(0)).getCatScores().get(finalCategory -1));
 		}
-/*
- * to determine the name of round winner we ask for the index of the player who holds the card with the max score
- * we can then match this with the index of the winning player
- */
 		int maxScoreIndex = scores.indexOf(Collections.max(scores));
-		String winner = deck.getPlayers().get(maxScoreIndex).getPName();
-		i = 0;
-		for(int s : scores) {
-			if(scores.get(maxScoreIndex) == scores.get(i))  {
-				if(scores.indexOf(maxScoreIndex) != scores.indexOf(i)) {
-				maxScoreIndex = -1;
-				break;	
-				}
-			}
-			i++;
+		Collections.sort(scores);
+		int max = scores.get(scores.size() -1);
+		if(scores.size() == 1) {
+			winner = deck.getPlayers().get(maxScoreIndex).getPName();
+		}else if(scores.get(scores.size() -2) == max) {
+					winner = "draw";
+		}else {
+			winner = deck.getPlayers().get(maxScoreIndex).getPName();
 		}
-		if(maxScoreIndex == -1) winner.equals("draw");
+		//================================================================LOG
+		if(logsToFile) deck.printToFile(deck.printWinner(winner, maxScoreIndex, printCategory(finalCategory), finalCategory));
+		//================================================================LOG	
 		return winner;
 	}// setWinner-end
 	
