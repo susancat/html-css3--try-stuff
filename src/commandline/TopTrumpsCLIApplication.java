@@ -2,6 +2,7 @@ package commandline;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -221,7 +222,18 @@ public class TopTrumpsCLIApplication  {
 	private int chooseCategory(String activePlayer) {
 		int cat = -1;
 		if(!activePlayer.startsWith("A")) {
-			cat = input.nextInt();
+			while(true) {
+                try {
+                    cat = input.nextInt();
+                    } catch(InputMismatchException e) {
+                        input.nextLine();
+                    }
+                if(cat == 1 || cat == 2 || cat == 3 || cat == 4 || cat == 5) {
+                	break;
+                } else {
+                	System.out.println("Please enter whole number between 1 to 5");
+                }
+            }
 		}else {
 			Random rand = new Random();
 			cat = rand.nextInt(5) + 1;

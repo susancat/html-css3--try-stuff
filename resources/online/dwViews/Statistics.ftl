@@ -17,15 +17,35 @@
     	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
     	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
+     
 	</head>
 
     <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
     	
     	<div class="container">
-
-			<!-- Add your HTML Here -->
+		<header>
+      <h1 style="background-color:black; font-size:40px; 
+	   color:#FFFFFF; text-align:center; padding:20px">
+	  TOP TRUMP GAME
+	  </h1>
+	  <h2 style="background-color:blue; font-size:30px; 
+	   color:#FFFFFF; text-align:left; padding:20px">
+	  YOUR PRVIOUS GAME STATISTICS ARE
+	  </h2>
+	  </header>
+	  
+	    <div style="float:center; margin: 30px;height: 480px; width: 600px;background: lime; class="StatTable">
+		 
 		
+		 <p style="Font-size:20px; text-align:center"> YOUR GAME STATISTIS ARE</p></br>
+		 <p>NUMBER OF GAMES</p><p id="nofGames"></p>
+		 <p>NUMBER OF HUMAN WIN</p><p id="nofhumanwin"></p>
+		 <p>NUMBER OF AI WIN</p><p id="nofaiwin"></p>
+		 <p>AVERAGE NUMBER OF DRAWS</p><p id="aveofdraws"></p>
+		 <p>LONGEST GAME</p><p id="longestgame"></p>
+		 
+		 
+		</div>
 		</div>
 		
 		<script type="text/javascript">
@@ -38,10 +58,20 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				helloJSONList();
-				helloWord("Student");
+				//<!--helloJSONList();-->
+				//<!--helloWord("Student");-->
 				
 			}
+			   var NumofGames = 1;
+			   var NumofHuWin = 2;
+			   var NumofAiWin = 3;
+			   var AveOfDraws = 4;
+			   var LongGame   = 5;
+			   document.getElementById("nofGames").innerHTML = NumofGames;
+			   document.getElementById("nofhumanwin").innerHTML = NumofHuWin;
+			   document.getElementById("nofaiwin").innerHTML = NumofAiWin;
+			   document.getElementById("aveofdraws").innerHTML = AveOfDraws;
+			   document.getElementById("longestgame").innerHTML = LongGame;
 			
 			// -----------------------------------------
 			// Add your other Javascript methods Here

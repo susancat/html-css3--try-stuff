@@ -25,7 +25,27 @@
     	<div class="container">
 
 			<!-- Add your HTML Here -->
-		
+		<header>
+      <h1 style="background-color:black; font-size:40px; 
+	   color:#FFFFFF; text-align:center; padding:20px">
+	  TOP TRUMP GAME
+	  </h1>
+	  <h2 style="background-color:blue; font-size:30px; 
+	   color:#FFFFFF; text-align:left; padding:20px">
+	  YOUR: SELECTED RANGE
+	  </h2>
+	  </header>
+	   <p style="font-size:20px"> PLEASE SELECT YOUR CHOICE</p>
+	   <form>
+	   IF YOU WANT TO PLAY GAME ENTER 1</br>
+	   <input type="text" value="1"></br>
+	   IF YOU WANT TO SEE STATISTICS ENTER 2</br>
+	   <input type="text" value="2"></br>
+	   IF YOU WANT TO QUIT</br>
+	   <input type="text" value="quit">
+	   
+	   </form>
+	  
 		</div>
 		
 		<script type="text/javascript">
@@ -38,8 +58,8 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				helloJSONList();
-				helloWord("Student");
+				//<!--helloJSONList();-->
+				//<!--helloWord("Student");-->
 				
 			}
 			

@@ -25,11 +25,134 @@
     	<div class="container">
 
 			<!-- Add your HTML Here -->
-		
+			<header>
+      <h1 style="background-color:black; font-size:40px; 
+	   color:#FFFFFF; text-align:center; padding:20px">
+	  TOP TRUMP GAME
+	  </h1>
+	  <h2 style="background-color:blue; font-size:30px; 
+	   color:#FFFFFF; text-align:left; padding:20px">
+	  YOUR: SELECTED RANGE
+	  </h2>
+	  </header>
+	 
+	  
+			<!-- Add your HTML Here -->
+	 
+     <div style="float:left; margin: 30px;height: 200px; width: 150px;background: green; 
+	 
+	 <table class="card">
+	 <tr>
+	 <th>
+	 <p>Active Player Is</p>
+	 <p id="Act_PlayerName"></p>
+	 </th>
+	 </tr>
+	 <td> <p>They Selected</p> <p id="SelectedRange"></p>
+	 </table>
+	 </div>
+	 
+	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; 
+	 <table class="card">
+	 <tr>
+	  <th style="font-size:100px">AI PLAYER 2</th>
+	  </tr></br></br></br>
+	  <tr>
+	    <td>Attribute1</td>
+		</br></br>
+		<td>Attribute2</td>
+		</br></br>
+		<td>Attribute3</td>
+		</br></br>
+		<td>Attribute4</td>
+		</br></br>
+		<td>Attribute5</td>
+	  </tr>
+	 </table>
+	 </div>
+	 
+	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; 
+	 <table class="card">
+	 <tr>
+	  <th style="font-size:100px">AI PLAYER 1</th>
+	  </tr></br></br></br>
+	  <tr>
+	    <td>Attribute1</td>
+		</br></br>
+		<td>Attribute2</td>
+		</br></br>
+		<td>Attribute3</td>
+		</br></br>
+		<td>Attribute4</td>
+		</br></br>
+		<td>Attribute5</td>
+	  </tr>
+	 </table>
+	 </div>
+	 
+	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; 
+	 <table class="card">
+	 <tr>
+	  <th style="font-size:100px">YOU</th>
+	  </tr></br></br></br>
+	  <tr>
+	    <td>Attribute1</td>
+		</br></br>
+		<td>Attribute2</td>
+		</br></br>
+		<td>Attribute3</td>
+		</br></br>
+		<td>Attribute4</td>
+		</br></br>
+		<td>Attribute5</td>
+	  </tr>
+	 </table>
+	 </div>
+	 
+	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; class="card">
+	 <tr>
+	  <th style="font-size:100px">AI Player 4</th>
+	  </tr></br></br></br>
+	  <tr>
+	    <td>Attribute1</td>
+		</br></br>
+		<td>Attribute2</td>
+		</br></br>
+		<td>Attribute3</td>
+		</br></br>
+		<td>Attribute4</td>
+		</br></br>
+		<td>Attribute5</td>
+	  </tr>
+	 </table>
+	 </div>
+	 
+	 <div style="float:right; margin: 40px;
+	 height: 300px; width: 200px;
+	 background: lightblue; class="card">
+	 <tr>
+	  <th style="font-size:100px">AI Player 3</th>
+	  </tr></br></br></br>
+	  <tr>
+	    <td>Attribute1</td>
+		</br></br>
+		<td>Attribute2</td>
+		</br></br>
+		<td>Attribute3</td>
+		</br></br>
+		<td>Attribute4</td>
+		</br></br>
+		<td>Attribute5</td>
+	  </tr>
+	 </table>
+	 </div>
+    
+		</div>
 		</div>
 		
 		<script type="text/javascript">
-		
+		    
+			
 			// Method that is called on page load
 			function initalize() {
 			
@@ -38,11 +161,17 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				helloJSONList();
-				helloWord("Student");
+				//<--helloJSONList();-->
+				//<--helloWord("Student");-->
 				
 			}
-			
+			  
+			  var ActivePlayerId = "Active Palyer is";
+			  var ActivePlayerName = "You";
+			  var SelectedRangeBox = "Range";
+              document.getElementById("ActiveTitle").innerHTML = ActivePlayerId;
+			  document.getElementById("Act_PlayerName").innerHTML = ActivePlayerName;
+			  document.getElementById("SelectedRange").innerHTML = SelectedRangeBox;
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
