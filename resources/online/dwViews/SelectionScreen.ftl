@@ -34,17 +34,11 @@
 	   color:#FFFFFF; text-align:left; padding:20px">
 	  YOUR: SELECTED RANGE
 	  </h2>
-	  </header>
+		  </header>
 	   <p style="font-size:20px"> PLEASE SELECT YOUR CHOICE</p>
-	   <form>
-	   IF YOU WANT TO PLAY GAME ENTER 1</br>
-	   <input type="text" value="1"></br>
-	   IF YOU WANT TO SEE STATISTICS ENTER 2</br>
-	   <input type="text" value="2"></br>
-	   IF YOU WANT TO QUIT</br>
-	   <input type="text" value="quit">
-	   
-	   </form>
+	   <input type="button" value="Play Game" onclick="location.href='http://localhost:7777/toptrumps/game'">
+	   <input type="button" value="Game Statistics" onclick="location.href='http://localhost:7777/toptrumps/stats'">
+	   <input type="button" value="Quit" onclick="closeCurrentTab()">
 	  
 		</div>
 		
@@ -140,7 +134,14 @@
 				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();		
 			}
-
+		function closeCurrentTab(){
+			var conf=confirm("Are you sure, you want to quit the game?");
+				if(conf==true){
+					window.opener=null;
+					window.open('','_self');
+					window.open("about:blank","_self").close();
+				}
+	    }
 		</script>
 		
 		</body>
