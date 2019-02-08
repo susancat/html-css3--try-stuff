@@ -54,7 +54,11 @@ public class TopTrumpsCLIApplication  {
 				+ "\nor type 'quit' to exit application:");
 		String choice = input.next();
 		if(choice.equals("1")) {
+			try {
 			topTrumps.printStats();
+			}catch(NumberFormatException e) {
+				System.out.println("You need to complete a game first!");
+			}
 		}
 		else if(choice.equals("2")) {
 			topTrumps.playGame(writeGameLogsToFile);
