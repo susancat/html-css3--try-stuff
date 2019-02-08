@@ -36,6 +36,8 @@ public class TopTrumpsRESTAPI {
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 	TopTrumpsCLIApplication topTrumps;
+	Deck deck;
+	Boolean logsToFile = false;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -44,12 +46,26 @@ public class TopTrumpsRESTAPI {
 	 * @param conf
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
-		topTrumps = new TopTrumpsCLIApplication();
+		this.topTrumps = new TopTrumpsCLIApplication();
+		this.deck = new Deck();
+		topTrumps.dealCards(deck, logsToFile);
 	}
 	
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
+	
+	
+	@GET
+	@Path("/playerActiveCard") 
+	public String activePCard() throws IOException {
+		String cName = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).getCardName();
+		String JSONstring = oWriter.writeValueAsString(cName);
+		return JSONstring;
+	}
+	
+	
+	
 	
 	@GET
 	@Path("/helloJSONList")
@@ -82,6 +98,23 @@ public class TopTrumpsRESTAPI {
 	 */
 	public String helloWord(@QueryParam("Word") String Word) throws IOException {
 		return "Hello "+Word;
+	}
+	
+	@GET 
+	@Path("/getStatistics")
+
+	public String getStatistics(@QueryParam("Stat") String Stat) throws Exception {
+		DatabaseConnect db = new DatabaseConnect();
+		db.DatabaseOpen();
+		List<String> stats = new ArrayList<String>();
+		stats.add(db.totalNumberGames());
+		stats.add(db.totalHumanWins());
+		stats.add(db.totalAIWins());
+		stats.add(db.avgNumberDraws());
+		stats.add(db.maxGameLength());
+		db.DatabaseClose();
+		String statevalue = oWriter.writeValueAsString(stats);
+		return statevalue;
 	}
 	
 }

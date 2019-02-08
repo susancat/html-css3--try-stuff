@@ -58,10 +58,9 @@
 	 <tr>
 	  <th style="font-size:100px">AI PLAYER 2</th>
 	  </tr></br></br>
-	  <tr>
-	   <p id="AI2Attribute1">AI2Attribute1</p>
+	   <p id="AI2Attribute1"></p>
 		</br>
-	   <p id="AI2Attribute2">AI2Attribute2</p>
+	   <p id="AI2Attribute2"></p>
 		</br>
 	  <p id="AI2Attribute3">AI2Attribute3</p>
 		</br>
@@ -115,7 +114,10 @@
 	  <th style="font-size:100px">AI Player 4</th>
 	  </tr></br></br>
 	  <tr>
-	    <p id="AI4Attribute1">AI4Attribute1</p>
+	    <p id="AI4Attribute1">AI4At1</p>
+	    
+	  
+	    
 		</br>
 	   <p id="AI4Attribute1">AI4Attribute2</p>
 		</br>
@@ -162,82 +164,21 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				helloJSONList();
-				helloWord("Student");
+				//helloJSONList();
+				//helloWord("Student");
+				activePCard();
 				
 			}
-			  
-			 var ActivePlayerId = "Active Palyer is";
-			  var ActivePlayerName = "You";
-			  var SelectedRangeBox = "Range";
-              document.getElementById("ActiveTitle").innerHTML = ActivePlayerId;
-			  document.getElementById("Act_PlayerName").innerHTML = ActivePlayerName;
-			  document.getElementById("SelectedRange").innerHTML = SelectedRangeBox;
-			  
-			  var youcard1 = "Yourcard1";
-			  var youcard2 = "Yourcard2";
-			  var youcard3 = "Yourcard3";
-			  var youcard4 = "Yourcard4";
-			  var youcard5 = "Yourcard5";
-			  
-			  document.getElementById("YOUAttribute1").innerHTML = "Yourcard1";
-			  document.getElementById("YOUAttribute2").innerHTML = youcard2;
-			  document.getElementById("YOUAttribute3").innerHTML = youcard3;
-			  document.getElementById("YOUAttribute4").innerHTML = youcard4;
-			  document.getElementById("YOUAttribute5").innerHTML = youcard5;
-			  
-			  var AIonecard1 = "AICARD11";
-			  var AIonecard2
-			  var AIonecard3
-			  var AIonecard4
-			  var AIonecard5
-			  
-			  document.getElementById("AI1Attribute1").innerHTML = AIonecard1;
-			  document.getElementById("AI1Attribute2").innerHTML = AIonecard2;
-			  document.getElementById("AI1Attribute3").innerHTML = AIonecard3;
-			  document.getElementById("AI1Attribute4").innerHTML = AIonecard4;
-			  document.getElementById("AI1Attribute5").innerHTML = AIonecard5;
-			  
-			  var AI2ndcard1
-			  var AI2ndcard2
-			  var AI2ndcard3
-			  var AI2ndcard4
-			  var AI2ndcard5
-			  
-			  document.getElementById("AI2Attribute1").innerHTML = AI2ndcard1;
-			  document.getElementById("AI2Attribute2").innerHTML = AI2ndcard2;
-			  document.getElementById("AI2Attribute3").innerHTML = AI2ndcard3;
-			  document.getElementById("AI2Attribute4").innerHTML = AI2ndcard4;
-			  document.getElementById("AI2Attribute5").innerHTML = AI2ndcard5;
-			  
-			  var AI3rdcard1
-			  var AI3rdcard2
-			  var AI3rdcard3
-			  var AI3rdcard4
-			  var AI3rdcard5
-			  
-			  document.getElementById("AI3Attribute1").innerHTML = AI3rdcard1;
-			  document.getElementById("AI3Attribute2").innerHTML = AI3rdcard2;
-			  document.getElementById("AI3Attribute3").innerHTML = AI3rdcard3;
-			  document.getElementById("AI3Attribute4").innerHTML = AI3rdcard4;
-			  document.getElementById("AI3Attribute5").innerHTML = AI3rdcard5;
-			  
-			  var AI4thcard1
-			  var AI4thcard2
-			  var AI4thcard3
-			  var AI4thcard4
-			  var AI4thcard5
-			  
-			  document.getElementById("AI4Attribute1").innerHTML = AI4thcard1;
-			  document.getElementById("AI4Attribute2").innerHTML = AI4thcard2;
-			  document.getElementById("AI4Attribute3").innerHTML = AI4thcard3;
-			  document.getElementById("AI4Attribute4").innerHTML = AI4thcard4;
-			  document.getElementById("AI4Attribute5").innerHTML = AI4thcard5;
-			 
+			var hi = activePCard();
+			document.getElementById("AI2Attribute2").innerHTML = hi;
+			
 			  
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
+		
+			
+		
 		
 			// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
@@ -268,6 +209,18 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
+		
+			function activePCard() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playerActiveCard");
+				if(!xhr) {
+					alert("CORS not supported");
+				}
+				xhr.onload = function(e) {
+					var responseText = xhr.response;
+					alert(responseText);
+				};
+				xhr.send();
+			}
 		
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {

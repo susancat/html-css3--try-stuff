@@ -60,18 +60,18 @@
 				// For example, lets call our sample methods
 				//<!--helloJSONList();-->
 				//<!--helloWord("Student");-->
-				
+				getStatistics();
 			}
-			   var NumofGames = 1;
-			   var NumofHuWin = 2;
-			   var NumofAiWin = 3;
-			   var AveOfDraws = 4;
-			   var LongGame   = 5;
-			   document.getElementById("nofGames").innerHTML = NumofGames;
-			   document.getElementById("nofhumanwin").innerHTML = NumofHuWin;
-			   document.getElementById("nofaiwin").innerHTML = NumofAiWin;
-			   document.getElementById("aveofdraws").innerHTML = AveOfDraws;
-			   document.getElementById("longestgame").innerHTML = LongGame;
+			  // var NumofGames = 1;
+			 //  var NumofHuWin = 2;
+			 //  var NumofAiWin = 3;
+			  // var AveOfDraws = 4;
+			 //  var LongGame   = 5;
+			  // document.getElementById("nofGames").innerHTML = NumofGames;
+			 //  document.getElementById("nofhumanwin").innerHTML = NumofHuWin;
+			  // document.getElementById("nofaiwin").innerHTML = NumofAiWin;
+			 //  document.getElementById("aveofdraws").innerHTML = AveOfDraws;
+			 //  document.getElementById("longestgame").innerHTML = LongGame;
 			
 			// -----------------------------------------
 			// Add your other Javascript methods Here
@@ -150,6 +150,47 @@
 				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();		
 			}
+			
+			function getStatistics() {
+
+                // First create a CORS request, this is the message we are going to send (a get request in this case)
+
+                var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStatistics?Stat); // Request type and URL+parameters
+
+                // Message is not sent yet, but we can check that the browser supports CORS
+                if (!xhr) {
+                    alert("CORS not supported");
+                }
+
+                // CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+                // to do when the response arrives 
+                xhr.onload = function(e) {
+                    var responseText = xhr.response; // the text of the response
+                    alert(responseText); // lets produce an alert
+                };
+
+    
+                // We have done everything we need to prepare the CORS request, so send it
+
+                xhr.send(); 
+
+               var '{"statisitics":['+ xhr ]}';
+
+                object = JSON.parse(xhr)
+
+          document.getElementById("demo").innerHTML =
+
+          obj.statisitics[0] + " " + obj.statisitics[0];
+
+           obj.statisitics[1] + " " + obj.statisitics[1];
+
+          obj.statisitics[2] + " " + obj.statisitics[2];
+
+          obj.statisitics[3] + " " + obj.statisitics[3];
+
+          obj.statisitics[4] + " " + obj.statisitics[4];        
+
+            }
 
 		</script>
 		
