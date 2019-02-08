@@ -8,22 +8,22 @@ import java.sql.SQLException;
 import java.sql.Statement; 
 
 public class DatabaseConnect {
-	static Connection c = null;
-	private static int gamenumber;
-	private static int gameHuWin;
-	private static int gameAiWin;
-	private static double gamedraws;
-	private static int gameLen;
-	private static boolean verifydbopen;
-	private static boolean verifydbclose;
-	private static boolean confirmstatementclosure;
+	Connection c = null;
+	private int gamenumber;
+	private int gameHuWin;
+	private int gameAiWin;
+	private double gamedraws;
+	private int gameLen;
+	private boolean verifydbopen;
+	private boolean verifydbclose;
+	private boolean confirmstatementclosure;
 	
 	
-	public static void DatabaseOpen() {       
+	public void DatabaseOpen() {       
 		try {          
 			Class.forName("org.postgresql.Driver");          
-			c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/MainTest",            
-					"postgres", "Psql8544");         
+			c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/TopTrumps",            
+					"postgres", "freekshow");         
 			
 			if(c !=null) 
 			{
@@ -36,7 +36,7 @@ public class DatabaseConnect {
 			e.printStackTrace(); 
 		}
 	} 
-	public static void DatabaseClose() {
+	public void DatabaseClose() {
 		try {
 			c.close();
 			if(c.isClosed()) {
@@ -47,84 +47,98 @@ public class DatabaseConnect {
 		//	System.out.println("Data Base Close");
 		}catch ( Exception e ) { 
 			e.printStackTrace(); 
-	}
+		}
    }
 	
-	public static void insertValues(int gnumber, int humanwin, int aiwin, int draws, int gamelength) {
-		int gameIdNum = 0;
-		gameIdNum = getGameId(gameIdNum);
-		gameIdNum++;
-		try {
-			
-			Statement stmt = c.createStatement();
-			
-		String insertquery = "INSERT INTO Game(GameId, GamesNo, HumanWin, AIWin, NoDraws, GameLength)"
-				+ "VALUES ('"+gameIdNum+"','"+gnumber+"','"+humanwin+"', '"+aiwin+"', '"+draws+"', '"+gamelength+"')";
+	public void insertValues(int humanwin, int aiwin, int draws, int gamelength) throws SQLException {
+		Statement stmt = c.createStatement();
+		String insertquery = "INSERT INTO Game(HumanWin, AIWin, NoDraws, GameLength)"
+				+ "VALUES ('"+humanwin+"', '"+aiwin+"', '"+draws+"', '"+gamelength+"')";
 	    stmt.executeUpdate(insertquery);
 		// System.out.println("Values Inserted");
 		stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
 	}
-	public static void GameNumberdb() {
-		try {
-			 
-			 PreparedStatement stmtGsum =  c.prepareStatement("SELECT SUM(GamesNo) As Total_games FROM   Game");
+	
+	public String totalNumberGames() throws SQLException {
+			 PreparedStatement stmtGsum =  c.prepareStatement("SELECT COUNT(*) As Total_games FROM Game");
 			 ResultSet result = stmtGsum.executeQuery();
 			 result.next();
-		     String Gamesum = result.getString(1);
-		     System.out.println(Gamesum);
-		     gamenumber = Integer.parseInt(Gamesum);
+		     String gameSum = result.getString(1);
+//		     System.out.println(gameSum);
+		     gamenumber = Integer.parseInt(gameSum);
 			 stmtGsum.close();
 			 if (stmtGsum.isClosed()) {confirmstatementclosure = true;
 			                          }else{confirmstatementclosure = false;}
+			 return gameSum;
+	}
 			 
-			 PreparedStatement stmtHwin = c.prepareStatement("SELECT SUM(HumanWin) As Human_score FROM   Game");
+	public String totalHumanWins() throws SQLException {
+			 PreparedStatement stmtHwin = c.prepareStatement("SELECT SUM(HumanWin) As Human_score FROM Game");
 			 ResultSet getHquery = stmtHwin.executeQuery();
 	         getHquery.next();
-	         String Hwinsum = getHquery.getString(1);
-			 System.out.println(Hwinsum);
-			 gameHuWin = Integer.parseInt(Hwinsum);
+	         String hWinSum = getHquery.getString(1);
+//			 System.out.println(hWinSum);
+			 gameHuWin = Integer.parseInt(hWinSum);
 			 stmtHwin.close();
 			 if (stmtHwin.isClosed()) {confirmstatementclosure = true;
 			                          }else{confirmstatementclosure = false;}
-			 
-			 PreparedStatement stmtAiwin = c.prepareStatement("SELECT SUM(AIWin) As AI_score FROM   Game");
+			 return hWinSum;
+	}
+	
+	public String totalAIWins() throws SQLException {		 
+			 PreparedStatement stmtAiwin = c.prepareStatement("SELECT SUM(AIWin) As AI_score FROM Game");
 			 ResultSet getAiquery = stmtAiwin.executeQuery();
 	         getAiquery.next();
-	         String Aiwinsum = getAiquery.getString(1);
-			 System.out.println(Aiwinsum);
-			 gameAiWin = Integer.parseInt(Aiwinsum);
+	         String aiWinSum = getAiquery.getString(1);
+//			 System.out.println(aiWinSum);
+			 gameAiWin = Integer.parseInt(aiWinSum);
 			 stmtAiwin.close();
 			 if (stmtAiwin.isClosed()) {confirmstatementclosure = true;
                                        }else{confirmstatementclosure = false;}
+			 return aiWinSum;
+	}
 			 
-			 PreparedStatement stmtDraws = c.prepareStatement("SELECT AVG(NoDraws) As Ave_Draws  FROM   Game");
+	public String avgNumberDraws() throws SQLException {
+			 PreparedStatement stmtDraws = c.prepareStatement("SELECT AVG(NoDraws) As Ave_Draws  FROM Game");
 			 ResultSet getDraws = stmtDraws.executeQuery();
 	         getDraws.next();
-	         String AveDraws = getDraws.getString(1);
-			 System.out.println(AveDraws);
-			 gamedraws = Double.parseDouble(AveDraws);
+	         String avgDraws = String.format("%5.2f", getDraws.getDouble(1));
+//			 System.out.println(avgDraws);
+			 gamedraws = Double.parseDouble(avgDraws);
 			 stmtDraws.close();
 			 if (stmtDraws.isClosed()) {confirmstatementclosure = true;
                                        }else{confirmstatementclosure = false;}
+			 return avgDraws;
+	}
 			 
-			 PreparedStatement stmtGlength = c.prepareStatement("SELECT MAX(GameLength) As Length_Game FROM   Game");
+	public String maxGameLength() throws SQLException {
+			 PreparedStatement stmtGlength = c.prepareStatement("SELECT MAX(GameLength) As Length_Game FROM Game");
 			 ResultSet getGlquery = stmtGlength.executeQuery();
 			 getGlquery.next();
-	         String Gamelength = getGlquery.getString(1);
-			 System.out.println(Gamelength);
-			 gameLen = Integer.parseInt(Gamelength);
+	         String gameLength = getGlquery.getString(1);
+//			 System.out.println(gameLength);
+			 gameLen = Integer.parseInt(gameLength);
 			 stmtGlength.close();
 			 if (stmtGlength.isClosed()) {confirmstatementclosure = true;
                                          }else{confirmstatementclosure = false;}
+			 return gameLength;
 			 
-		} catch (SQLException e) {
-		
-			e.printStackTrace();
-		}
 	}
+	
+	public void createTable() throws SQLException {
+		DatabaseOpen();
+		Statement stmt = c.createStatement();
+		if (c != null) {
+		String sql = "CREATE TABLE IF NOT EXISTS Game(GamesNo serial, HumanWin integer, "
+				+ "AIWin integer, NoDraws integer, GameLength integer)";
+		stmt.executeUpdate(sql);
+		
+		}
+		DatabaseClose();
+		}
+
+
 	/*
 	 * These getter and setter have been created
 	 * for junit testing and in case if they are needed
@@ -133,49 +147,30 @@ public class DatabaseConnect {
 	 * written in above method which will affect game in cli
 	 * version. 
 	 */
-	public static int getGameNumber() {
+	public int getGameNumber() {
 		return gamenumber;
 	}
-	public static int getHumanWins() {
+	public int getHumanWins() {
 		return gameHuWin;
 	}
-	public static int getAiWins() {
+	public int getAiWins() {
 		return gameAiWin;
 	}
-	public static double getDrawsAve() {
+	public double getDrawsAve() {
 		return gamedraws;
 	}
-	public static int getTotalGameTime() {
+	public int getTotalGameTime() {
 		return gameLen;
 	}
-	public static int getGameId(int gameIdint) {
-		/*
-		 * This Method get game id from database
-		 * so the program know the previous game 
-		 * Id number and can assign a new Number
-		 * to new game, it is called by insertvalues
-		 * method.
-		 */
-		try {
-			PreparedStatement stmtGId = c.prepareStatement("SELECT MAX(GameId) As Game_Id  FROM   Game");
-			ResultSet result = stmtGId.executeQuery();
-			result.next();
-		    String gameId = result.getString(1);
-		    gameIdint = Integer.parseInt(gameId);
-		   // System.out.println("This is gameId" + gameIdint);
-		    stmtGId.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return gameIdint;
-	}
-	public static boolean isDBopen() {
+	public boolean isDBopen() {
 		return verifydbopen;
 		}
-	public static boolean isDBclose() {
+	public boolean isDBclose() {
 		return verifydbclose;
 	}
-	public static boolean areStatementClose() {
+	public boolean areStatementClose() {
 		return confirmstatementclosure;
 	}
+	
 }
+	

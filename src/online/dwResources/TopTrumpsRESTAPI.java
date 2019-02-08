@@ -35,6 +35,7 @@ public class TopTrumpsRESTAPI {
 	/** A Jackson Object writer. It allows us to turn Java objects
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
+	TopTrumpsCLIApplication topTrumps;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -43,9 +44,7 @@ public class TopTrumpsRESTAPI {
 	 * @param conf
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
-		// ----------------------------------------------------
-		// Add relevant initalization here
-		// ----------------------------------------------------
+		topTrumps = new TopTrumpsCLIApplication();
 	}
 	
 	// ----------------------------------------------------
