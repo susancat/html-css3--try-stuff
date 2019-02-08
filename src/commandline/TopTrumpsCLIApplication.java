@@ -121,6 +121,7 @@ public class TopTrumpsCLIApplication  {
 					String s = input.next();
 					if(s.equals("end")) {
 						exitGame = true;
+						round = 1;
 						break;
 					}
 				}
