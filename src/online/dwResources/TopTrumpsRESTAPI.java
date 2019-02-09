@@ -59,9 +59,11 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/playerActiveCard") 
 	public String activePCard() throws IOException {
-		String cName = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0)).getCardName();
-		String JSONstring = oWriter.writeValueAsString(cName);
-		return JSONstring;
+		Card c = deck.getCardDeck().get(0);
+		String JSONc = oWriter.writeValueAsString(c);
+		System.out.println(JSONc);
+		return JSONc;
+		
 	}
 	
 	

@@ -58,15 +58,18 @@
 	 <tr>
 	  <th style="font-size:100px">AI PLAYER 2</th>
 	  </tr></br></br>
-	   <p id="AI2Attribute1"></p>
+		<tr>
+		<p id="AI2_cardName"></p>
 		</br>
-	   <p id="AI2Attribute2"></p>
+		<p id="AI2_size"></p>
 		</br>
-	  <p id="AI2Attribute3">AI2Attribute3</p>
+		<p id="AI2_speed"></p>
 		</br>
-	   <p id="AI2Attribute4">AI2Attribute4</p>
+		<p id="AI2_range"></p>
 		</br>
-	  <p id="AI2Attribute5">AI2Attribute5</p>
+		<p id="AI2_firepower"></p>
+		</br>
+		<p id="AI2_cargo"></p>
 	  </tr>
 	 </table>
 	 </div>
@@ -155,6 +158,8 @@
 		
 		
 		<script type="text/javascript">
+		
+			
 		    
 			// Method that is called on page load
 			function initalize() {
@@ -166,11 +171,15 @@
 				// For example, lets call our sample methods
 				//helloJSONList();
 				//helloWord("Student");
-				activePCard();
+				var card = JSON.parse(activePCard());
+				var size = card.size;
 				
 			}
-			var hi = activePCard();
-			document.getElementById("AI2Attribute2").innerHTML = hi;
+			
+			//var card = JSON.parse(activePCard());
+			var AI2name = "orion";
+			document.getElementById("AI2_cardName").innerHTML = "Name: " + AI2name;
+			//document.getElementById("AI2_size").innerHTML = "Size: " + card.size;
 			
 			  
 			// -----------------------------------------
