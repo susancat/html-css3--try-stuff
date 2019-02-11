@@ -2,6 +2,7 @@ package online.dwResources;
 import commandline.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class TopTrumpsRESTAPI {
 	/** A Jackson Object writer. It allows us to turn Java objects
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
+	TopTrumpsCLIApplication topTrumps;
+	Deck deck;
+	Boolean logsToFile = false;
+	DatabaseConnect db;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -42,15 +47,34 @@ public class TopTrumpsRESTAPI {
 	 * the deck file and the number of AI players.
 	 * @param conf
 	 */
-	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
-		// ----------------------------------------------------
-		// Add relevant initalization here
-		// ----------------------------------------------------
+	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) throws Exception{
+		this.topTrumps = new TopTrumpsCLIApplication();
+		this.deck = new Deck();
+		topTrumps.dealCards(deck, logsToFile);
 	}
 	
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
+	
+	
+	@GET
+	@Path("/playerActiveCard") 
+	public String activePCard() throws IOException {
+		Card c = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0));
+		String JSONc = oWriter.writeValueAsString(c);
+		return JSONc;
+		
+	}
+	
+	@GET
+	@Path("/ai1ActiveCard")
+	public String activeAI1Card() throws IOException {
+		Card c = deck.getCardDeck().get(deck.getPlayers().get(1).getHand().get(0));
+		String JSONc = oWriter.writeValueAsString(c);
+		return JSONc;
+	}
+	
 	
 	@GET
 	@Path("/helloJSONList")
@@ -83,6 +107,26 @@ public class TopTrumpsRESTAPI {
 	 */
 	public String helloWord(@QueryParam("Word") String Word) throws IOException {
 		return "Hello "+Word;
+	}
+	
+	
+	public void loadStats() throws Exception{
+		db = new DatabaseConnect();
+		db.DatabaseOpen();
+		db.totalNumberGames();
+		db.totalHumanWins();
+		db.totalAIWins();
+		db.avgNumberDraws();
+		db.maxGameLength();
+		db.DatabaseClose();
+	}
+	
+	@GET 
+	@Path("/getStatistics")
+	public String getStatistics() throws Exception {
+		loadStats();
+		String dbString = oWriter.writeValueAsString(this.db);
+		return dbString;
 	}
 	
 }
