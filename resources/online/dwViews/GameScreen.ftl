@@ -90,7 +90,7 @@
 	 
 	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
 		 <table class="card">
-	  		<th >Your top card is </th>
+	  		<th >Your card is: </th>
 			<tr>
 	 			<p id="hcName"></p>
 	 			<p id="hcSize"></p>

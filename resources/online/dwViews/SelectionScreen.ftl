@@ -25,6 +25,7 @@
     	<div class="container">
 
 			<!-- Add your HTML Here -->
+<<<<<<< HEAD
 		<header>
       <h1 style="background-color:black; font-size:40px; 
 	   color:#FFFFFF; text-align:center; padding:20px">
@@ -40,6 +41,9 @@
 	   <input type="button" value="Game Statistics" onclick="location.href='http://localhost:7777/toptrumps/stats'">
 	   <input type="button" value="Quit" onclick="closeCurrentTab()">
 	  
+=======
+		
+>>>>>>> ebe962160199c5221127981df262dde50cad33d0
 		</div>
 		
 		<script type="text/javascript">
@@ -52,8 +56,8 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				//<!--helloJSONList();-->
-				//<!--helloWord("Student");-->
+				helloJSONList();
+				helloWord("Student");
 				
 			}
 			

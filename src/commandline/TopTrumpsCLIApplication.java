@@ -190,9 +190,9 @@ public class TopTrumpsCLIApplication  {
 				//=========================================DB
 			}else {
 				// add common deck to winners array
-				addCommonDeck(deck);
 				finalWinner = roundWinner;
 				activePlayer = roundWinner;
+				addCommonDeck(deck);
 				winningCardIndex = winningCardIndex(deck);
 				finalWinningCard = deck.getCardDeck().get(winningCardIndex).getCardName();
 				// check for overall game win
