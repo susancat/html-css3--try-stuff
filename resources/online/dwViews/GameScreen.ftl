@@ -35,8 +35,7 @@
 	  YOUR: SELECTED RANGE
 	  </h2>
 	  </header>
-	 
-	  
+	   
 			<!-- Add your HTML Here -->
 	 
      <div style="float:left; margin: 30px;height: 200px; width: 150px;background: green; 
@@ -49,100 +48,102 @@
 	 </th>
 	 </tr>
 	 <td> <p>They Selected</p> <p id="SelectedRange"></p>
+	 </br>
+	 <td> <p>Round Number</p> <p id="Round.NO"></p>
 	 </table>
 	 </div>
 	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; 
+	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
 	 <table class="card">
 	 <tr>
 	  <th style="font-size:100px">AI PLAYER 2</th>
-	  </tr></br></br></br>
-	  <tr>
-	    <td>Attribute1</td>
-		</br></br>
-		<td>Attribute2</td>
-		</br></br>
-		<td>Attribute3</td>
-		</br></br>
-		<td>Attribute4</td>
-		</br></br>
-		<td>Attribute5</td>
+	  </tr></br></br>
+		<tr>
+		<p id="AI2_cardName"></p>
+		</br>
+		<p id="AI2_size"></p>
+		</br>
+		<p id="AI2_speed"></p>
+		</br>
+		<p id="AI2_range"></p>
+		</br>
+		<p id="AI2_firepower"></p>
+		</br>
+		<p id="AI2_cargo"></p>
 	  </tr>
 	 </table>
 	 </div>
 	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; 
-	 <table class="card">
-	 <tr>
-	  <th style="font-size:100px">AI PLAYER 1</th>
-	  </tr></br></br></br>
-	  <tr>
-	    <td>Attribute1</td>
-		</br></br>
-		<td>Attribute2</td>
-		</br></br>
-		<td>Attribute3</td>
-		</br></br>
-		<td>Attribute4</td>
-		</br></br>
-		<td>Attribute5</td>
-	  </tr>
-	 </table>
+	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
+	 	<table class="card">
+	 		<th style="font-size:100px">AI PLAYER 1</th>
+	 		<tr>
+	  			<p id="ai1Name"></p></br>
+	  			<p id="ai1Size"></p></br>
+	  			<p id="ai1Speed"></p></br>
+	  			<p id="ai1Range"></p></br>
+	  			<p id="ai1Firepower"></p></br>
+	  			<p id="ai1Cargo"></p>
+	  		</tr>
+		</table>
 	 </div>
 	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; 
-	 <table class="card">
-	 <tr>
-	  <th style="font-size:100px">YOU</th>
-	  </tr></br></br></br>
-	  <tr>
-	    <td>Attribute1</td>
-		</br></br>
-		<td>Attribute2</td>
-		</br></br>
-		<td>Attribute3</td>
-		</br></br>
-		<td>Attribute4</td>
-		</br></br>
-		<td>Attribute5</td>
-	  </tr>
-	 </table>
+	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
+		 <table class="card">
+	  		<th >Your top card is </th>
+			<tr>
+	 			<p id="hcName" font-style:bold></p>
+	 			<p id="hcSize"></p>
+	 			<p id="hcSpeed"></p>
+	 			<p id="hcRange"></p>
+	 			<p id="hcFirepower"></p>
+	 			<p id="hcCargo"></p>
+			</tr>
+			<tr>
+				<input type="button" value="Size" onclick="submit">
+				<input type="button" value="Speed" onclick="submit">
+				<input type="button" value="Range" onclick="submit">
+				<input type="button" value="Firepower" onclick="submit">
+				<input type="button" value="Cargo" onclick="submit">
+	  		</tr>
+	 	</table>
 	 </div>
 	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 200px;background: lightblue; class="card">
+	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; class="card">
 	 <tr>
 	  <th style="font-size:100px">AI Player 4</th>
-	  </tr></br></br></br>
+	  </tr></br></br>
 	  <tr>
-	    <td>Attribute1</td>
-		</br></br>
-		<td>Attribute2</td>
-		</br></br>
-		<td>Attribute3</td>
-		</br></br>
-		<td>Attribute4</td>
-		</br></br>
-		<td>Attribute5</td>
+	    <p id="AI4Attribute1">AI4At1</p>
+	    
+	  
+	    
+		</br>
+	   <p id="AI4Attribute1">AI4Attribute2</p>
+		</br>
+	    <p id="AI4Attribute1">AI4Attribute3</p>
+		</br>
+	    <p id="AI4Attribute1">AI4Attribute4</p>
+		</br>
+		<p id="AI4Attribute1">AI4Attribute5</p>
 	  </tr>
 	 </table>
 	 </div>
 	 
-	 <div style="float:right; margin: 40px;
-	 height: 300px; width: 200px;
-	 background: lightblue; class="card">
+	 <div style="float:right; margin: 40px; height: 300px; width: 220px; background: lightblue; class="card">
 	 <tr>
 	  <th style="font-size:100px">AI Player 3</th>
-	  </tr></br></br></br>
+	  </tr></br></br>
 	  <tr>
-	    <td>Attribute1</td>
-		</br></br>
-		<td>Attribute2</td>
-		</br></br>
-		<td>Attribute3</td>
-		</br></br>
-		<td>Attribute4</td>
-		</br></br>
-		<td>Attribute5</td>
+	   <p id="AI3Attribute1">AI3Attribute1</p>
+		</br>
+	   <p id="AI3Attribute2">AI3Attribute2</p>
+		</br>
+		<p id="AI3Attribute3">AI3Attribute3</p>
+		</br>
+         <p id="AI3Attribute4">AI3Attribute4</p>
+		</br>
+		<p id="AI3Attribute5">AI3Attribute5</p>
 	  </tr>
 	 </table>
 	 </div>
@@ -150,31 +151,41 @@
 		</div>
 		</div>
 		
+		
+		
+		
 		<script type="text/javascript">
-		    
+			var activeCard;
+			var ai1ActiveCard;
 			
 			// Method that is called on page load
 			function initalize() {
 			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// For example, lets call our sample methods
-				//<--helloJSONList();-->
-				//<--helloWord("Student");-->
-				
+				activePCard();
+				activeAI1Card();
+			}
+			
+			
+			function showActiveCard() {
+				document.getElementById("hcName").innerHTML = activeCard.cardName;
+				document.getElementById("hcSize").innerHTML = "Speed: " + activeCard.size;
+				document.getElementById("hcSpeed").innerHTML = "Size: " + activeCard.speed;
+				document.getElementById("hcRange").innerHTML = "Range: " + activeCard.range;
+				document.getElementById("hcFirepower").innerHTML = "Firepower: " + activeCard.firepower;
+				document.getElementById("hcCargo").innerHTML = "Cargo: " + activeCard.cargo;
+			}
+			
+			
+			function showAI1card() {
+				document.getElementById("ai1Name").innerHTML = "Name: " + ai1ActiveCard.cardName;
 			}
 			  
-			  var ActivePlayerId = "Active Palyer is";
-			  var ActivePlayerName = "You";
-			  var SelectedRangeBox = "Range";
-              document.getElementById("ActiveTitle").innerHTML = ActivePlayerId;
-			  document.getElementById("Act_PlayerName").innerHTML = ActivePlayerName;
-			  document.getElementById("SelectedRange").innerHTML = SelectedRangeBox;
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
+		
+			
+		
 		
 			// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
@@ -205,6 +216,33 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
+		
+			function activePCard() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playerActiveCard");
+				if(!xhr) {
+					alert("CORS not supported");
+				}
+				xhr.onload = function(e) {
+					console.log(xhr.response)
+					//alert(responseText);
+					activeCard = JSON.parse(xhr.response);
+					showActiveCard();
+				};
+				xhr.send();
+			}
+			
+			function activeAI1Card() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/ai1ActiveCard");
+				if(!xhr) {
+					alert("CORS not supported")
+				}
+				xhr.onload = function(e) {
+					console.log(xhr.response)
+					ai1ActiveCard = JSON.parse(xhr.response);
+					showAI1card();
+				};
+				xhr.send();
+			}
 		
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {
