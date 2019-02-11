@@ -2,6 +2,7 @@ package online.dwResources;
 import commandline.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class TopTrumpsRESTAPI {
 	TopTrumpsCLIApplication topTrumps;
 	Deck deck;
 	Boolean logsToFile = false;
+	DatabaseConnect db;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -45,10 +47,12 @@ public class TopTrumpsRESTAPI {
 	 * the deck file and the number of AI players.
 	 * @param conf
 	 */
-	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
+	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) throws Exception{
 		this.topTrumps = new TopTrumpsCLIApplication();
 		this.deck = new Deck();
 		topTrumps.dealCards(deck, logsToFile);
+		db = new DatabaseConnect();
+		loadStats();
 	}
 	
 	// ----------------------------------------------------
@@ -59,14 +63,19 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/playerActiveCard") 
 	public String activePCard() throws IOException {
-		Card c = deck.getCardDeck().get(0);
+		Card c = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0));
 		String JSONc = oWriter.writeValueAsString(c);
-		System.out.println(JSONc);
 		return JSONc;
 		
 	}
 	
-	
+	@GET
+	@Path("/ai1ActiveCard")
+	public String activeAI1Card() throws IOException {
+		Card c = deck.getCardDeck().get(deck.getPlayers().get(1).getHand().get(0));
+		String JSONc = oWriter.writeValueAsString(c);
+		return JSONc;
+	}
 	
 	
 	@GET
@@ -102,21 +111,23 @@ public class TopTrumpsRESTAPI {
 		return "Hello "+Word;
 	}
 	
+	
+	public void loadStats() throws Exception{
+		//db = new DatabaseConnect();
+		db.DatabaseOpen();
+		db.totalNumberGames();
+		db.totalHumanWins();
+		db.totalAIWins();
+		db.avgNumberDraws();
+		db.maxGameLength();
+		db.DatabaseClose();
+	}
+	
 	@GET 
 	@Path("/getStatistics")
-
-	public String getStatistics(@QueryParam("Stat") String Stat) throws Exception {
-		DatabaseConnect db = new DatabaseConnect();
-		db.DatabaseOpen();
-		List<String> stats = new ArrayList<String>();
-		stats.add(db.totalNumberGames());
-		stats.add(db.totalHumanWins());
-		stats.add(db.totalAIWins());
-		stats.add(db.avgNumberDraws());
-		stats.add(db.maxGameLength());
-		db.DatabaseClose();
-		String statevalue = oWriter.writeValueAsString(stats);
-		return statevalue;
+	public String getStatistics() throws Exception {
+		String dbString = oWriter.writeValueAsString(this.db);
+		return dbString;
 	}
 	
 }

@@ -75,41 +75,38 @@
 	 </div>
 	 
 	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
-	 <table class="card">
-	 <tr>
-	  <th style="font-size:100px">AI PLAYER 1</th>
-	  </tr></br></br>
-	  <tr>
-	  <p id="AI1Attribute1">AI1Attribute1</p>
-		</br>
-	  <p id="AI1Attribute1">AI1Attribute2</p>
-		</br>
-	  <p id="AI1Attribute1">AI1Attribute3</p>
-		</br>
-	  <p id="AI1Attribute1">AI1Attribute4</p>
-		</br>
-	  <p id="AI1Attribute1">AI1Attribute5</p>
-	  </tr>
-	 </table>
+	 	<table class="card">
+	 		<th style="font-size:100px">AI PLAYER 1</th>
+	 		<tr>
+	  			<p id="ai1Name"></p></br>
+	  			<p id="ai1Size"></p></br>
+	  			<p id="ai1Speed"></p></br>
+	  			<p id="ai1Range"></p></br>
+	  			<p id="ai1Firepower"></p></br>
+	  			<p id="ai1Cargo"></p>
+	  		</tr>
+		</table>
 	 </div>
 	 
 	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
-	 <table class="card">
-	 <tr>
-	  <th style="font-size:100px">YOU</th>
-	  </tr></br></br></br>
-	  <tr>
-	    <input type="button" value="YOUAttribute1" onclick="submit">
-		</br></br>
-	    <input type="button" value="YOUAttribute2" onclick="submit">
-		</br></br>
-		<input type="button" value="YOUAttribute3" onclick="submit">
-		</br></br>
-		<input type="button" value="YOUAttribute4" onclick="submit">
-		</br></br>
-	    <input type="button" value="YOUAttribute5" onclick="submit">
-	  </tr>
-	 </table>
+		 <table class="card">
+	  		<th >Your top card is </th>
+			<tr>
+	 			<p id="hcName" font-style:bold></p>
+	 			<p id="hcSize"></p>
+	 			<p id="hcSpeed"></p>
+	 			<p id="hcRange"></p>
+	 			<p id="hcFirepower"></p>
+	 			<p id="hcCargo"></p>
+			</tr>
+			<tr>
+				<input type="button" value="Size" onclick="submit">
+				<input type="button" value="Speed" onclick="submit">
+				<input type="button" value="Range" onclick="submit">
+				<input type="button" value="Firepower" onclick="submit">
+				<input type="button" value="Cargo" onclick="submit">
+	  		</tr>
+	 	</table>
 	 </div>
 	 
 	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; class="card">
@@ -158,29 +155,30 @@
 		
 		
 		<script type="text/javascript">
-		
+			var activeCard;
+			var ai1ActiveCard;
 			
-		    
 			// Method that is called on page load
 			function initalize() {
 			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// For example, lets call our sample methods
-				//helloJSONList();
-				//helloWord("Student");
-				var card = JSON.parse(activePCard());
-				var size = card.size;
-				
+				activePCard();
+				activeAI1Card();
 			}
 			
-			//var card = JSON.parse(activePCard());
-			var AI2name = "orion";
-			document.getElementById("AI2_cardName").innerHTML = "Name: " + AI2name;
-			//document.getElementById("AI2_size").innerHTML = "Size: " + card.size;
 			
+			function showActiveCard() {
+				document.getElementById("hcName").innerHTML = activeCard.cardName;
+				document.getElementById("hcSize").innerHTML = "Speed: " + activeCard.size;
+				document.getElementById("hcSpeed").innerHTML = "Size: " + activeCard.speed;
+				document.getElementById("hcRange").innerHTML = "Range: " + activeCard.range;
+				document.getElementById("hcFirepower").innerHTML = "Firepower: " + activeCard.firepower;
+				document.getElementById("hcCargo").innerHTML = "Cargo: " + activeCard.cargo;
+			}
+			
+			
+			function showAI1card() {
+				document.getElementById("ai1Name").innerHTML = "Name: " + ai1ActiveCard.cardName;
+			}
 			  
 			// -----------------------------------------
 			// Add your other Javascript methods Here
@@ -225,8 +223,23 @@
 					alert("CORS not supported");
 				}
 				xhr.onload = function(e) {
-					var responseText = xhr.response;
-					alert(responseText);
+					console.log(xhr.response)
+					//alert(responseText);
+					activeCard = JSON.parse(xhr.response);
+					showActiveCard();
+				};
+				xhr.send();
+			}
+			
+			function activeAI1Card() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/ai1ActiveCard");
+				if(!xhr) {
+					alert("CORS not supported")
+				}
+				xhr.onload = function(e) {
+					console.log(xhr.response)
+					ai1ActiveCard = JSON.parse(xhr.response);
+					showAI1card();
 				};
 				xhr.send();
 			}
