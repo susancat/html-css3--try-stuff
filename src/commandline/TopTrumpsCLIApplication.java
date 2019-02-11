@@ -121,7 +121,7 @@ public class TopTrumpsCLIApplication  {
 					String s = input.next();
 					if(s.equals("end")) {
 						exitGame = true;
-						round = 1;
+						numberOfRounds = 0;
 						break;
 					}
 				}
@@ -305,7 +305,7 @@ public class TopTrumpsCLIApplication  {
 		String winner = "";
 
 		for(Player p : deck.getPlayers()) {
-			scores.add(deck.getCardDeck().get(p.getHand().get(0)).getCatScores().get(finalCategory -1));
+			scores.add(deck.getCardDeck().get(p.getHand().get(0)).catScores().get(finalCategory -1));
 		}
 		int maxScoreIndex = scores.indexOf(Collections.max(scores));
 		Collections.sort(scores);

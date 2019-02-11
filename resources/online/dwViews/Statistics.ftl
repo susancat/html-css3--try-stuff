@@ -17,38 +17,25 @@
     	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
     	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-     
+
 	</head>
 
     <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
     	
     	<div class="container">
-		<header>
-      <h1 style="background-color:black; font-size:40px; 
-	   color:#FFFFFF; text-align:center; padding:20px">
-	  TOP TRUMP GAME
-	  </h1>
-	  <h2 style="background-color:blue; font-size:30px; 
-	   color:#FFFFFF; text-align:left; padding:20px">
-	  YOUR PRVIOUS GAME STATISTICS ARE
-	  </h2>
-	  </header>
-	  
-	    <div style="float:center; margin: 30px;height: 480px; width: 600px;background: lime; class="StatTable">
-		 
+			<p>These are the stats!</p>
+			<p id="gnumber"></p>
+			<p id="hWin"></p>
+			<p id="aiWin"></p>
+			<p id="draws"></p>
+			<p id="maxGame"></p>
+			
 		
-		 <p style="Font-size:20px; text-align:center"> YOUR GAME STATISTIS ARE</p></br>
-		 <p>NUMBER OF GAMES</p><p id="nofGames"></p>
-		 <p>NUMBER OF HUMAN WIN</p><p id="nofhumanwin"></p>
-		 <p>NUMBER OF AI WIN</p><p id="nofaiwin"></p>
-		 <p>AVERAGE NUMBER OF DRAWS</p><p id="aveofdraws"></p>
-		 <p>LONGEST GAME</p><p id="longestgame"></p>
-		 
-		 
-		</div>
 		</div>
 		
 		<script type="text/javascript">
+		
+			var db;
 		
 			// Method that is called on page load
 			function initalize() {
@@ -58,20 +45,19 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				//<!--helloJSONList();-->
-				//<!--helloWord("Student");-->
+				//helloJSONList();
+				//helloWord("Student");
+				getStats();
 				
 			}
-			   var NumofGames = 1;
-			   var NumofHuWin = 2;
-			   var NumofAiWin = 3;
-			   var AveOfDraws = 4;
-			   var LongGame   = 5;
-			   document.getElementById("nofGames").innerHTML = NumofGames;
-			   document.getElementById("nofhumanwin").innerHTML = NumofHuWin;
-			   document.getElementById("nofaiwin").innerHTML = NumofAiWin;
-			   document.getElementById("aveofdraws").innerHTML = AveOfDraws;
-			   document.getElementById("longestgame").innerHTML = LongGame;
+			
+			function printStats() {
+				document.getElementById("gNumber").innerHTML = "Number of games played: " + db.gameNumber;
+				document.getElementById("hWin").innerHTML = "Number of human wins: " + db.humanWins;
+				document.getElementById("aiWin").innerHTML = "Number of ai wins: " + db.aiWins;
+				document.getElementById("draws").innerHTML = "Adverage number of draws: " + db.drawsAve;
+				document.getElementById("maxGame").innerHTML = "Longest game played: " + db.totalGameTime;
+			}
 			
 			// -----------------------------------------
 			// Add your other Javascript methods Here
@@ -106,6 +92,20 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
+		
+		
+			function getStats() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStatistics");
+				if (!xhr) {
+					alert("CORS not supported");
+				}
+				xhr.onload = function(e) {
+					console.log(xhr.response)
+					db = JSON.parse(xhr.response);
+					printStats();
+				};
+				xhr.send();
+			}
 		
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {

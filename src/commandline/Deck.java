@@ -183,7 +183,7 @@ public class Deck {
 						+ "Category is: " + category
 						+"\r\n---------------------------------------\r\n";
 			for(Player p : players) {
-				log = log + p.getPName() + ": " + cardDeck.get(p.getHand().get(0)).getCatScores().get(finalCategory -1) 
+				log = log + p.getPName() + ": " + cardDeck.get(p.getHand().get(0)).catScores().get(finalCategory -1) 
 						+ "\r\n---------------------------------------\r\n";
  			}
 			return log;
@@ -198,7 +198,7 @@ public class Deck {
 		public String printWinner(String winner, int winIndex, String category, int finalCategory) {
 			String log = "\r\n------------------WINNER---------------\r\n" 
 					+ winner + ": " + cardDeck.get(players.get(winIndex).getHand().get(0)).getCardName() 
-					+ " " + category + " " + cardDeck.get(players.get(winIndex).getHand().get(0)).getCatScores().get(finalCategory -1) 
+					+ " " + category + " " + cardDeck.get(players.get(winIndex).getHand().get(0)).catScores().get(finalCategory -1) 
 					+ "\r\n---------------------------------------\r\n";
 			return log;
 		}
