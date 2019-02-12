@@ -121,7 +121,7 @@ public class TopTrumpsCLIApplication  {
 					String s = input.next();
 					if(s.equals("end")) {
 						exitGame = true;
-						numberOfRounds = 0;
+						resetCounters();//reset database counters on exit
 						break;
 					}
 				}
@@ -145,18 +145,19 @@ public class TopTrumpsCLIApplication  {
 						e.printStackTrace();
 						}
 				//=========================================DB
+				resetCounters();//reset database counters for next game
 				exitGame=true; 
 				break;// exit the game loop
 			}
 			
-
+			
 			System.out.println("\nRound " + round + "\nPlayers have drawn their cards");
 // if player in print card details
 			if(playerIn) {
 				String activeCardName = getActiveCardName(deck);
 				String activeCardStats = getActiveCardStats(deck);
 				System.out.println("\nYour card is " + activeCardName
-											+ "\n" + activeCardStats);
+									+ "\n" + activeCardStats);
 			}
 // place all players top cards in a common deck
 			deck.setCommonDeck();
@@ -322,6 +323,13 @@ public class TopTrumpsCLIApplication  {
 		//================================================================LOG	
 		return winner;
 	}//=======================setWinner-end
+	
+//===================RESET DB COUNTERS
+	public void resetCounters() {
+		numberOfRounds = 0;
+		humanWin = 0;
+		aiWin = 0;
+	}//===reset-end
 	
 //===============CHECK PLAYER IN GAME=======================
 	public Boolean checkPlayerIn(boolean playerIn, Deck deck) {
