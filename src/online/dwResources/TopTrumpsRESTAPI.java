@@ -1,10 +1,13 @@
 package online.dwResources;
 import commandline.*;
 
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.URI;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,6 +20,7 @@ import online.configuration.TopTrumpsJSONConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
 @Produces(MediaType.APPLICATION_JSON) // This resource returns JSON content
@@ -51,6 +55,8 @@ public class TopTrumpsRESTAPI {
 		this.topTrumps = new TopTrumpsCLIApplication();
 		this.deck = new Deck();
 		topTrumps.dealCards(deck, logsToFile);
+		Desktop d = Desktop.getDesktop();
+		d.browse(new URI("http://localhost:7777/toptrumps"));
 	}
 	
 	// ----------------------------------------------------
