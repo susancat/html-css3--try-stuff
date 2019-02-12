@@ -64,7 +64,6 @@ public class TopTrumpsRESTAPI {
 		Card c = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0));
 		String JSONc = oWriter.writeValueAsString(c);
 		return JSONc;
-		
 	}
 	
 	@GET
