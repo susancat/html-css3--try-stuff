@@ -22,134 +22,87 @@
 
     <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
     	
-    	<div class="container">
+    <div class="container">
 
-			<!-- Add your HTML Here -->
-			<header>
-      <h1 style="background-color:black; font-size:40px; 
-	   color:#FFFFFF; text-align:center; padding:20px">
-	  TOP TRUMP GAME
-	  </h1>
-	  <h2 style="background-color:blue; font-size:30px; 
-	   color:#FFFFFF; text-align:left; padding:20px">
-	  YOUR: SELECTED RANGE
-	  </h2>
-	  </header>
-	   
-			<!-- Add your HTML Here -->
-	 
-     <div style="float:left; margin: 30px;height: 200px; width: 150px;background: green; 
-	 
-	 <table class="card">
-	 <tr>
-	 <th>
-	 <p>Active Player Is</p>
-	 <p id="Act_PlayerName"></p>
-	 </th>
-	 </tr>
-	 <td> <p>They Selected</p> <p id="SelectedRange"></p>
-	 </br>
-	 <td> <p>Round Number</p> <p id="Round.NO"></p>
-	 </table>
-	 </div>
-	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
-	 <table class="card">
-	 <tr>
-	  <th style="font-size:100px">AI PLAYER 2</th>
-	  </tr></br></br>
-		<tr>
-		<p id="AI2_cardName"></p>
-		</br>
-		<p id="AI2_size"></p>
-		</br>
-		<p id="AI2_speed"></p>
-		</br>
-		<p id="AI2_range"></p>
-		</br>
-		<p id="AI2_firepower"></p>
-		</br>
-		<p id="AI2_cargo"></p>
-	  </tr>
-	 </table>
-	 </div>
-	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
-	 	<table class="card">
-	 		<th style="font-size:100px">AI PLAYER 1</th>
-	 		<tr>
-	  			<p id="ai1Name"></p></br>
-	  			<p id="ai1Size"></p></br>
-	  			<p id="ai1Speed"></p></br>
-	  			<p id="ai1Range"></p></br>
-	  			<p id="ai1Firepower"></p></br>
-	  			<p id="ai1Cargo"></p>
-	  		</tr>
-		</table>
-	 </div>
-	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; 
-		 <table class="card">
-	  		<th >Your card is: </th>
-			<tr>
-	 			<p id="hcName"></p>
-	 			<p id="hcSize"></p>
-	 			<p id="hcSpeed"></p>
-	 			<p id="hcRange"></p>
-	 			<p id="hcFirepower"></p>
-	 			<p id="hcCargo"></p>
-			</tr>
-			<tr>
-				<input type="button" value="Size" onclick="submit">
-				<input type="button" value="Speed" onclick="submit">
-				<input type="button" value="Range" onclick="submit">
-				<input type="button" value="Firepower" onclick="submit">
+		<header>
+			<h1 style="background-color:#330066; font-size:40px; color:#FFFFFF; text-align:center; padding:20px">Top Trumps Game</h1>
+	  		<h2 style="background-color:#0066cc; font-size:30px; color:#FFFFFF; text-align:center; padding:20px">Let's Play!</h2>
+	  	</header>
+	  	
+	  	<div style="float:left; margin: 30px;height: 660px; width: 150px; padding: 10px; background: #99ccff"> 
+			<h5>Active player is:</h5>
+	 		<p><h5 id="activePName"></h5></p></br>
+	 		<h5>Chosen category:</h5>
+			<p><h5 id="selectedCategory"></h5></p></br>
+	 		<p><h5>Round:</h5></p> 
+			<p><h5 id="round"><h5></p></br>
+	 		</br>
+	  		<div class="chooseCats">
+	 			<h5>Choose your category</h5>
+				<input type="button" value="Size" onclick="submit"></br>
+				<input type="button" value="Speed" onclick="submit"></br>
+				<input type="button" value="Range" onclick="submit"></br>
+				<input type="button" value="Firepower" onclick="submit"></br>
 				<input type="button" value="Cargo" onclick="submit">
-	  		</tr>
-	 	</table>
-	 </div>
+	 		</div>
+	 		</br>
+	 		<h5>Return to main menu</h5>
+	 		<input type="button" value="Menu" onclick="location.href='http://localhost:7777/toptrumps/'"></br>
+	 	</div>
 	 
-	 <div style="float:right; margin: 40px;height: 300px; width: 220px;background: lightblue; class="card">
-	 <tr>
-	  <th style="font-size:100px">AI Player 4</th>
-	  </tr></br></br>
-	  <tr>
-	    <p id="AI4Attribute1">AI4At1</p>
-	    
-	  
-	    
-		</br>
-	   <p id="AI4Attribute1">AI4Attribute2</p>
-		</br>
-	    <p id="AI4Attribute1">AI4Attribute3</p>
-		</br>
-	    <p id="AI4Attribute1">AI4Attribute4</p>
-		</br>
-		<p id="AI4Attribute1">AI4Attribute5</p>
-	  </tr>
-	 </table>
-	 </div>
 	 
-	 <div style="float:right; margin: 40px; height: 300px; width: 220px; background: lightblue; class="card">
-	 <tr>
-	  <th style="font-size:100px">AI Player 3</th>
-	  </tr></br></br>
-	  <tr>
-	   <p id="AI3Attribute1">AI3Attribute1</p>
-		</br>
-	   <p id="AI3Attribute2">AI3Attribute2</p>
-		</br>
-		<p id="AI3Attribute3">AI3Attribute3</p>
-		</br>
-         <p id="AI3Attribute4">AI3Attribute4</p>
-		</br>
-		<p id="AI3Attribute5">AI3Attribute5</p>
-	  </tr>
-	 </table>
-	 </div>
-    
+		<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
+	 		<h4>AI Player 2</h4>
+			<p><h5 id="AI2_cardName"></h5></p>
+			<p><h5 id="AI2_size"></h5></p>
+			<p><h5 id="AI2_speed"></h5></p>
+			<p><h5 id="AI2_range"></h5></p>
+			<p><h5 id="AI2_firepower"></h5></p>
+			<p><h5 id="AI2_cargo"></h5></p>
+	 	</div>
+	 
+		<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
+	 		<h4>AI Player 1</h4>
+	  		<p><h5 id="AI1_cardName"></h5></p>
+	  		<p><h5 id="AI1_size"></h5></p>
+	  		<p><h5 id="AI1_speed"></h5></p>
+	  		<p><h5 id="AI1_range"></h5></p>
+	  		<p><h5 id="AI1_firepower"></h5></p>
+	  		<p><h5 id="AI1_cargo"></h5></p>
+	 	</div>
+	 
+	 
+		<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
+			<h4>Your card is:</h4>
+			<p><h5 id="cardName"></h5></p>
+	 		<p><h5 id="size"></h5></p>
+	 		<p><h5 id="speed"></h5></p>
+	 		<p><h5 id="range"></h5></p>
+	 		<p><h5 id="firepower"></h5></p>
+	 		<p><h5 id="cargo"></h5></P>
+	 	</div>
+	 
+	 	<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
+	 		<h4>AI Player 4</h4>
+	  		<p><h5 id="AI4_cardName"></h5></P>
+	    	<p><h5 id="AI4_size"></h5></p>
+	    	<p><h5 id="AI4_speed"></h5></p>
+	    	<p><h5 id="AI4_range"></h5></p>
+	    	<p><h5 id="AI4_firepower"></h5></P>
+	    	<p><h5 id="AI4_cargo"></h5></p>
+	 	</div>
+	 
+	 	<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px; background: #cccc66; class="card"">
+	 		<h4>AI Player 3</h4>
+	  		<p><h5 id="AI3_cardName"></h5></p>
+	    	<p><h5 id="AI3_size"></h5></p>
+	    	<p><h5 id="AI3_speed"></h5></p>
+	   		<p><h5 id="AI3_range"></h5></p>
+	   	 	<p><h5 id="AI3_firepower"></h5></p>
+	    	<p><h5 id="AI3_cargo"></h5></p>
 		</div>
-		</div>
+		
+	</div>
 		
 		
 		
@@ -161,23 +114,28 @@
 			// Method that is called on page load
 			function initalize() {
 			
-				activePCard();
+				activeCard();
 				activeAI1Card();
 			}
 			
 			
-			function showActiveCard() {
-				document.getElementById("hcName").innerHTML = activeCard.cardName;
-				document.getElementById("hcSize").innerHTML = "Speed: " + activeCard.size;
-				document.getElementById("hcSpeed").innerHTML = "Size: " + activeCard.speed;
-				document.getElementById("hcRange").innerHTML = "Range: " + activeCard.range;
-				document.getElementById("hcFirepower").innerHTML = "Firepower: " + activeCard.firepower;
-				document.getElementById("hcCargo").innerHTML = "Cargo: " + activeCard.cargo;
+			function showCard() {
+				document.getElementById("cardName").innerHTML = activeCard.cardName;
+				document.getElementById("size").innerHTML = "Speed: " + activeCard.size;
+				document.getElementById("speed").innerHTML = "Size: " + activeCard.speed;
+				document.getElementById("range").innerHTML = "Range: " + activeCard.range;
+				document.getElementById("firepower").innerHTML = "Firepower: " + activeCard.firepower;
+				document.getElementById("cargo").innerHTML = "Cargo: " + activeCard.cargo;
 			}
 			
 			
 			function showAI1card() {
-				document.getElementById("ai1Name").innerHTML = "Name: " + ai1ActiveCard.cardName;
+				document.getElementById("AI1_cardName").innerHTML = ai1ActiveCard.cardName;
+				document.getElementById("AI1_size").innerHTML = "Size: " + ai1ActiveCard.size;
+				document.getElementById("AI1_speed").innerHTML = "Speed: " + ai1ActiveCard.speed;
+				document.getElementById("AI1_range").innerHTML = "Range: " + ai1ActiveCard.range;
+				document.getElementById("AI1_firepower").innerHTML = "Firepower: " + ai1ActiveCard.firepower;
+				document.getElementById("AI1_cargo").innerHTML = "Cargo: " + ai1ActiveCard.cargo;
 			}
 			  
 			// -----------------------------------------
@@ -217,7 +175,7 @@
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
 		
-			function activePCard() {
+			function activeCard() {
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playerActiveCard");
 				if(!xhr) {
 					alert("CORS not supported");
@@ -226,7 +184,7 @@
 					console.log(xhr.response)
 					//alert(responseText);
 					activeCard = JSON.parse(xhr.response);
-					showActiveCard();
+					showCard();
 				};
 				xhr.send();
 			}
@@ -243,7 +201,8 @@
 				};
 				xhr.send();
 			}
-		
+			
+//==============================================DELETE BELOW WHEN READY==================================================================================================	
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {
 			
@@ -287,7 +246,7 @@
 				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();		
 			}
-
+//============================================================DELETE ABOVE==========================================================
 		</script>
 		
 		</body>

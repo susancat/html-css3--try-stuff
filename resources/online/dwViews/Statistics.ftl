@@ -21,72 +21,45 @@
 	</head>
 
     <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
-    <div class="container">
-    	 <header>
-      <h1 style="background-color:black; font-size:40px; 
-	   color:#FFFFFF; text-align:center; padding:20px">
-	  TOP TRUMP GAME
-	  </h1>
-	  <h2 style="background-color:blue; font-size:30px; 
-	   color:#FFFFFF; text-align:left; padding:20px">
-	  YOUR PRVIOUS GAME STATISTICS ARE
-	  </h2>
-	  </header>
+    	<div class="container">
+    		 <header>
+      			<h1 style="background-color:#330066; font-size:40px; color:#FFFFFF; text-align:center; padding:20px">Top Trumps Game</h1>
+	  			<h2 style="background-color:#0066cc; font-size:30px; color:#FFFFFF; text-align:center; padding:20px">Statistics</h2>
+			</header>
 	  
-	    <div style="float:center; margin: 30px;height: 480px; width: 600px;background: lime; class="StatTable">
-		 
-		
-		 <p style="Font-size:20px; text-align:center"> YOUR GAME STATISTIS ARE</p></br>
-		 <p>NUMBER OF GAMES</p><p id="nofGames"></p>
-		 <p>NUMBER OF HUMAN WIN</p><p id="nofhumanwin"></p>
-		 <p>NUMBER OF AI WIN</p><p id="nofaiwin"></p>
-		 <p>AVERAGE NUMBER OF DRAWS</p><p id="aveofdraws"></p>
-		 <p>LONGEST GAME</p><p id="longestgame"></p>
-		 
-		 
+	    	<div style="float:left; margin: 30px; padding: 20px; height: 400px; width: 300px;background: #99ccff; class="StatTable">
+				<p><h4 style="Font-size:20px; text-align:left;"> Your game statistics are:</h4></p>
+		 		<p><h5 id="gNumber"></h5></p>
+		 		<p><h5 id="hWin"></h5></p>
+		 		<p><h5 id="aiWin"></h5></p>
+		 		<p><h5 id="draws"></h5></p>
+		 		<p><h5 id="maxGame"></h5></p></br>
+		 		<p><h5>Return to main menu</h5></p>
+		 		<input type="button" value="Menu" onclick="location.href='http://localhost:7777/toptrumps/'">
+			</div>
+	
 		</div>
-		</div>
-    	
-			<p>These are the stats!</p>
-			<p id="gnumber"></p>
-			<p id="hWin"></p>
-			<p id="aiWin"></p>
-			<p id="draws"></p>
-			<p id="maxGame"></p>
-			
-		
-		</div>
+	
 		
 		<script type="text/javascript">
 		
 			var db;
 		
-			// Method that is called on page load
+			// ------call getStats when page loads
 			function initalize() {
-			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// For example, lets call our sample methods
-				//helloJSONList();
-				//helloWord("Student");
 				getStats();
-				
 			}
 			
+			//-----prints attributes to html. Called from getStats (below) 
 			function printStats() {
 				document.getElementById("gNumber").innerHTML = "Number of games played: " + db.gameNumber;
-				document.getElementById("hWin").innerHTML = "Number of human wins: " + db.humanWins;
-				document.getElementById("aiWin").innerHTML = "Number of ai wins: " + db.aiWins;
-				document.getElementById("draws").innerHTML = "Adverage number of draws: " + db.drawsAve;
-				document.getElementById("maxGame").innerHTML = "Longest game played: " + db.totalGameTime;
+				document.getElementById("hWin").innerHTML = "Number of human wins: " + db.gameHuWins;
+				document.getElementById("aiWin").innerHTML = "Number of ai wins: " + db.gameAiWins;
+				document.getElementById("draws").innerHTML = "Adverage number of draws: " + db.gameDraws;
+				document.getElementById("maxGame").innerHTML = "Longest game played: " + db.gameLen;
 			}
 			
-			// -----------------------------------------
-			// Add your other Javascript methods Here
-			// -----------------------------------------
-		
+			
 			// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
   				var xhr = new XMLHttpRequest();
@@ -114,10 +87,9 @@
 		
 		</script>
 		
-		<!-- Here are examples of how to call REST API Methods -->
+		
 		<script type="text/javascript">
-		
-		
+		//-------Get database obj from REST API as JSON and parse to Javascript obj
 			function getStats() {
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStatistics");
 				if (!xhr) {
@@ -131,50 +103,6 @@
 				xhr.send();
 			}
 		
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloJSONList() {
-			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloJSONList"); // Request type and URL
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
-			}
-			
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloWord(word) {
-			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloWord?Word="+word); // Request type and URL+parameters
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
-			}
-
 		</script>
 		
 		</body>

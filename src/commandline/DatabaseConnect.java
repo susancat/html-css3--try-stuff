@@ -150,16 +150,16 @@ public class DatabaseConnect {
 	public int getGameNumber() {
 		return gamenumber;
 	}
-	public int getHumanWins() {
+	public int getgameHuWins() {
 		return gameHuWin;
 	}
-	public int getAiWins() {
+	public int getGameAiWins() {
 		return gameAiWin;
 	}
-	public double getDrawsAve() {
+	public double getGameDraws() {
 		return gamedraws;
 	}
-	public int getTotalGameTime() {
+	public int getGameLen() {
 		return gameLen;
 	}
 	public boolean isDBopen() {
