@@ -22,7 +22,7 @@ public class DatabaseConnect {
 	public void DatabaseOpen() {       
 		try {          
 			Class.forName("org.postgresql.Driver");          
-			c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/TopTrumps",            
+			c = DriverManager.getConnection("jdbc:postgresql://localhost:5433/TopTrumps",            
 					"postgres", "freekshow");         
 			
 			if(c !=null) 
@@ -133,7 +133,6 @@ public class DatabaseConnect {
 		String sql = "CREATE TABLE IF NOT EXISTS Game(GamesNo serial, HumanWin integer, "
 				+ "AIWin integer, NoDraws integer, GameLength integer)";
 		stmt.executeUpdate(sql);
-		
 		}
 		DatabaseClose();
 		}
