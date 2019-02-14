@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 /**
  * Top Trumps command line application
- * 
  */
 public class TopTrumpsCLIApplication  {
 	
@@ -72,7 +71,6 @@ public class TopTrumpsCLIApplication  {
 	private int numberOfRounds = 0;
 	//=========================================DB
 	
-	
 	// variables for game information
 	private int round;
 	private String activePlayer;
@@ -81,8 +79,8 @@ public class TopTrumpsCLIApplication  {
 	private String finalWinningCard;
 	private int winningCardIndex;
 	private int finalCategory;
-	private boolean exitGame;
-	private boolean playerIn;
+	private boolean exitGame = false; // flag to check whether the user wants to exit the game
+	private boolean playerIn = true; // flag to check if human player is stiil in
 	
 //============================PLAY GAME===================================
 /**
@@ -100,8 +98,6 @@ public class TopTrumpsCLIApplication  {
 		}
 		
 		System.out.println("\nGame start\n");
-		exitGame = false; // flag to check whether the user wants to exit the game
-		playerIn = true; // flag to check if human player is stiil in
 		Deck deck = new Deck(); 
 		dealCards(deck, logsToFile); 
 		// choose first player randomly 
@@ -116,7 +112,7 @@ public class TopTrumpsCLIApplication  {
 			 * At the beginning of each round checks are performed to see if the human player
 			 * is still in the game and if anybody has won
 			 */
-			playerIn = checkPlayerIn(playerIn, deck);
+			playerIn = checkPlayerIn(deck);
 			checkWin(deck);
 			if(exitGame) {
 				System.out.println("\n********GAME OVER********" + "\nThe overall winner was "+ finalWinner
@@ -148,9 +144,9 @@ public class TopTrumpsCLIApplication  {
 			// place all players top cards in a common deck
 			deck.setCommonDeck();
 			// determine who's turn it is to chose category										
-			printWhosTurn(activePlayer, deck);
+			printWhosTurn(deck);
 			//	active player chooses category
-			finalCategory = chooseCategory(activePlayer, deck);
+			finalCategory = chooseCategory(deck);
 			System.out.println("The category is " + printCategory(finalCategory));
 			
 			//============================================LOG
@@ -231,10 +227,9 @@ public class TopTrumpsCLIApplication  {
 //===========================WHOS TURN?==========================
 /**
  * Method to print who's turn it is.
- * @param activePlayer
  * @param deck
  */
-	public void printWhosTurn(String activePlayer, Deck deck) {
+	public void printWhosTurn(Deck deck) {
 		if(!activePlayer.startsWith("A")) {
 			System.out.println("It's your turn to choose a category, your choices are:\n"
 								+ "\t1. Size\n"
@@ -275,11 +270,10 @@ public class TopTrumpsCLIApplication  {
  * between 1 and 5 is chosen by computer (alternatively you could have the computer choosing
  * the max category score from the AI's active card, but its not always best to choose the highest
  * score when playing the game. Potential here for some interesting category choice algorithms!)
- * @param activePlayer
  * @param deck
  * @return
  */
-	public int chooseCategory(String activePlayer, Deck deck) {
+	public int chooseCategory(Deck deck) {
 		int cat = -1;
 		if(!activePlayer.startsWith("A")) {
 			while(true) {
@@ -385,11 +379,10 @@ public class TopTrumpsCLIApplication  {
 /**
  * Methods loops through players array to see if any players names
  * do not start with 'A' (as in AI)
- * @param playerIn
  * @param deck
  * @return
  */
-	public Boolean checkPlayerIn(boolean playerIn, Deck deck) {
+	public Boolean checkPlayerIn(Deck deck) {
 		playerIn = false;
 		for(Player p : deck.getPlayers()) {
 			if(!p.getPName().startsWith("A")) {
