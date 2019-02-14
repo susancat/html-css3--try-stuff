@@ -55,32 +55,155 @@ public class TopTrumpsRESTAPI {
 		this.topTrumps = new TopTrumpsCLIApplication();
 		this.deck = new Deck();
 		topTrumps.dealCards(deck, logsToFile);
+		topTrumps.setActivePlayer(deck.getPlayers().get(0).getPName());
+		topTrumps.setRound(1);
 		Desktop d = Desktop.getDesktop();
 		d.browse(new URI("http://localhost:7777/toptrumps"));
 	}
 	
-	// ----------------------------------------------------
-	// Add relevant API methods here
-	// ----------------------------------------------------
-	
-	
+
+//======================GET ACTIVE CARDS==================================	
 	@GET
 	@Path("/playerActiveCard") 
+	/**
+	 * This method first checks whether the player is still in the game using
+	 * the checkForPlayer method. It then either passes 'o' flag or the 
+	 * first card obj in the players array as a String.
+	 * @return
+	 * @throws IOException
+	 */
 	public String activePCard() throws IOException {
-		Card c = deck.getCardDeck().get(deck.getPlayers().get(0).getHand().get(0));
-		String JSONc = oWriter.writeValueAsString(c);
-		return JSONc;
+		String json;
+		String pName = "You";
+		int index = checkForPlayer(pName);
+		if(index == -1) { json= "o"; }
+		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
+		json = oWriter.writeValueAsString(c); }
+		return json;
 	}
-	
+	// As above for AI1
 	@GET
 	@Path("/ai1ActiveCard")
 	public String activeAI1Card() throws IOException {
-		Card c = deck.getCardDeck().get(deck.getPlayers().get(1).getHand().get(0));
-		String JSONc = oWriter.writeValueAsString(c);
-		return JSONc;
+		String json;
+		String pName = "AIPlayer1";
+		int index = checkForPlayer(pName);
+		if(index == -1) { json = "o"; }
+		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
+		json = oWriter.writeValueAsString(c); }
+		return json;
+	}
+	// As above for AI2
+	@GET
+	@Path("/ai2ActiveCard")
+	public String activeAI2Card() throws IOException {
+		String json;
+		String pName = "AIPlayer2";
+		int index = checkForPlayer(pName);
+		if(index == -1) { json = "Player out!"; }
+		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
+		json = oWriter.writeValueAsString(c); }
+		return json;
+	}
+	// AS above for AI3
+	@GET
+	@Path("/ai3ActiveCard")
+	public String activeAI3Card() throws IOException {
+		String json;
+		String pName = "AIPlayer3";
+		int index = checkForPlayer(pName);
+		if(index == -1) { json = "Player out!"; }
+		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
+		json = oWriter.writeValueAsString(c); }
+		return json;
+	}
+	// AS above for AI4
+	@GET
+	@Path("/ai4ActiveCard")
+	public String activeAI4Card() throws IOException {
+		String json;
+		String pName = "AIPlayer4";
+		int index = checkForPlayer(pName);
+		if(index == -1) { json = "Player out!"; }
+		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
+		json = oWriter.writeValueAsString(c); }
+		return json;
+	}
+//==================================active-cards-end
+	
+//==============CHECK FOR PLAYERS===================
+/**
+ * Method to check whether player is in the game,
+ * returns -1 if not
+ * @param name
+ * @return
+ */
+	public int checkForPlayer(String name) {
+		int index = -1;
+		for(Player p : deck.getPlayers()) {
+			if(p.getPName().equals(name)) {
+				index = deck.getPlayers().indexOf(p);
+			}
+		}
+		System.out.println(index);
+		return index;
+	}//=================player-check-end
+	
+//==============WHOS CHOOSES CATEGORY====================
+/**
+ * This method
+ * @return
+ * @throws IOException
+ */
+	@GET
+	@Path("/whosTurn")
+	public int whosTurn() throws IOException {
+		int json = 0;
+		if(!(topTrumps.getActivePlayer().startsWith("A"))) {
+			json = -1;
+		}else {
+			topTrumps.setFinalCategory(topTrumps.firstPlay() + 1);
+			playRound(json);	
+		}
+		return json;
+	}//================whos-turn-end
+	
+
+	@GET
+	@Path("/playRound")
+	public String playRound(int category) throws IOException{
+		topTrumps.checkWin(deck);
+		deck.setCommonDeck();
+		topTrumps.setRoundWinner(topTrumps.setWinner(deck, logsToFile));
+		topTrumps.setFinalWinner(topTrumps.getRoundWinner());
+		topTrumps.setActivePlayer(topTrumps.getRoundWinner());
+		topTrumps.setWinningCardIndex(topTrumps.winningCardIndex(deck));
+		topTrumps.setFinalWinningCard(deck.getCardDeck().get(topTrumps.getWinningCardIndex()).getCardName());
+		topTrumps.setRound(topTrumps.getRound() + 1);
+		deck.clearActiveCards();
+		String json = oWriter.writeValueAsString(topTrumps);
+		return json;
 	}
 	
+	public void loadStats() throws Exception{
+		db = new DatabaseConnect();
+		db.DatabaseOpen();
+		db.totalNumberGames();
+		db.totalHumanWins();
+		db.totalAIWins();
+		db.avgNumberDraws();
+		db.maxGameLength();
+		db.DatabaseClose();
+	}
 	
+	@GET 
+	@Path("/getStatistics")
+	public String getStatistics() throws Exception {
+		loadStats();
+		String dbString = oWriter.writeValueAsString(this.db);
+		return dbString;
+	}
+//===========================DELETE WHEN READY=====================================	
 	@GET
 	@Path("/helloJSONList")
 	/**
@@ -113,25 +236,8 @@ public class TopTrumpsRESTAPI {
 	public String helloWord(@QueryParam("Word") String Word) throws IOException {
 		return "Hello "+Word;
 	}
+//======================================================================DELETE ABOVE	
 	
 	
-	public void loadStats() throws Exception{
-		db = new DatabaseConnect();
-		db.DatabaseOpen();
-		db.totalNumberGames();
-		db.totalHumanWins();
-		db.totalAIWins();
-		db.avgNumberDraws();
-		db.maxGameLength();
-		db.DatabaseClose();
-	}
-	
-	@GET 
-	@Path("/getStatistics")
-	public String getStatistics() throws Exception {
-		loadStats();
-		String dbString = oWriter.writeValueAsString(this.db);
-		return dbString;
-	}
 	
 }

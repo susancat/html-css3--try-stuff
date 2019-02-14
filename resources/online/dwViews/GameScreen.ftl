@@ -110,6 +110,7 @@
 		<script type="text/javascript">
 			var activeCard;
 			var ai1ActiveCard;
+            var playerOut = "Player out!";
 			
 			// Method that is called on page load
 			function initalize() {
@@ -137,7 +138,10 @@
 				document.getElementById("AI1_firepower").innerHTML = "Firepower: " + ai1ActiveCard.firepower;
 				document.getElementById("AI1_cargo").innerHTML = "Cargo: " + ai1ActiveCard.cargo;
 			}
-			  
+
+            function playerOut() { document.getElementById("cardName").innerHTML = playerOut; }
+            function AI1Out() { document.getElementById("AI1_cardName").innerHTML = playerOut; }
+
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
@@ -149,23 +153,17 @@
 			function createCORSRequest(method, url) {
   				var xhr = new XMLHttpRequest();
   				if ("withCredentials" in xhr) {
-
     				// Check if the XMLHttpRequest object has a "withCredentials" property.
     				// "withCredentials" only exists on XMLHTTPRequest2 objects.
     				xhr.open(method, url, true);
-
   				} else if (typeof XDomainRequest != "undefined") {
-
     				// Otherwise, check if XDomainRequest.
     				// XDomainRequest only exists in IE, and is IE's way of making CORS requests.
     				xhr = new XDomainRequest();
     				xhr.open(method, url);
-
  				 } else {
-
     				// Otherwise, CORS is not supported by the browser.
     				xhr = null;
-
   				 }
   				 return xhr;
 			}
@@ -183,8 +181,11 @@
 				xhr.onload = function(e) {
 					console.log(xhr.response)
 					//alert(responseText);
-					activeCard = JSON.parse(xhr.response);
-					showCard();
+                    var response = JSON.parse(xhr.response);
+                    if(response == "o") { playerOut(); }
+                    else {
+                    activeCard = response;
+                    showCard(); }
 				};
 				xhr.send();
 			}
@@ -196,8 +197,11 @@
 				}
 				xhr.onload = function(e) {
 					console.log(xhr.response)
-					ai1ActiveCard = JSON.parse(xhr.response);
-					showAI1card();
+                    var response = JSON.parse(xhr.response);
+                    if(response == "o") { AI1Out(); }
+                    else {
+                    ai1ActiveCard = response;
+                    showAI1card(); }
 				};
 				xhr.send();
 			}
@@ -213,7 +217,6 @@
 				if (!xhr) {
   					alert("CORS not supported");
 				}
-
 				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
 				// to do when the response arrives 
 				xhr.onload = function(e) {
@@ -235,7 +238,6 @@
 				if (!xhr) {
   					alert("CORS not supported");
 				}
-
 				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
 				// to do when the response arrives 
 				xhr.onload = function(e) {
