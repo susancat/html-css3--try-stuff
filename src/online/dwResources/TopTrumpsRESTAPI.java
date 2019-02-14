@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
  * 
  * Below are provided some sample methods that illustrate how to create
  * REST API methods in Dropwizard. You will need to replace these with
- * methods that allow a TopTrumps game to be controled from a Web page.
+ * methods that allow a TopTrumps game to be controlled from a Web page.
  */
 public class TopTrumpsRESTAPI {
 
@@ -46,7 +46,7 @@ public class TopTrumpsRESTAPI {
 	DatabaseConnect db;
 	
 	/**
-	 * Contructor method for the REST API. This is called first. It provides
+	 * Constructor method for the REST API. This is called first. It provides
 	 * a TopTrumpsJSONConfiguration from which you can get the location of
 	 * the deck file and the number of AI players.
 	 * @param conf
@@ -59,8 +59,7 @@ public class TopTrumpsRESTAPI {
 		topTrumps.setRound(1);
 		Desktop d = Desktop.getDesktop();
 		d.browse(new URI("http://localhost:7777/toptrumps"));
-	}
-	
+	}//======================================================constuctor-end
 
 //======================GET ACTIVE CARDS==================================	
 	@GET
@@ -151,7 +150,11 @@ public class TopTrumpsRESTAPI {
 	
 //==============WHOS CHOOSES CATEGORY====================
 /**
- * This method
+ * This method should be called when the player clicks 'start game'
+ * or 'play next round'. if the active player is the user it returns -1, 
+ * which can be used as a flag to trigger choose category buttons to appear.
+ * If the active player is AI, then the category is chosen at random and the
+ * method calls playGame.
  * @return
  * @throws IOException
  */
@@ -168,23 +171,40 @@ public class TopTrumpsRESTAPI {
 		return json;
 	}//================whos-turn-end
 	
-
+//=====================PLAY ROUND=========================
+/**
+ * The playRound method begins by checking for winner and then
+ * works through the same logic as the CL game minus the prints to console 
+ * and log. The TopTrumpsCLIApplication obj 'topTrumps' is then 
+ * parsed to a json string and returned. 
+ * @param category
+ * @return
+ * @throws IOException
+ */
 	@GET
 	@Path("/playRound")
 	public String playRound(int category) throws IOException{
 		topTrumps.checkWin(deck);
 		deck.setCommonDeck();
+		topTrumps.setFinalCategory(category);
 		topTrumps.setRoundWinner(topTrumps.setWinner(deck, logsToFile));
 		topTrumps.setFinalWinner(topTrumps.getRoundWinner());
 		topTrumps.setActivePlayer(topTrumps.getRoundWinner());
 		topTrumps.setWinningCardIndex(topTrumps.winningCardIndex(deck));
 		topTrumps.setFinalWinningCard(deck.getCardDeck().get(topTrumps.getWinningCardIndex()).getCardName());
+		topTrumps.addCommonDeck(deck);
 		topTrumps.setRound(topTrumps.getRound() + 1);
 		deck.clearActiveCards();
 		String json = oWriter.writeValueAsString(topTrumps);
 		return json;
-	}
+	}//==============play-round-end
 	
+//===================LOAD STATISTICS==============
+/**
+ * The method up dates the database variables ready for
+ * retrieval.
+ * @throws Exception
+ */
 	public void loadStats() throws Exception{
 		db = new DatabaseConnect();
 		db.DatabaseOpen();
@@ -194,15 +214,23 @@ public class TopTrumpsRESTAPI {
 		db.avgNumberDraws();
 		db.maxGameLength();
 		db.DatabaseClose();
-	}
+	}//====================load-stats-end
 	
+//===============GET STATISTICS======================
+/**
+ * This method parses a database obj containing all
+ * the statistics data in to a string and returns it.
+ * @return
+ * @throws Exception
+ */
 	@GET 
 	@Path("/getStatistics")
 	public String getStatistics() throws Exception {
 		loadStats();
 		String dbString = oWriter.writeValueAsString(this.db);
 		return dbString;
-	}
+	}//===================get-stats-end
+	
 //===========================DELETE WHEN READY=====================================	
 	@GET
 	@Path("/helloJSONList")
@@ -240,4 +268,4 @@ public class TopTrumpsRESTAPI {
 	
 	
 	
-}
+}//RESTAPI-END
