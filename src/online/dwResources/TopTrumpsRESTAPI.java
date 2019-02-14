@@ -160,7 +160,7 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/whosTurn")
-	public int whosTurn() throws IOException {
+	public int whosTurn() throws IOException, SQLException {
 		int json = 0;
 		if(!(topTrumps.getActivePlayer().startsWith("A"))) {
 			json = -1;
@@ -171,7 +171,7 @@ public class TopTrumpsRESTAPI {
 		return json;
 	}//================whos-turn-end
 	
-//=====================PLAY ROUND=========================
+//=====================PLAY ROUND==============================
 /**
  * The playRound method begins by checking for winner and then
  * works through the same logic as the CL game minus the prints to console 
@@ -183,7 +183,7 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/playRound")
-	public String playRound(int category) throws IOException{
+	public String playRound(int category) throws IOException, SQLException {
 		topTrumps.checkWin(deck);
 		deck.setCommonDeck();
 		topTrumps.setFinalCategory(category);
