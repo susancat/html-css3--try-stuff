@@ -99,7 +99,7 @@ public class TopTrumpsRESTAPI {
 		String json;
 		String pName = "AIPlayer2";
 		int index = checkForPlayer(pName);
-		if(index == -1) { json = "Player out!"; }
+		if(index == -1) { json = "o"; }
 		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
 		json = oWriter.writeValueAsString(c); }
 		return json;
@@ -111,7 +111,7 @@ public class TopTrumpsRESTAPI {
 		String json;
 		String pName = "AIPlayer3";
 		int index = checkForPlayer(pName);
-		if(index == -1) { json = "Player out!"; }
+		if(index == -1) { json = "o"; }
 		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
 		json = oWriter.writeValueAsString(c); }
 		return json;
@@ -123,7 +123,7 @@ public class TopTrumpsRESTAPI {
 		String json;
 		String pName = "AIPlayer4";
 		int index = checkForPlayer(pName);
-		if(index == -1) { json = "Player out!"; }
+		if(index == -1) { json = "o"; }
 		else { Card c = deck.getCardDeck().get(deck.getPlayers().get(index).getHand().get(0)); 
 		json = oWriter.writeValueAsString(c); }
 		return json;
