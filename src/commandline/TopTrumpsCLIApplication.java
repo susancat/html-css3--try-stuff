@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 /**
  * Top Trumps command line application
+ * 
  */
 public class TopTrumpsCLIApplication  {
 	
@@ -20,6 +21,7 @@ public class TopTrumpsCLIApplication  {
 * it then calls the relevant method based on the users input. The user can also quit
 * the application by typing 'quit'
 * @param args
+* 
 */
 	public static void main(String[] args) {
 		// create instance so methods do not have to be static

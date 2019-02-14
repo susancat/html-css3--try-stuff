@@ -11,13 +11,12 @@ import java.util.HashMap;
 public class Deck {
 	//use a HashMap to link 40 cards with position 0~39th for illustration in log
 	private HashMap<Integer, String> card = new HashMap<Integer, String>();
+	//an array of card obj
 	private ArrayList<Card> cardDeck = new ArrayList<Card>();
+	//an array of player obj
 	private ArrayList<Player> players = new ArrayList<Player>();
-	
-
 	//this ArrayList store card number used to be shuffled, its value link to card name one on one 
 	private ArrayList<Integer> cardNumber = new ArrayList<Integer>();
-
 	//common deck
 	private ArrayList<Integer> commonDeck = new ArrayList<Integer>();
 
