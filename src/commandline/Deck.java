@@ -22,26 +22,34 @@ public class Deck {
 
 	
 	public void loadDeck() {
-		Card c = new Card();
+		String cardName = "";
+		int size = 0;
+		int speed = 0;
+		int range = 0;
+		int firepower = 0;
+		int cargo = 0;
 		try { 
 			BufferedReader bfReader = new BufferedReader(new FileReader("StarCitizenDeck.txt"));
 	        bfReader.readLine();//the header will not be read
 	        String line = null; 
 	        while((line=bfReader.readLine())!=null){     
 	           String item[] = line.split(" ");//data in file is divided by space
-	           c.setCardName(item[0]);
-	           c.setSize(Integer.valueOf(item[1]));
-	           c.setSpeed(Integer.valueOf(item[2]));
-	           c.setRange(Integer.valueOf(item[3]));
-	           c.setFirepower(Integer.valueOf(item[4]));
-	           c.setCargo(Integer.valueOf(item[5]));
+	           cardName = item[0];
+	           size = Integer.valueOf(item[1]);
+	           speed = Integer.valueOf(item[2]);
+	           range = Integer.valueOf(item[3]);
+	           firepower = Integer.valueOf(item[4]);
+	           cargo = Integer.valueOf(item[5]);
+	           Card c = new Card(cardName, size, speed, range, firepower, cargo);
 	           cardDeck.add(c);
 	        }      
 	        bfReader.close();
 	     }catch (Exception e) { 
-	    	 e.printStackTrace(); 
-	     }
+	                e.printStackTrace(); 
+	      }
+		
 	}
+
 	
 	public void shuffleCards() {
 	int index = 0;
