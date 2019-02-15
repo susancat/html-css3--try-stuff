@@ -30,6 +30,8 @@
 	  	</header>
 	  	
 	  	<div style="float:left; margin: 30px;height: 660px; width: 150px; padding: 10px; background: #99ccff"> 
+	  	</br>
+			<h5><input type="button" value="Next Round" onclick="submit"><h5>
 			<h5>Active player is:</h5>
 	 		<p><h5 id="activePName"></h5></p></br>
 	 		<h5>Chosen category:</h5>
@@ -39,19 +41,19 @@
 	 		</br>
 	  		<div class="chooseCats">
 	 			<h5>Choose your category</h5>
-				<input type="button" value="Size" onclick="submit"></br>
-				<input type="button" value="Speed" onclick="submit"></br>
-				<input type="button" value="Range" onclick="submit"></br>
-				<input type="button" value="Firepower" onclick="submit"></br>
-				<input type="button" value="Cargo" onclick="submit">
+				<input type="button" id="1" value="Size" onclick=chooseCat()></br>
+				<input type="button" id="2" value="Speed" onclick=chooseCat()></br>
+				<input type="button" id="3" value="Range" onclick=chooseCat()></br>
+				<input type="button" id="4" value="Firepower" onclick=chooseCat()></br>
+				<input type="button" id="5" value="Cargo" onclick=chooseCat()>
 	 		</div>
 	 		</br>
 	 		<h5>Return to main menu</h5>
-	 		<input type="button" value="Menu" onclick="location.href='http://localhost:7777/toptrumps/'"></br>
+	 		<h5><input type="button" value="Menu" onclick="location.href='http://localhost:7777/toptrumps/'"></h5></br>
 	 	</div>
 	 
 	 
-		<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
+		<div id="showByClick2" style="visibility:hidden; float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
 	 		<h4>AI Player 2</h4>
 			<p><h5 id="AI2_cardName"></h5></p>
 			<p><h5 id="AI2_size"></h5></p>
@@ -61,7 +63,7 @@
 			<p><h5 id="AI2_cargo"></h5></p>
 	 	</div>
 	 
-		<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
+		<div id="showByClick" style="visibility:hidden; float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
 	 		<h4>AI Player 1</h4>
 	  		<p><h5 id="AI1_cardName"></h5></p>
 	  		<p><h5 id="AI1_size"></h5></p>
@@ -82,7 +84,7 @@
 	 		<p><h5 id="cargo"></h5></P>
 	 	</div>
 	 
-	 	<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
+	 	<div id="showByClick4" style="visibility:hidden; float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
 	 		<h4>AI Player 4</h4>
 	  		<p><h5 id="AI4_cardName"></h5></P>
 	    	<p><h5 id="AI4_size"></h5></p>
@@ -92,7 +94,7 @@
 	    	<p><h5 id="AI4_cargo"></h5></p>
 	 	</div>
 	 
-	 	<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px; background: #cccc66; class="card"">
+	 	<div id="showByClick3" style="visibility:hidden; float:right; margin: 30px; padding: 10px; height: 300px; width: 220px; background: #cccc66; class="card"">
 	 		<h4>AI Player 3</h4>
 	  		<p><h5 id="AI3_cardName"></h5></p>
 	    	<p><h5 id="AI3_size"></h5></p>
@@ -108,22 +110,30 @@
 		
 		
 		<script type="text/javascript">
-			
 			var activeCard;
 			var ai1ActiveCard;
 			var ai2ActiveCard;
 			var ai3ActiveCard;
 			var ai4ActiveCard;
-           // Method that is called on page load
+			var category;
+			var playRound;
+            //var playerOut = "Player out!";
+            //var activePlayer;
+			
+			// Method that is called on page load
 			function initalize() {
+			
 				activeCard();
 				activeAI1Card();
 				activeAI2Card();
 				activeAI3Card();
 				activeAI4Card();
-		    }
-		    
-		    function showCard() {
+				playRound();
+				//activePlayer();
+			}
+			
+			
+			function showCard() {
 				document.getElementById("cardName").innerHTML = activeCard.cardName;
 				document.getElementById("size").innerHTML = "Speed: " + activeCard.size;
 				document.getElementById("speed").innerHTML = "Size: " + activeCard.speed;
@@ -168,11 +178,31 @@
 				document.getElementById("AI4_firepower").innerHTML = "Firepower: " + ai4ActiveCard.firepower;
 				document.getElementById("AI4_cargo").innerHTML = "Cargo: " + ai4ActiveCard.cargo;
 			}
-			  
+            //function playerOut() { document.getElementById("cardName").innerHTML = playerOut; }
+            
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
-		
+			
+			function showdiv(id) {
+  				var div = document.getElementById(id);
+      				  if (div.style.visibility == 'hidden') {
+              				div.style.visibility = 'visible';
+          			} 
+          			  else {
+          				sbtitle.style.visibility = 'hidden';
+          			}
+          	}
+			
+			function chooseCat(){
+				document.getElementById("selectedCategory").innerHTML = event.target.value;
+				var category = parseInt(event.target.id)
+				showdiv("showByClick");
+				showdiv("showByClick2");
+				showdiv("showByClick3");
+				showdiv("showByClick4");
+				getRound();
+			}
 			
 		
 		
@@ -180,23 +210,17 @@
 			function createCORSRequest(method, url) {
   				var xhr = new XMLHttpRequest();
   				if ("withCredentials" in xhr) {
-
     				// Check if the XMLHttpRequest object has a "withCredentials" property.
     				// "withCredentials" only exists on XMLHTTPRequest2 objects.
     				xhr.open(method, url, true);
-
   				} else if (typeof XDomainRequest != "undefined") {
-
     				// Otherwise, check if XDomainRequest.
     				// XDomainRequest only exists in IE, and is IE's way of making CORS requests.
     				xhr = new XDomainRequest();
     				xhr.open(method, url);
-
  				 } else {
-
     				// Otherwise, CORS is not supported by the browser.
     				xhr = null;
-
   				 }
   				 return xhr;
 			}
@@ -205,6 +229,19 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
+			function activePlayer() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/activePlayer");
+				if(!xhr) {
+					alert("CORS not supported");
+				}
+				xhr.onload = function(e) {
+					console.log(xhr.response)
+					//alert(responseText);
+					activePlayer = JSON.parse(xhr.response);
+					showActPlayer();
+				};
+				xhr.send();
+			}
 			
 			function activeCard() {
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playerActiveCard");
@@ -214,8 +251,11 @@
 				xhr.onload = function(e) {
 					console.log(xhr.response)
 					//alert(responseText);
-					activeCard = JSON.parse(xhr.response);
-					showCard();
+                    var response = JSON.parse(xhr.response);
+                    if(response == "o") { playerOut(); }
+                    else {
+                    activeCard = response;
+                    showCard(); }
 				};
 				xhr.send();
 			}
@@ -227,8 +267,11 @@
 				}
 				xhr.onload = function(e) {
 					console.log(xhr.response)
-					ai1ActiveCard = JSON.parse(xhr.response);
-					showAI1card();
+                    var response = JSON.parse(xhr.response);
+                    if(response == "o") { AI1Out(); }
+                    else {
+                    ai1ActiveCard = response;
+                    showAI1card(); }
 				};
 				xhr.send();
 			}
@@ -283,7 +326,6 @@
 				if (!xhr) {
   					alert("CORS not supported");
 				}
-
 				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
 				// to do when the response arrives 
 				xhr.onload = function(e) {
@@ -305,7 +347,6 @@
 				if (!xhr) {
   					alert("CORS not supported");
 				}
-
 				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
 				// to do when the response arrives 
 				xhr.onload = function(e) {
