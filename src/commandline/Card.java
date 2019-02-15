@@ -32,6 +32,11 @@ public class Card {
 		this.cargo = cargo;
 	}//======================card-end
 	
+//=================EMPTY CARD CONSTRUCTOR==================
+	public Card() {
+		
+	}//======card-end
+	
 //==============CATEGORY VALUES ARRAY===================
 /**
  * This array loads the values of each attribute in to an array.

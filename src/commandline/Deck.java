@@ -22,32 +22,25 @@ public class Deck {
 
 	
 	public void loadDeck() {
-		String cardName = "";
-		int size = 0;
-		int speed = 0;
-		int range = 0;
-		int firepower = 0;
-		int cargo = 0;
+		Card c = new Card();
 		try { 
 			BufferedReader bfReader = new BufferedReader(new FileReader("StarCitizenDeck.txt"));
 	        bfReader.readLine();//the header will not be read
 	        String line = null; 
 	        while((line=bfReader.readLine())!=null){     
 	           String item[] = line.split(" ");//data in file is divided by space
-	           cardName = item[0];
-	           size = Integer.valueOf(item[1]);
-	           speed = Integer.valueOf(item[2]);
-	           range = Integer.valueOf(item[3]);
-	           firepower = Integer.valueOf(item[4]);
-	           cargo = Integer.valueOf(item[5]);
-	           Card c = new Card(cardName, size, speed, range, firepower, cargo);
+	           c.setCardName(item[0]);
+	           c.setSize(Integer.valueOf(item[1]));
+	           c.setSpeed(Integer.valueOf(item[2]));
+	           c.setRange(Integer.valueOf(item[3]));
+	           c.setFirepower(Integer.valueOf(item[4]));
+	           c.setCargo(Integer.valueOf(item[5]));
 	           cardDeck.add(c);
 	        }      
 	        bfReader.close();
 	     }catch (Exception e) { 
-	                e.printStackTrace(); 
-	      }
-		
+	    	 e.printStackTrace(); 
+	     }
 	}
 	
 	public void shuffleCards() {
@@ -61,9 +54,9 @@ public class Deck {
 	}
 	 
 		
-		public void ShareCards() {	
+		public void ShareCards(int aiPlayers) {	
 			players.add(new Player("You"));
-			for(int i = 1; i <= 4; i++) {
+			for(int i = 1; i <= aiPlayers; i++) {
 				players.add(new Player("AIPlayer" + i));
 			}
 			for (int i = 0; i < cardNumber.size();i++) {
@@ -79,43 +72,6 @@ public class Deck {
 					players.get(4).addCard(cardNumber.get(i));
 				}
 			}
-		}
-		
-		
-//////////////GETTERS////////////////////////
-		public ArrayList<Integer> getCommonDeck() {
-			return commonDeck;
-		}
-		
-		public ArrayList<Player> getPlayers() {
-			return players;
-		}
-
-		public void setPlayers(ArrayList<Player> players) {
-			this.players = players;
-		}
-
-		public ArrayList<Card> getCardDeck() {
-			return cardDeck;
-		}
-
-		public void setCardDeck(ArrayList<Card> deck) {
-			this.cardDeck = deck;
-		}
-
-		/*
- * 		setCommonDeck loads the card number of index 0 of each player in to
- * 		the corresponding indexes of the array. The numbers are loaded in reverse 
- * 		order in to the lefthand side of the array (0) so that 0-4 of the common deck 
- * 		always points to the correct player, if we agree that 0 = player and 1-4 are used 
- *		for the ai players
- */
-		public void setCommonDeck() {
-			int i = 0;
-			for(Player p : players) {
-				commonDeck.add(players.get(i).getHand().get(0));
-				i++;
-			}	
 		}
 		
 		public void clearActiveCards() {
@@ -136,10 +92,41 @@ public class Deck {
 				}
 			}
 			this.players = tempList; 
-}
-
-///////////////////////LOGS////////////////////////////////////////
+		}
 		
+//================GETTERS AND SETTERS==========================
+		public ArrayList<Integer> getCommonDeck() {
+			return commonDeck;
+		}
+		/**
+		 * setCommonDeck loads the card number of index 0 of each player in to
+		 * the corresponding indexes of the array. The numbers are loaded in reverse 
+		 * order in to the lefthand side of the array (0) so that 0-4 of the common deck 
+		 * always points to the correct player, if we agree that 0 = player and 1-4 are used 
+		 * for the ai players
+		 */
+		public void setCommonDeck() {
+			int i = 0;
+			for(Player p : players) {
+				commonDeck.add(players.get(i).getHand().get(0));
+				i++;
+			}	
+		}
+		public ArrayList<Player> getPlayers() {
+			return players;
+		}
+		public void setPlayers(ArrayList<Player> players) {
+			this.players = players;
+		}
+		public ArrayList<Card> getCardDeck() {
+			return cardDeck;
+		}
+		public void setCardDeck(ArrayList<Card> deck) {
+			this.cardDeck = deck;
+		}
+
+
+//======================================LOGS============================================
 		
 		public String fullDeckLog() {
 			String log = "\r\n------------DECK LOG-------------------"
