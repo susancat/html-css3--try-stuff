@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 
 import online.configuration.TopTrumpsJSONConfiguration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -129,23 +130,9 @@ public class TopTrumpsRESTAPI {
 		return json;
 	}
 //==================================active-cards-end
-	
+
 //==============CHECK FOR PLAYERS===================
-//	@GET
-//	@Path("/activePlayer")
-//	public String activePlayer(int round) throws Exception {
-//		String activePlayer = null;
-//		if (topTrumps.getRound() !=1) {
-//			activePlayer = topTrumps.setWinner(deck, logsToFile);
-//		}
-//		else {
-//			Random rand = new Random();
-//			int firstPlay = rand.nextInt(4);
-//			activePlayer = deck.getPlayers().get(firstPlay).getPName();
-//		}
-//		String JSONfp =  oWriter.writeValueAsString(activePlayer);
-//		return JSONfp;
-//	}
+
 /**
  * Method to check whether player is in the game,
  * returns -1 if not
@@ -161,7 +148,7 @@ public class TopTrumpsRESTAPI {
 		}
 		System.out.println(index);
 		return index;
-	}//=================player-check-end
+	}//=================player-check-end,non-json(string)cannot be called
 	
 //==============WHOS CHOOSES CATEGORY====================
 /**
@@ -176,23 +163,18 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/whosTurn")
 	public int whosTurn() throws IOException {
-		int json = 0;
+		int category = 0;
 		if(!(topTrumps.getActivePlayer().startsWith("A"))) {
-			json = -1;
+			category = -1;
 		}else {
 			topTrumps.setFinalCategory(topTrumps.firstPlay() + 1);
-			playRound(json);	
+			playRound(category);	
 		}
-		return json;
-	}//================whos-turn-end
+		return category;
+	}//================whos-turn-end£ºreturn a category number,click next round button to check and start a new round
 	
 //=====================PLAY ROUND=========================
-	@GET
-	@Path("/getRound")
-	public int getRound() {
-		int round = topTrumps.getRound();
-		return round;
-	}
+
 /**
  * The playRound method begins by checking for winner and then
  * works through the same logic as the CL game minus the prints to console 
@@ -204,7 +186,7 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/playRound")
-	public String playRound(int category) throws IOException{
+	public String playRound(@QueryParam("num")int category) throws IOException{
 		topTrumps.checkWin(deck);
 		deck.setCommonDeck();
 		topTrumps.setFinalCategory(category);
@@ -219,7 +201,14 @@ public class TopTrumpsRESTAPI {
 		String json = oWriter.writeValueAsString(topTrumps);
 		return json;
 	}//==============play-round-end
-	
+	@GET
+	@Path("/cardInHand")
+	public String cardInHand(@QueryParam("num") int playerPosition) throws IOException{
+		int cardInHand = deck.getPlayers().get(playerPosition).getHand().size();
+		String json = oWriter.writeValueAsString(cardInHand);
+		return json;
+	}
+
 //===================LOAD STATISTICS==============
 /**
  * The method up dates the database variables ready for
