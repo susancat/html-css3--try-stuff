@@ -61,6 +61,7 @@
 			<p><h5 id="AI2_range"></h5></p>
 			<p><h5 id="AI2_firepower"></h5></p>
 			<p><h5 id="AI2_cargo"></h5></p>
+			<p><h5 id="cardLeft2"></h5></p>
 	 	</div>
 	 
 		<div id="showByClick" style="visibility:hidden; float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
@@ -71,6 +72,7 @@
 	  		<p><h5 id="AI1_range"></h5></p>
 	  		<p><h5 id="AI1_firepower"></h5></p>
 	  		<p><h5 id="AI1_cargo"></h5></p>
+	  		<p><h5 id="cardLeft1"></h5></p>
 	 	</div>
 	 
 	 
@@ -81,17 +83,19 @@
 	 		<p><h5 id="speed"></h5></p>
 	 		<p><h5 id="range"></h5></p>
 	 		<p><h5 id="firepower"></h5></p>
-	 		<p><h5 id="cargo"></h5></P>
+	 		<p><h5 id="cargo"></h5></p>
+	 		<p><h5 id="cardLeft"></h5></p>
 	 	</div>
 	 
 	 	<div id="showByClick4" style="visibility:hidden; float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
 	 		<h4>AI Player 4</h4>
-	  		<p><h5 id="AI4_cardName"></h5></P>
+	  		<p><h5 id="AI4_cardName"></h5></p>
 	    	<p><h5 id="AI4_size"></h5></p>
 	    	<p><h5 id="AI4_speed"></h5></p>
 	    	<p><h5 id="AI4_range"></h5></p>
-	    	<p><h5 id="AI4_firepower"></h5></P>
+	    	<p><h5 id="AI4_firepower"></h5></p>
 	    	<p><h5 id="AI4_cargo"></h5></p>
+	    	<p><h5 id="cardLeft4"></h5></p>
 	 	</div>
 	 
 	 	<div id="showByClick3" style="visibility:hidden; float:right; margin: 30px; padding: 10px; height: 300px; width: 220px; background: #cccc66; class="card"">
@@ -102,6 +106,7 @@
 	   		<p><h5 id="AI3_range"></h5></p>
 	   	 	<p><h5 id="AI3_firepower"></h5></p>
 	    	<p><h5 id="AI3_cargo"></h5></p>
+	    	<p><h5 id="cardLeft3"></h5></p>
 		</div>
 		
 	</div>
@@ -116,20 +121,27 @@
 			var ai3ActiveCard;
 			var ai4ActiveCard;
 			var category;
-			var playRound;
+			//var playRound;
+			
+			//var player;
             //var playerOut = "Player out!";
-            //var activePlayer;
+      		//var activePlayer;
 			
 			// Method that is called on page load
 			function initalize() {
-			
 				activeCard();
 				activeAI1Card();
 				activeAI2Card();
 				activeAI3Card();
 				activeAI4Card();
-				playRound();
 				//activePlayer();
+				cardInHand(0);
+				cardInHand1(1);
+				cardInHand2(2);
+				cardInHand3(3);
+				cardInHand4(4);
+				//playRound();
+				
 			}
 			
 			
@@ -178,6 +190,12 @@
 				document.getElementById("AI4_firepower").innerHTML = "Firepower: " + ai4ActiveCard.firepower;
 				document.getElementById("AI4_cargo").innerHTML = "Cargo: " + ai4ActiveCard.cargo;
 			}
+			
+			function ShowCardInHand(cardLeft){document.getElementById("cardLeft").innerHTML = "Cards left:" + cardLeft;}
+			function ShowCardInHand1(cardLeft1){document.getElementById("cardLeft1").innerHTML = "Cards left:" + cardLeft1;}
+			function ShowCardInHand2(cardLeft2){document.getElementById("cardLeft2").innerHTML = "Cards left:" + cardLeft2;}
+			function ShowCardInHand3(cardLeft3){document.getElementById("cardLeft3").innerHTML = "Cards left:" + cardLeft3;}
+			function ShowCardInHand4(cardLeft4){document.getElementById("cardLeft4").innerHTML = "Cards left:" + cardLeft4;}
             //function playerOut() { document.getElementById("cardName").innerHTML = playerOut; }
             
 			// -----------------------------------------
@@ -190,7 +208,7 @@
               				div.style.visibility = 'visible';
           			} 
           			  else {
-          				sbtitle.style.visibility = 'hidden';
+          				div.style.visibility = 'hidden';
           			}
           	}
 			
@@ -201,7 +219,7 @@
 				showdiv("showByClick2");
 				showdiv("showByClick3");
 				showdiv("showByClick4");
-				getRound();
+				//playRound(category);
 			}
 			
 		
@@ -229,17 +247,18 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
-			function activePlayer() {
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/activePlayer");
+			function playRound(num) {
+				
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playRound");
 				if(!xhr) {
 					alert("CORS not supported");
 				}
 				xhr.onload = function(e) {
 					console.log(xhr.response)
-					//alert(responseText);
-					activePlayer = JSON.parse(xhr.response);
-					showActPlayer();
-				};
+					var response = JSON.parse(xhr.response);
+                    playRound = response;
+                    }
+				
 				xhr.send();
 			}
 			
@@ -315,49 +334,67 @@
 				xhr.send();
 			}
 			
-//==============================================DELETE BELOW WHEN READY==================================================================================================	
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloJSONList() {
+			function cardInHand(num){
+	            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/cardInHand?num="+num);
+	            if(!xhr) {
+	                alert("CORS not supported")
+	            }
+	            xhr.onload = function(e) {
+	                console.log(xhr.response)
+	                var cardLeft = JSON.parse(xhr.response);
+	                ShowCardInHand(cardLeft);
+	            };
+	            xhr.send();
+	        }
+			function cardInHand1(num){
+	            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/cardInHand?num="+num);
+	            if(!xhr) {
+	                alert("CORS not supported")
+	            }
+	            xhr.onload = function(e) {
+	                console.log(xhr.response)
+	                var cardLeft1 = JSON.parse(xhr.response);
+	                ShowCardInHand1(cardLeft1);
+	            };
+	            xhr.send();
+	        }
+			function cardInHand2(num){
+	            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/cardInHand?num="+num);
+	            if(!xhr) {
+	                alert("CORS not supported")
+	            }
+	            xhr.onload = function(e) {
+	                console.log(xhr.response)
+	                var cardLeft2 = JSON.parse(xhr.response);
+	                ShowCardInHand2(cardLeft2);
+	            };
+	            xhr.send();
+	        }
+			function cardInHand3(num){
+	            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/cardInHand?num="+num);
+	            if(!xhr) {
+	                alert("CORS not supported")
+	            }
+	            xhr.onload = function(e) {
+	                console.log(xhr.response)
+	                var cardLeft3 = JSON.parse(xhr.response);
+	                ShowCardInHand3(cardLeft3);
+	            };
+	            xhr.send();
+	        }
+			function cardInHand4(num){
+	            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/cardInHand?num="+num);
+	            if(!xhr) {
+	                alert("CORS not supported")
+	            }
+	            xhr.onload = function(e) {
+	                console.log(xhr.response)
+	                var cardLeft4 = JSON.parse(xhr.response);
+	                ShowCardInHand4(cardLeft4);
+	            };
+	            xhr.send();
+	        }
 			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloJSONList"); // Request type and URL
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
-			}
-			
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloWord(word) {
-			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloWord?Word="+word); // Request type and URL+parameters
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
-			}
-//============================================================DELETE ABOVE==========================================================
 		</script>
 		
 		</body>
