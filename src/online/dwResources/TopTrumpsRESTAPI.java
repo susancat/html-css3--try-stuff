@@ -165,13 +165,13 @@ public class TopTrumpsRESTAPI {
 			topTrumps.setFinalCategory(topTrumps.firstPlay() + 1);
 			playRound(json);	
 		}
-		return json;
+		return json;//if -1 palyers turn else random choice
 	}//================whos-turn-end
 	
 
 	@GET
 	@Path("/playRound")
-	public String playRound(int category) throws IOException{
+	public String playRound(@QueryParam("category") int category) throws IOException{
 		topTrumps.checkWin(deck);
 		deck.setCommonDeck();
 		topTrumps.setRoundWinner(topTrumps.setWinner(deck, logsToFile));
@@ -184,6 +184,15 @@ public class TopTrumpsRESTAPI {
 		String json = oWriter.writeValueAsString(topTrumps);
 		return json;
 	}
+
+	@GET
+	@Path("/cardInHand")
+	public String cardInHand(@QueryParam("num") int playerPosition) throws IOException{
+		int cardInHand = deck.getPlayers().get(playerPosition).getHand().size();
+		String json = oWriter.writeValueAsString(cardInHand);
+		return json;
+	}
+
 	
 	public void loadStats() throws Exception{
 		db = new DatabaseConnect();
@@ -195,7 +204,7 @@ public class TopTrumpsRESTAPI {
 		db.maxGameLength();
 		db.DatabaseClose();
 	}
-	
+
 	@GET 
 	@Path("/getStatistics")
 	public String getStatistics() throws Exception {

@@ -39,18 +39,79 @@
 	</div>
 		
 		<script type="text/javascript">
-		
+			
+			
+			//---TRY ME------TRY ME------TRY ME------TRY ME------TRY ME------TRY ME---//
+			
+			//-----declare variables begin----------declare variables begin----------declare variables begin-----
+			
+			//active-cards-begin===============
+			var playerActiveCard;
+			var ai1ActiveCard;
+			var ai2ActiveCard;
+			var ai3ActiveCard;
+			var ai4ActiveCard;
+			//===============active-cards-end
+			
+			//WHOS CHOOSES CATEGORY===============
+			var whosTurn;
+			//===============whos-turn-end
+			
+			var playRound;
+			var getStatistics;
+			
+			//-----declare variables end----------declare variables end----------declare variables end-----
+			
 			// Method that is called on page load
 			function initalize() {
 			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
+				//active-cards-begin===============
+				activePCard();
+				activeAI1Card();
+				activeAI2Card();
+				activeAI3Card();
+				activeAI4Card();
+				//===============active-cards-end
 				
-				// For example, lets call our sample methods
+				//WHOS CHOOSES CATEGORY===============
+				whosTurn();
+				//===============whos-turn-end
 				
-				
+				playRound(int category);
+				getStatistics();
 			}
+			
+			
+			//-----function pair One begin----------function pair One begin----------function pair One begin-----
+			
+			 function showActivePCard() {
+		    	document.getElementById("playerActiveCard").innerHTML = activePCard();
+		    }
+			
+			function activePlayer() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playerActiveCard");
+				if(!xhr) {
+					alert("CORS not supported");
+				}
+				xhr.onload = function(e) {
+					console.log(xhr.response)
+					//alert(responseText);
+					activePlayer = JSON.parse(xhr.response);
+					showActivePCard();
+				};
+				xhr.send();
+			}
+			
+			//-----function pair One end----------function pair One end----------function pair One end-----
+			
+			
+			//---TRY ME END------TRY ME END------TRY ME END------TRY ME END------TRY ME END---//
+			
+			
+			
+			
+			
+			
 			
 			// -----------------------------------------
 			// Add your other Javascript methods Here

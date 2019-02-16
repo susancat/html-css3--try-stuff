@@ -48,6 +48,7 @@
 	 		</br>
 	 		<h5>Return to main menu</h5>
 	 		<input type="button" value="Menu" onclick="location.href='http://localhost:7777/toptrumps/'"></br>
+			<input type="button" value="Next Round" onclick="location.href='http://localhost:7777/toptrumps/playRound'"></br>
 	 	</div>
 	 
 	 
@@ -59,6 +60,8 @@
 			<p><h5 id="AI2_range"></h5></p>
 			<p><h5 id="AI2_firepower"></h5></p>
 			<p><h5 id="AI2_cargo"></h5></p>
+			<p><h5 id="cardAI2"></h5></p>
+
 	 	</div>
 	 
 		<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
@@ -69,17 +72,19 @@
 	  		<p><h5 id="AI1_range"></h5></p>
 	  		<p><h5 id="AI1_firepower"></h5></p>
 	  		<p><h5 id="AI1_cargo"></h5></p>
+
 	 	</div>
 	 
 	 
 		<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
 			<h4>Your card is:</h4>
-			<p><h5 id="cardName"></h5></p>
+			<p><h5 id="thatIsMyID"></h5></p>
 	 		<p><h5 id="size"></h5></p>
 	 		<p><h5 id="speed"></h5></p>
 	 		<p><h5 id="range"></h5></p>
 	 		<p><h5 id="firepower"></h5></p>
-	 		<p><h5 id="cargo"></h5></P>
+	 		<p><h5 id="cargo"></h5></p>
+			<p><h5 id="card"></h5>cards left</p>
 	 	</div>
 	 
 	 	<div style="float:right; margin: 30px; padding: 10px; height: 300px; width: 220px;background: #cccc66; class="card"">
@@ -108,20 +113,101 @@
 		
 		
 		<script type="text/javascript">
+			var chosenCategory;
+			var whosTurn;
 			var activeCard;
 			var ai1ActiveCard;
             var playerOut = "Player out!";
 			
 			// Method that is called on page load
 			function initalize() {
-			
-				activeCard();
+				defineCategory();
+				activeCard()
 				activeAI1Card();
+				//maybe
+				//whosTurn();//function returns int category
+				//displayCards();//1 or 5 depends on whos turn is
+				playRound();//int category passed here
+				//try here
+				cardInHand(0);
+				
+
+				
+			}
+
+			//round loops
+			//when you click on play game button
+			var category;
+			var counter = 0;
+			var rand;
+			var arrayList = ["player", "AI1", "AI2", "AI3", "AI4"];
+			var indexRandom = Math.floor(Math.random() * 4);
+
+			var roundWinnerName = arrayList[indexRandom];//need to get initial value!!!
+			//define category including the first round
+			function defineCategory(roundWinnerName){
+				if(counter != 0){
+					if(roundWinnerName.includes("player")){
+						//category = result from the click
+						category = Math.floor(Math.random() * 4);
+					}else{
+						category = Math.floor(Math.random() * 4);
+					}
+				}else{
+					counter++;
+					rand = Math.floor(Math.random() * 4);
+				if(rand = 0){
+					//category = result from the click
+					category = Math.floor(Math.random() * 4);
+
+				}else {
+					category = Math.floor(Math.random() * 4);
+				}
+				}
+			return category;	
+			}
+
+
+
+			function playRound(){
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playRound?category="+category);
+				if(!xhr) {
+					alert("CORS not supported")
+				}
+				xhr.onload = function(e) {
+					//console.log(xhr.response)
+					var response = JSON.parse(xhr.response);
+					//ShowCardInHand(response);
+				};
+			xhr.send();
+		}
+			
+
+			function clickNext(){
+				playRound();
+			}
+
+			function getActivePlayer(){
+				
+			}
+
+			function getRoundWinnerName(){
+				
+			}
+
+			
+
+			
+
+			whosTurn = function whosTurn(){
+				//if -1 --> Active player >activePlayer = -1;
+				// else random choice>
+				
 			}
 			
 			
 			function showCard() {
-				document.getElementById("cardName").innerHTML = activeCard.cardName;
+				document.getElementById("thatIsMyID").innerHTML = activeCard.cardName;
 				document.getElementById("size").innerHTML = "Speed: " + activeCard.size;
 				document.getElementById("speed").innerHTML = "Size: " + activeCard.speed;
 				document.getElementById("range").innerHTML = "Range: " + activeCard.range;
@@ -137,11 +223,16 @@
 				document.getElementById("AI1_range").innerHTML = "Range: " + ai1ActiveCard.range;
 				document.getElementById("AI1_firepower").innerHTML = "Firepower: " + ai1ActiveCard.firepower;
 				document.getElementById("AI1_cargo").innerHTML = "Cargo: " + ai1ActiveCard.cargo;
+				
+
 			}
 
             function playerOut() { document.getElementById("cardName").innerHTML = playerOut; }
             function AI1Out() { document.getElementById("AI1_cardName").innerHTML = playerOut; }
 
+			function ShowCardInHand(response){
+					document.getElementById("card").innerHTML = response;
+				}
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
@@ -173,6 +264,22 @@
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
 		
+			function cardInHand(num){
+			var num = 0;
+			var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/cardInHand?num="+num);
+			if(!xhr) {
+				alert("CORS not supported")
+			}
+			xhr.onload = function(e) {
+				console.log(xhr.response)
+				var response = JSON.parse(xhr.response);
+			};
+			xhr.send();
+		}
+
+
+
+
 			function activeCard() {
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playerActiveCard");
 				if(!xhr) {
