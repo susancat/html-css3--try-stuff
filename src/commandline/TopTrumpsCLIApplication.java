@@ -66,8 +66,11 @@ public class TopTrumpsCLIApplication  {
 	//=========================================DB
 	// variables for database
 	private DatabaseConnect db;
-	private int humanWin =0;
-	private int aiWin = 0;
+	private int humanRoundWin =0;
+	private int ai1RoundWin = 0;
+	private int ai2RoundWin = 0;
+	private int ai3RoundWin = 0;
+	private int ai4RoundWin = 0;
 	private int numberOfDraws = 0;
 	private int numberOfRounds = 0;
 	//=========================================DB
@@ -91,7 +94,7 @@ public class TopTrumpsCLIApplication  {
  * @param logsToFile
  */
 	private void playGame(boolean logsToFile) {
-		
+		exitGame = false;
 		System.out.println("\nGame start\n");
 		Deck deck = new Deck(); 		//create deck 
 		dealCards(deck, logsToFile); 	//and deal cards
@@ -137,15 +140,12 @@ public class TopTrumpsCLIApplication  {
 			}
 			//=============================================LOG
 		
-			roundWinner = setWinner(deck, logsToFile);// winner is determine from category chosen
+			setWinner(deck, logsToFile);// winner is determine from category chosen
 			//check for draw
 			if(roundWinner.equals("draw")) {
 				System.out.println("This round was a draw, the common deck has " 
 										+ deck.getCommonDeck().size() + " cards");
 	
-				//=========================================DB
-				numberOfDraws++;
-				//=========================================DB
 			}else {
 				finalWinner = roundWinner;
 				activePlayer = roundWinner;	// set active player
@@ -297,10 +297,9 @@ public class TopTrumpsCLIApplication  {
  * @param logsToFile
  * @return
  */
-	public String setWinner(Deck deck, boolean logsToFile) {
+	public void setWinner(Deck deck, boolean logsToFile) {
 		ArrayList<Integer> scores = new ArrayList<Integer>();
-		String winner = "";
-
+	
 		for(Player p : deck.getPlayers()) {
 			scores.add(deck.getCardDeck().get(p.getHand().get(0)).catScores().get(finalCategory -1));
 		}
@@ -308,17 +307,38 @@ public class TopTrumpsCLIApplication  {
 		Collections.sort(scores);
 		int max = scores.get(scores.size() -1);
 		if(scores.size() == 1) {
-			winner = deck.getPlayers().get(maxScoreIndex).getPName();
+			roundWinner = deck.getPlayers().get(maxScoreIndex).getPName();
 		}else if(scores.get(scores.size() -2) == max) {
-					winner = "draw";
+					roundWinner = "draw";
 		}else {
-			winner = deck.getPlayers().get(maxScoreIndex).getPName();
+			roundWinner = deck.getPlayers().get(maxScoreIndex).getPName();
 		}
 		//================================================================LOG
-		if(logsToFile) deck.printToFile(deck.printWinner(winner, maxScoreIndex, printCategory(finalCategory), finalCategory));
+		if(logsToFile) deck.printToFile(deck.printWinner(roundWinner, maxScoreIndex, printCategory(finalCategory), finalCategory));
 		//================================================================LOG	
-		return winner;
+		incrementGameVariables();
 	}//=======================setWinner-end
+	
+//========INCREMENT DATABASE VARIABLES FOR GAME STATS======
+/**
+ * Method increment variables for game statistics
+ */
+	public void incrementGameVariables() {
+		if(roundWinner.equals("You")) {
+			humanRoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '1') {
+			ai1RoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '2') {
+			ai2RoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '3') {
+			ai3RoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '4') {
+			ai4RoundWin++;
+		}else {
+			numberOfDraws++;
+		}
+	}//====increment-var-end
+	
 	
 //==============CHECK FOR WIN=======================
 /**
@@ -328,11 +348,6 @@ public class TopTrumpsCLIApplication  {
  */
 	public void checkWin(Deck deck) {
 		if (deck.getPlayers().size() == 1) {
-			if (finalWinner.startsWith("A")){
-				aiWin = 1;
-				}else {
-					humanWin = 1;
-				}
 			insertDbValues();//insert stats
 			resetCounters();//reset database counters for next game
 			exitGame=true; 
@@ -344,9 +359,14 @@ public class TopTrumpsCLIApplication  {
  * Method to reset database counters.
  */
 	public void resetCounters() {
+		//numberOfRounds = 0;
+		humanRoundWin = 0;
+		ai1RoundWin = 0;
+		ai2RoundWin = 0;
+		ai3RoundWin = 0;
+		ai4RoundWin = 0;
+		numberOfDraws = 0;
 		numberOfRounds = 0;
-		humanWin = 0;
-		aiWin = 0;
 	}//===reset-end
 	
 //===============CHECK PLAYER IN GAME=======================
@@ -407,7 +427,7 @@ public class TopTrumpsCLIApplication  {
 	public void insertDbValues() {
 		try {
 			db.DatabaseOpen();
-			db.insertValues(humanWin, aiWin, numberOfDraws, numberOfRounds);
+			db.insertValues(humanRoundWin, ai1RoundWin, ai2RoundWin, ai3RoundWin, ai4RoundWin, numberOfDraws, numberOfRounds, finalWinner);
 			db.DatabaseOpen();
 			}catch(SQLException e) { e.printStackTrace(); }
 	}//=====================insert-end

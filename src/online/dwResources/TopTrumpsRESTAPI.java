@@ -187,7 +187,7 @@ public class TopTrumpsRESTAPI {
 		topTrumps.checkWin(deck);
 		deck.setCommonDeck();
 		topTrumps.setFinalCategory(category);
-		topTrumps.setRoundWinner(topTrumps.setWinner(deck, logsToFile));
+		topTrumps.setWinner(deck, logsToFile);
 		topTrumps.setFinalWinner(topTrumps.getRoundWinner());
 		topTrumps.setActivePlayer(topTrumps.getRoundWinner());
 		topTrumps.setWinningCardIndex(topTrumps.winningCardIndex(deck));
