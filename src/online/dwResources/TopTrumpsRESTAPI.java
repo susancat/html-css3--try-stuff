@@ -166,7 +166,6 @@ public class TopTrumpsRESTAPI {
 			json = -1;
 		}else {
 			topTrumps.setFinalCategory(topTrumps.firstPlay() + 1);
-			json = topTrumps.getFinalCategory();
 			playRound(json);	
 		}
 		return json;
