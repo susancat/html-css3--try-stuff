@@ -184,11 +184,11 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/playRound")
-	public String playRound(int category) throws IOException, SQLException {
+	public String playRound(@QueryParam("category") int category) throws IOException, SQLException {
 		topTrumps.checkWin(deck);
 		deck.setCommonDeck();
 		topTrumps.setFinalCategory(category);
-		topTrumps.setRoundWinner(topTrumps.setWinner(deck, logsToFile));
+		topTrumps.setWinner(deck, logsToFile);
 		topTrumps.setFinalWinner(topTrumps.getRoundWinner());
 		topTrumps.setActivePlayer(topTrumps.getRoundWinner());
 		topTrumps.setWinningCardIndex(topTrumps.winningCardIndex(deck));
