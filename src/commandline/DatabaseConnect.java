@@ -50,10 +50,11 @@ public class DatabaseConnect {
 		}
    }
 	
-	public void insertValues(int humanRoundWin, int aiRoundWin, String gameWinner, int draws, int gamelength) throws SQLException {
+	public void insertValues(int humanRoundWin, int ai1RoundWin, int ai2RoundWin, int ai3RoundWin, int ai4RoundWin, int draws, int gamelength, String gameWinner) throws SQLException {
 		Statement stmt = c.createStatement();
-		String insertquery = "INSERT INTO Game(HumanRoundWin, AIRoundWin, gameWinner, NoDraws, GameLength)"
-				+ "VALUES ('"+humanRoundWin+"', '"+aiRoundWin+"', '"+gameWinner+"', '"+draws+"', '"+gamelength+"')";
+		String insertquery = "INSERT INTO Game(HumanRoundWin, AI1RoundWin, AI2RoundWin, AI3RoundWin, AI4RoundWin, NoDraws, GameLength, gameWinner)"
+				+ "VALUES ('"+humanRoundWin+"', '"+ai1RoundWin+"', '"+ai2RoundWin+"', '"+ai3RoundWin+"', '"+ai4RoundWin+"',"
+						+ "  '"+draws+"', '"+gamelength+"', '"+gameWinner+"')";
 	    stmt.executeUpdate(insertquery);
 		// System.out.println("Values Inserted");
 		stmt.close();
@@ -131,7 +132,8 @@ public class DatabaseConnect {
 		Statement stmt = c.createStatement();
 		if (c != null) {
 		String sql = "CREATE TABLE IF NOT EXISTS Game(GamesNo serial, HumanRoundWin integer, "
-				+ "AIRoundWin integer, NoDraws integer, GameWinner varchar(24), GameLength integer)";
+				+ "AI1RoundWin integer, AI2RoundWin integer, AI3RoundWin integer, AI4RoundWin integer,"
+				+ " NoDraws integer, GameLength integer, GameWinner varchar(24))";
 		stmt.executeUpdate(sql);
 		}
 		DatabaseClose();

@@ -67,7 +67,10 @@ public class TopTrumpsCLIApplication  {
 	// variables for database
 	private DatabaseConnect db;
 	private int humanRoundWin =0;
-	private int aiRoundWin = 0;
+	private int ai1RoundWin = 0;
+	private int ai2RoundWin = 0;
+	private int ai3RoundWin = 0;
+	private int ai4RoundWin = 0;
 	private int numberOfDraws = 0;
 	private int numberOfRounds = 0;
 	//=========================================DB
@@ -91,7 +94,7 @@ public class TopTrumpsCLIApplication  {
  * @param logsToFile
  */
 	private void playGame(boolean logsToFile) {
-		
+		exitGame = false;
 		System.out.println("\nGame start\n");
 		Deck deck = new Deck(); 		//create deck 
 		dealCards(deck, logsToFile); 	//and deal cards
@@ -323,8 +326,14 @@ public class TopTrumpsCLIApplication  {
 	public void incrementGameVariables() {
 		if(roundWinner.equals("You")) {
 			humanRoundWin++;
-		}else if(roundWinner.startsWith("A")) {
-			aiRoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '1') {
+			ai1RoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '2') {
+			ai2RoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '3') {
+			ai3RoundWin++;
+		}else if(roundWinner.charAt(roundWinner.length() -1) == '4') {
+			ai4RoundWin++;
 		}else {
 			numberOfDraws++;
 		}
@@ -352,7 +361,10 @@ public class TopTrumpsCLIApplication  {
 	public void resetCounters() {
 		//numberOfRounds = 0;
 		humanRoundWin = 0;
-		aiRoundWin = 0;
+		ai1RoundWin = 0;
+		ai2RoundWin = 0;
+		ai3RoundWin = 0;
+		ai4RoundWin = 0;
 		numberOfDraws = 0;
 		numberOfRounds = 0;
 	}//===reset-end
@@ -415,7 +427,7 @@ public class TopTrumpsCLIApplication  {
 	public void insertDbValues() {
 		try {
 			db.DatabaseOpen();
-			db.insertValues(humanRoundWin, aiRoundWin, finalWinner, numberOfDraws, numberOfRounds);
+			db.insertValues(humanRoundWin, ai1RoundWin, ai2RoundWin, ai3RoundWin, ai4RoundWin, numberOfDraws, numberOfRounds, finalWinner);
 			db.DatabaseOpen();
 			}catch(SQLException e) { e.printStackTrace(); }
 	}//=====================insert-end
