@@ -12,6 +12,7 @@ import java.net.URI;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -54,6 +55,7 @@ public class TopTrumpsRESTAPI {
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) throws Exception{
 		this.topTrumps = new TopTrumpsCLIApplication();
+		//topTrumps.setAIPlayers(conf.getNumAIPlayers()); //not able to do this... yet
 		this.deck = new Deck();
 		topTrumps.dealCards(deck, logsToFile);
 		topTrumps.setActivePlayer(deck.getPlayers().get(0).getPName());
@@ -161,14 +163,15 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/whosTurn")
-	public int whosTurn() throws IOException, SQLException {
-		int json = 0;
+	public String whosTurn() throws IOException, SQLException {
+		int j = 0;
 		if(!(topTrumps.getActivePlayer().startsWith("A"))) {
-			json = -1;
+			j = -1;
 		}else {
 			topTrumps.setFinalCategory(topTrumps.firstPlay() + 1);
-			playRound(json);	
+			playRound(j);	
 		}
+		String json = oWriter.writeValueAsString(j);
 		return json;
 	}//================whos-turn-end
 	
@@ -270,4 +273,3 @@ public class TopTrumpsRESTAPI {
 	
 	
 }//RESTAPI-END
-
