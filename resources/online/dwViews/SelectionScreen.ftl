@@ -1,3 +1,5 @@
+
+
 <html>
 
 	<head>
@@ -22,21 +24,25 @@
 
     <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
     	
-    <div class="container">
-			
-		<header>
-      		<h1 style="background-color:#330066; font-size:40px; color:#ffffff; text-align:center; padding:20px">Top Trumps Game</h1>
-	  		<h2 style="background-color:#0066cc; font-size:30px; color:#ffffff; text-align:center; padding:20px">Sci-Fi Ships Special Web Edition!</h2>
-		</header>
-	   
-		<div>
-	   		<p><h4 style="font-size:20px"> Please select your choice</h4></p>
-	   		<input type="button" value="Play Game" onclick="location.href='http://localhost:7777/toptrumps/game'">
-	   		<input type="button" value="Game Statistics" onclick="location.href='http://localhost:7777/toptrumps/stats'">
-	   		<input type="button" value="Quit" onclick="closeCurrentTab()">
-	  	</div>
+    	<div class="container">
 
-	</div>
+			<!-- Add your HTML Here -->
+		<header>
+      <h1 style="background-color:black; font-size:40px; 
+	   color:#FFFFFF; text-align:center; padding:20px">
+	  TOP TRUMP GAME
+	  </h1>
+	  <h2 style="background-color:blue; font-size:30px; 
+	   color:#FFFFFF; text-align:left; padding:20px">
+	  YOUR: SELECTED RANGE
+	  </h2>
+		  </header>
+	   <p style="font-size:20px"> PLEASE SELECT YOUR CHOICE</p>
+	   <input type="button" value="Play Game" onclick="location.href='http://localhost:7777/toptrumps/game'">
+	   <input type="button" value="Game Statistics" onclick="location.href='http://localhost:7777/toptrumps/stats'">
+	   <input type="button" value="Quit" onclick="closeCurrentTab()">
+	  
+		</div>
 		
 		<script type="text/javascript">
 		
@@ -48,7 +54,8 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				
+				//<!--helloJSONList();-->
+				//<!--helloWord("Student");-->
 				
 			}
 			
@@ -60,17 +67,23 @@
 			function createCORSRequest(method, url) {
   				var xhr = new XMLHttpRequest();
   				if ("withCredentials" in xhr) {
+
     				// Check if the XMLHttpRequest object has a "withCredentials" property.
     				// "withCredentials" only exists on XMLHTTPRequest2 objects.
     				xhr.open(method, url, true);
+
   				} else if (typeof XDomainRequest != "undefined") {
+
     				// Otherwise, check if XDomainRequest.
     				// XDomainRequest only exists in IE, and is IE's way of making CORS requests.
     				xhr = new XDomainRequest();
     				xhr.open(method, url);
+
  				 } else {
+
     				// Otherwise, CORS is not supported by the browser.
     				xhr = null;
+
   				 }
   				 return xhr;
 			}
@@ -90,6 +103,7 @@
 				if (!xhr) {
   					alert("CORS not supported");
 				}
+
 				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
 				// to do when the response arrives 
 				xhr.onload = function(e) {
@@ -111,6 +125,7 @@
 				if (!xhr) {
   					alert("CORS not supported");
 				}
+
 				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
 				// to do when the response arrives 
 				xhr.onload = function(e) {
