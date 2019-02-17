@@ -11,15 +11,12 @@ import java.util.HashMap;
 public class Deck {
 	//use a HashMap to link 40 cards with position 0~39th for illustration in log
 	private HashMap<Integer, String> card = new HashMap<Integer, String>();
-	
+	//an array of card obj
 	private ArrayList<Card> cardDeck = new ArrayList<Card>();
-	
+	//an array of player obj
 	private ArrayList<Player> players = new ArrayList<Player>();
-	
-
 	//this ArrayList store card number used to be shuffled, its value link to card name one on one 
 	private ArrayList<Integer> cardNumber = new ArrayList<Integer>();
-
 	//common deck
 	private ArrayList<Integer> commonDeck = new ArrayList<Integer>();
 
@@ -52,6 +49,7 @@ public class Deck {
 	      }
 		
 	}
+
 	
 	public void shuffleCards() {
 	int index = 0;
@@ -64,9 +62,9 @@ public class Deck {
 	}
 	 
 		
-		public void ShareCards() {	
+		public void ShareCards(int aiPlayers) {	
 			players.add(new Player("You"));
-			for(int i = 1; i <= 4; i++) {
+			for(int i = 1; i <= aiPlayers; i++) {
 				players.add(new Player("AIPlayer" + i));
 			}
 			for (int i = 0; i < cardNumber.size();i++) {
@@ -82,43 +80,6 @@ public class Deck {
 					players.get(4).addCard(cardNumber.get(i));
 				}
 			}
-		}
-		
-		
-//////////////GETTERS////////////////////////
-		public ArrayList<Integer> getCommonDeck() {
-			return commonDeck;
-		}
-		
-		public ArrayList<Player> getPlayers() {
-			return players;
-		}
-
-		public void setPlayers(ArrayList<Player> players) {
-			this.players = players;
-		}
-
-		public ArrayList<Card> getCardDeck() {
-			return cardDeck;
-		}
-
-		public void setCardDeck(ArrayList<Card> deck) {
-			this.cardDeck = deck;
-		}
-
-		/*
- * 		setCommonDeck loads the card number of index 0 of each player in to
- * 		the corresponding indexes of the array. The numbers are loaded in reverse 
- * 		order in to the lefthand side of the array (0) so that 0-4 of the common deck 
- * 		always points to the correct player, if we agree that 0 = player and 1-4 are used 
- *		for the ai players
- */
-		public void setCommonDeck() {
-			int i = 0;
-			for(Player p : players) {
-				commonDeck.add(players.get(i).getHand().get(0));
-				i++;
-			}	
 		}
 		
 		public void clearActiveCards() {
@@ -139,10 +100,41 @@ public class Deck {
 				}
 			}
 			this.players = tempList; 
-}
-
-///////////////////////LOGS////////////////////////////////////////
+		}
 		
+//================GETTERS AND SETTERS==========================
+		public ArrayList<Integer> getCommonDeck() {
+			return commonDeck;
+		}
+		/**
+		 * setCommonDeck loads the card number of index 0 of each player in to
+		 * the corresponding indexes of the array. The numbers are loaded in reverse 
+		 * order in to the lefthand side of the array (0) so that 0-4 of the common deck 
+		 * always points to the correct player, if we agree that 0 = player and 1-4 are used 
+		 * for the ai players
+		 */
+		public void setCommonDeck() {
+			int i = 0;
+			for(Player p : players) {
+				commonDeck.add(players.get(i).getHand().get(0));
+				i++;
+			}	
+		}
+		public ArrayList<Player> getPlayers() {
+			return players;
+		}
+		public void setPlayers(ArrayList<Player> players) {
+			this.players = players;
+		}
+		public ArrayList<Card> getCardDeck() {
+			return cardDeck;
+		}
+		public void setCardDeck(ArrayList<Card> deck) {
+			this.cardDeck = deck;
+		}
+
+
+//======================================LOGS============================================
 		
 		public String fullDeckLog() {
 			String log = "\r\n------------DECK LOG-------------------"

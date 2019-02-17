@@ -1,3 +1,4 @@
+
 package online.dwResources;
 import commandline.*;
 
@@ -18,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 
 import online.configuration.TopTrumpsJSONConfiguration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -130,9 +130,8 @@ public class TopTrumpsRESTAPI {
 		return json;
 	}
 //==================================active-cards-end
-
+	
 //==============CHECK FOR PLAYERS===================
-
 /**
  * Method to check whether player is in the game,
  * returns -1 if not
@@ -148,7 +147,7 @@ public class TopTrumpsRESTAPI {
 		}
 		System.out.println(index);
 		return index;
-	}//=================player-check-end,non-json(string)cannot be called
+	}//=================player-check-end
 	
 //==============WHOS CHOOSES CATEGORY====================
 /**
@@ -162,19 +161,18 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/whosTurn")
-	public int whosTurn() throws IOException {
-		int category = 0;
+	public int whosTurn() throws IOException, SQLException {
+		int json = 0;
 		if(!(topTrumps.getActivePlayer().startsWith("A"))) {
-			category = -1;
+			json = -1;
 		}else {
 			topTrumps.setFinalCategory(topTrumps.firstPlay() + 1);
-			playRound(category);	
+			playRound(json);	
 		}
-		return category;
-	}//================whos-turn-end£ºreturn a category number,click next round button to check and start a new round
+		return json;
+	}//================whos-turn-end
 	
-//=====================PLAY ROUND=========================
-
+//=====================PLAY ROUND==============================
 /**
  * The playRound method begins by checking for winner and then
  * works through the same logic as the CL game minus the prints to console 
@@ -186,11 +184,11 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/playRound")
-	public String playRound(@QueryParam("num")int category) throws IOException{
+	public String playRound(@QueryParam("category") int category) throws IOException, SQLException {
 		topTrumps.checkWin(deck);
 		deck.setCommonDeck();
 		topTrumps.setFinalCategory(category);
-		topTrumps.setRoundWinner(topTrumps.setWinner(deck, logsToFile));
+		topTrumps.setWinner(deck, logsToFile);
 		topTrumps.setFinalWinner(topTrumps.getRoundWinner());
 		topTrumps.setActivePlayer(topTrumps.getRoundWinner());
 		topTrumps.setWinningCardIndex(topTrumps.winningCardIndex(deck));
@@ -201,14 +199,7 @@ public class TopTrumpsRESTAPI {
 		String json = oWriter.writeValueAsString(topTrumps);
 		return json;
 	}//==============play-round-end
-	@GET
-	@Path("/cardInHand")
-	public String cardInHand(@QueryParam("num") int playerPosition) throws IOException{
-		int cardInHand = deck.getPlayers().get(playerPosition).getHand().size();
-		String json = oWriter.writeValueAsString(cardInHand);
-		return json;
-	}
-
+	
 //===================LOAD STATISTICS==============
 /**
  * The method up dates the database variables ready for
@@ -279,3 +270,4 @@ public class TopTrumpsRESTAPI {
 	
 	
 }//RESTAPI-END
+

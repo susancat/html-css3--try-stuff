@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class DatabaseConnect {
 	Connection c = null;
-	private int gamenumber;
+	private int gameNumber;
 	private int gameHuWin;
 	private int gameAiWin;
 	private double gamedraws;
@@ -50,10 +50,11 @@ public class DatabaseConnect {
 		}
    }
 	
-	public void insertValues(int humanwin, int aiwin, int draws, int gamelength) throws SQLException {
+	public void insertValues(int humanRoundWin, int ai1RoundWin, int ai2RoundWin, int ai3RoundWin, int ai4RoundWin, int draws, int gamelength, String gameWinner) throws SQLException {
 		Statement stmt = c.createStatement();
-		String insertquery = "INSERT INTO Game(HumanWin, AIWin, NoDraws, GameLength)"
-				+ "VALUES ('"+humanwin+"', '"+aiwin+"', '"+draws+"', '"+gamelength+"')";
+		String insertquery = "INSERT INTO Game(HumanRoundWin, AI1RoundWin, AI2RoundWin, AI3RoundWin, AI4RoundWin, NoDraws, GameLength, gameWinner)"
+				+ "VALUES ('"+humanRoundWin+"', '"+ai1RoundWin+"', '"+ai2RoundWin+"', '"+ai3RoundWin+"', '"+ai4RoundWin+"',"
+						+ "  '"+draws+"', '"+gamelength+"', '"+gameWinner+"')";
 	    stmt.executeUpdate(insertquery);
 		// System.out.println("Values Inserted");
 		stmt.close();
@@ -66,7 +67,7 @@ public class DatabaseConnect {
 			 result.next();
 		     String gameSum = result.getString(1);
 //		     System.out.println(gameSum);
-		     gamenumber = Integer.parseInt(gameSum);
+		     gameNumber = Integer.parseInt(gameSum);
 			 stmtGsum.close();
 			 if (stmtGsum.isClosed()) {confirmstatementclosure = true;
 			                          }else{confirmstatementclosure = false;}
@@ -74,7 +75,7 @@ public class DatabaseConnect {
 	}
 			 
 	public String totalHumanWins() throws SQLException {
-			 PreparedStatement stmtHwin = c.prepareStatement("SELECT SUM(HumanWin) As Human_score FROM Game");
+			 PreparedStatement stmtHwin = c.prepareStatement("SELECT COUNT(gameWinner) As Human_score FROM Game WHERE gameWinner = 'You'");
 			 ResultSet getHquery = stmtHwin.executeQuery();
 	         getHquery.next();
 	         String hWinSum = getHquery.getString(1);
@@ -87,7 +88,7 @@ public class DatabaseConnect {
 	}
 	
 	public String totalAIWins() throws SQLException {		 
-			 PreparedStatement stmtAiwin = c.prepareStatement("SELECT SUM(AIWin) As AI_score FROM Game");
+			 PreparedStatement stmtAiwin = c.prepareStatement("SELECT COUNT(gameWinner) As AI_score FROM Game WHERE gameWinner LIKE 'AI%'");
 			 ResultSet getAiquery = stmtAiwin.executeQuery();
 	         getAiquery.next();
 	         String aiWinSum = getAiquery.getString(1);
@@ -130,10 +131,10 @@ public class DatabaseConnect {
 		DatabaseOpen();
 		Statement stmt = c.createStatement();
 		if (c != null) {
-		String sql = "CREATE TABLE IF NOT EXISTS Game(GamesNo serial, HumanWin integer, "
-				+ "AIWin integer, NoDraws integer, GameLength integer)";
+		String sql = "CREATE TABLE IF NOT EXISTS Game(GamesNo serial, HumanRoundWin integer, "
+				+ "AI1RoundWin integer, AI2RoundWin integer, AI3RoundWin integer, AI4RoundWin integer,"
+				+ " NoDraws integer, GameLength integer, GameWinner varchar(24))";
 		stmt.executeUpdate(sql);
-		
 		}
 		DatabaseClose();
 		}
@@ -148,18 +149,18 @@ public class DatabaseConnect {
 	 * version. 
 	 */
 	public int getGameNumber() {
-		return gamenumber;
+		return gameNumber;
 	}
-	public int getHumanWins() {
+	public int getgameHuWins() {
 		return gameHuWin;
 	}
-	public int getAiWins() {
+	public int getGameAiWins() {
 		return gameAiWin;
 	}
-	public double getDrawsAve() {
+	public double getGameDraws() {
 		return gamedraws;
 	}
-	public int getTotalGameTime() {
+	public int getGameLen() {
 		return gameLen;
 	}
 	public boolean isDBopen() {
