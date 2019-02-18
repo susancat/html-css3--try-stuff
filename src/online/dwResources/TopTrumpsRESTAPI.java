@@ -1,3 +1,4 @@
+
 package online.dwResources;
 import commandline.*;
 
@@ -176,7 +177,7 @@ public class TopTrumpsRESTAPI {
 		}
 		return json;
 	}
-//================whos-turn-end£ºreturn a category number,click next round button to check and start a new round
+//================whos-turn-endï¿½ï¿½return a category number,click next round button to check and start a new round
 	@GET
 	@Path("/activePlayer")
 	public String activePlayer()throws IOException{
@@ -297,3 +298,4 @@ public class TopTrumpsRESTAPI {
 		
 		
 	}//RESTAPI-END
+

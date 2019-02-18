@@ -19,7 +19,7 @@ public class Deck {
 	private ArrayList<Integer> cardNumber = new ArrayList<Integer>();
 	//common deck
 	private ArrayList<Integer> commonDeck = new ArrayList<Integer>();
-
+	
 	
 	public void loadDeck() {
 		String cardName = "";
