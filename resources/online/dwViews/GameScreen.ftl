@@ -1,4 +1,4 @@
-
+<html>
 
 	<head>
 		<!-- Web page title -->
@@ -26,30 +26,29 @@
 
 		<header>
 			<h1 style="background-color:#330066; font-size:40px; color:#FFFFFF; text-align:center; padding:20px">Top Trumps Game</h1>
-	  		<h2 style="background-color:#0066cc; font-size:30px; color:#FFFFFF; text-align:center; padding:20px">Let's Play!</h2>
+	  		<h2 id="roundWinner" style="background-color:#0066cc; font-size:30px; color:#FFFFFF; text-align:left; padding:20px"></h2>
 	  	</header>
 	  	
 	  	<div style="float:left; margin: 30px;height: 660px; width: 150px; padding: 10px; background: #99ccff"> 
 	  	</br>
-			<h5><input type="button" value="Next Round" onclick="submit"><h5>
 			<h5>Active player is:</h5>
 	 		<p><h5 id="activePName"></h5></p></br>
 	 		<h5>Chosen category:</h5>
 			<p><h5 id="selectedCategory"></h5></p></br>
 	 		<p><h5>Round:</h5></p> 
 			<p><h5 id="round"><h5></p></br>
-	 		</br>
-	  		<div class="chooseCats">
+	 		<div class="chooseCats">
 	 			<h5>Choose your category</h5>
-				<input type="button" id="1" value="Size" onclick=chooseCat()></br>
-				<input type="button" id="2" value="Speed" onclick=chooseCat()></br>
-				<input type="button" id="3" value="Range" onclick=chooseCat()></br>
-				<input type="button" id="4" value="Firepower" onclick=chooseCat()></br>
-				<input type="button" id="5" value="Cargo" onclick=chooseCat()>
+				<input type="button" id="1" value="Size" onclick="chooseCat(event)"></br>
+				<input type="button" id="2" value="Speed" onclick="chooseCat(event)"></br>
+				<input type="button" id="3" value="Range" onclick="chooseCat(event)"></br>
+				<input type="button" id="4" value="Firepower" onclick="chooseCat(event)"></br>
+				<input type="button" id="5" value="Cargo" onclick="chooseCat(event)">
 	 		</div>
 	 		</br>
 	 		<h5>Return to main menu</h5>
-	 		<h5><input type="button" value="Menu" onclick="location.href='http://localhost:7777/toptrumps/'"></h5></br>
+	 		<h5><input type="button" value="Menu" onclick="location.href='http://localhost:7777/toptrumps/'"></h5>
+	 		<h5><input type="button" value="Next Round" onclick=nextRound()><h5></br>
 	 	</div>
 	 
 	 
@@ -120,12 +119,17 @@
 			var ai2ActiveCard;
 			var ai3ActiveCard;
 			var ai4ActiveCard;
+			var cardLeft;
+			var cardLeft1;
+			var cardLeft2;
+			var cardLeft3;
+			var cardLeft4;
 			var category;
-			//var playRound;
-			
+			var toptrumps;
+			var round;
 			//var player;
             //var playerOut = "Player out!";
-      		//var activePlayer;
+      		
 			
 			// Method that is called on page load
 			function initalize() {
@@ -134,14 +138,13 @@
 				activeAI2Card();
 				activeAI3Card();
 				activeAI4Card();
-				//activePlayer();
+				
 				cardInHand(0);
 				cardInHand1(1);
 				cardInHand2(2);
 				cardInHand3(3);
 				cardInHand4(4);
-				//playRound();
-				
+				start(1);
 			}
 			
 			
@@ -192,15 +195,26 @@
 			}
 			
 			function ShowCardInHand(cardLeft){document.getElementById("cardLeft").innerHTML = "Cards left:" + cardLeft;}
-			function ShowCardInHand1(cardLeft1){document.getElementById("cardLeft1").innerHTML = "Cards left: " + cardLeft1;}
-			function ShowCardInHand2(cardLeft2){document.getElementById("cardLeft2").innerHTML = "Cards left: " + cardLeft2;}
-			function ShowCardInHand3(cardLeft3){document.getElementById("cardLeft3").innerHTML = "Cards left: " + cardLeft3;}
-			function ShowCardInHand4(cardLeft4){document.getElementById("cardLeft4").innerHTML = "Cards left: " + cardLeft4;}
-            //function playerOut() { document.getElementById("cardName").innerHTML = playerOut; }
+
+			function ShowCardInHand1(cardLeft1){document.getElementById("cardLeft1").innerHTML = "Cards left:" + cardLeft1;}
+			function ShowCardInHand2(cardLeft2){document.getElementById("cardLeft2").innerHTML = "Cards left:" + cardLeft2;}
+			function ShowCardInHand3(cardLeft3){document.getElementById("cardLeft3").innerHTML = "Cards left:" + cardLeft3;}
+			function ShowCardInHand4(cardLeft4){document.getElementById("cardLeft4").innerHTML = "Cards left:" + cardLeft4;}
+
             
+			function playerOut() { document.getElementById("cardName").innerHTML = "Player Out!"; }
+			function AI1Out() { document.getElementById("AI1_cardName").innerHTML = "AI1 Out!"; }
+			function AI2Out() { document.getElementById("AI2_cardName").innerHTML = "AI2 Out!"; }
+			function AI3Out() { document.getElementById("AI3_cardName").innerHTML = "AI3 Out!"; }
+			function AI4Out() { document.getElementById("AI4_cardName").innerHTML = "AI4 Out!"; }
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
+			
+			function start(round) {
+				document.getElementById("round").innerHTML = round;
+				firstPlayer();
+			}
 			
 			function showdiv(id) {
   				var div = document.getElementById(id);
@@ -212,17 +226,71 @@
           			}
           	}
 			
-			function chooseCat(){
-				document.getElementById("selectedCategory").innerHTML = event.target.value;
-				var category = parseInt(event.target.id)
+			function showActPlayer(toptrumps){
+			    
+				if (round == 1) {
+					document.getElementById("activePName").innerHTML = toptrumps.activePlayer;
+				}
+				else {document.getElementById("activePName").innerHTML = toptrumps.roundWinner;
+				}
+				document.getElementById("round").innerHTML = toptrumps.round;
+				document.getElementById("roundWinner").innerHTML = "Round Winner: " + toptrumps.roundWinner;
+			}
+			
+			function firstPlayer(activePlayer){
+				if (activePlayer =="You") {
+					chooseCat(event);
+			    }
+				else {
+					category = Math.round(Math.random() * 4 ) + 1;
+					showdiv("showByClick");
+					showdiv("showByClick2");
+					showdiv("showByClick3");
+					showdiv("showByClick4");
+				}
+				playRound(category);
+			}
+						
+			function activePlayer(){
+				if (toptrumps.roundWinner == "You") {
+					chooseCat(event);
+			    }
+				else {
+					category = Math.round(Math.random() * 4 ) + 1;
+					showdiv("showByClick");
+					showdiv("showByClick2");
+					showdiv("showByClick3");
+					showdiv("showByClick4");
+				}
+				playRound(category);
+			}
+			
+			function chooseCat(event){
+				x = event.target;
+				let category = parseInt(x.id);
+				document.getElementById("selectedCategory").innerHTML = x.value;
 				showdiv("showByClick");
 				showdiv("showByClick2");
 				showdiv("showByClick3");
 				showdiv("showByClick4");
-				//playRound(category);
 			}
 			
-		
+			
+			
+			function nextRound(){
+				activePlayer();
+				showCard();
+				showAI1card();
+				showAI2card();
+				showAI3card();
+				showAI4card();
+				
+				cardInHand(0);
+				cardInHand1(1);
+				cardInHand2(2);
+				cardInHand3(3);
+				cardInHand4(4);
+			}
 		
 			// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
@@ -247,20 +315,19 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
-			function playRound(num) {
-				
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playRound");
-				if(!xhr) {
-					alert("CORS not supported");
-				}
-				xhr.onload = function(e) {
-					console.log(xhr.response)
-					var response = JSON.parse(xhr.response);
-                    playRound = response;
-                    }
-				
-				xhr.send();
-			}
+		
+		function playRound(category){
+            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playRound?category="+category);
+            if(!xhr) {
+                alert("CORS not supported")
+            }
+            xhr.onload = function(e) {
+                console.log(xhr.response)
+                toptrumps = JSON.parse(xhr.response);
+                showActPlayer(toptrumps);
+            };
+            xhr.send();
+        }
 			
 			function activeCard() {
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/playerActiveCard");
@@ -269,8 +336,7 @@
 				}
 				xhr.onload = function(e) {
 					console.log(xhr.response)
-					//alert(responseText);
-                    var response = JSON.parse(xhr.response);
+					var response = JSON.parse(xhr.response);
                     if(response == "o") { playerOut(); }
                     else {
                     activeCard = response;
@@ -302,8 +368,11 @@
 				}
 				xhr.onload = function(e) {
 					console.log(xhr.response)
-					ai2ActiveCard = JSON.parse(xhr.response);
-					showAI2card();
+					var response = JSON.parse(xhr.response)
+					if(response == "o") { AI2Out(); }
+                    else {
+					ai2ActiveCard = response;
+					showAI2card();}
 				};
 				xhr.send();
 			}
@@ -313,10 +382,13 @@
 				if(!xhr) {
 					alert("CORS not supported")
 				}
-				xhr.onload = function(e) {
+					xhr.onload = function(e) {
 					console.log(xhr.response)
-					ai3ActiveCard = JSON.parse(xhr.response);
-					showAI3card();
+					var response = JSON.parse(xhr.response)
+					if(response == "o") { AI3Out(); }
+                    else {
+					ai3ActiveCard = response;
+					showAI3card();}
 				};
 				xhr.send();
 			}
@@ -326,10 +398,12 @@
 				if(!xhr) {
 					alert("CORS not supported")
 				}
-				xhr.onload = function(e) {
-					console.log(xhr.response)
-					ai4ActiveCard = JSON.parse(xhr.response);
-					showAI4card();
+				    xhr.onload = function(e) {
+					var response = JSON.parse(xhr.response)
+					if(response == "o") { AI4Out(); }
+                    else {
+					ai4ActiveCard = response;
+					showAI4card();}
 				};
 				xhr.send();
 			}
@@ -346,6 +420,7 @@
 	            };
 	            xhr.send();
 	        }
+			
 			function cardInHand1(num){
 	            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/cardInHand?num="+num);
 	            if(!xhr) {
@@ -395,8 +470,20 @@
 	            xhr.send();
 	        }
 			
+			function chooseActivePlayer(){
+	            var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/activePlayer");
+	            if(!xhr) {
+	                alert("CORS not supported")
+	            }
+	            xhr.onload = function(e) {
+	                console.log(xhr.response)
+	                activePlayer = JSON.parse(xhr.response);
+	                
+	            };
+	            xhr.send();
+	        }
+			
 		</script>
-		
+				
 		</body>
-
 </html>

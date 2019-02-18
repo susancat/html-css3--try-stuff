@@ -7,19 +7,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.net.URI;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import online.configuration.TopTrumpsJSONConfiguration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -55,7 +58,6 @@ public class TopTrumpsRESTAPI {
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) throws Exception{
 		this.topTrumps = new TopTrumpsCLIApplication();
-		//topTrumps.setAIPlayers(conf.getNumAIPlayers()); //not able to do this... yet
 		this.deck = new Deck();
 		topTrumps.dealCards(deck, logsToFile);
 		topTrumps.setActivePlayer(deck.getPlayers().get(0).getPName());
@@ -132,8 +134,9 @@ public class TopTrumpsRESTAPI {
 		return json;
 	}
 //==================================active-cards-end
-	
+
 //==============CHECK FOR PLAYERS===================
+
 /**
  * Method to check whether player is in the game,
  * returns -1 if not
@@ -149,7 +152,7 @@ public class TopTrumpsRESTAPI {
 		}
 		System.out.println(index);
 		return index;
-	}//=================player-check-end
+	}//=================player-check-end,non-json(string)cannot be called
 	
 //==============WHOS CHOOSES CATEGORY====================
 /**
@@ -163,19 +166,32 @@ public class TopTrumpsRESTAPI {
  */
 	@GET
 	@Path("/whosTurn")
-	public String whosTurn() throws IOException, SQLException {
-		int j = 0;
+
+	public int whosTurn() throws IOException, SQLException {
+		int json = 0;
 		if(!(topTrumps.getActivePlayer().startsWith("A"))) {
-			j = -1;
+			json = -1;
 		}else {
 			topTrumps.setFinalCategory(topTrumps.firstPlay() + 1);
-			playRound(j);	
+			playRound(json);	
 		}
-		String json = oWriter.writeValueAsString(j);
 		return json;
-	}//================whos-turn-end
-	
-//=====================PLAY ROUND==============================
+	}
+//================whos-turn-end��return a category number,click next round button to check and start a new round
+	@GET
+	@Path("/activePlayer")
+	public String activePlayer()throws IOException{
+		String activePlayer;
+		Random rand = new Random();
+		int firstPlay = rand.nextInt(4);
+		activePlayer = deck.getPlayers().get(firstPlay).getPName();
+		
+		String JSONfp =  oWriter.writeValueAsString(activePlayer);
+		return JSONfp;
+	}
+
+//=====================PLAY ROUND=========================
+
 /**
  * The playRound method begins by checking for winner and then
  * works through the same logic as the CL game minus the prints to console 
@@ -201,84 +217,85 @@ public class TopTrumpsRESTAPI {
 		deck.clearActiveCards();
 		String json = oWriter.writeValueAsString(topTrumps);
 		return json;
-	}//==============play-round-end
-
-//===================SHOW NUMBER OF CARDS IN HAND=============
+	}
+	
+	//==============play-round-end
 	@GET
 	@Path("/cardInHand")
 	public String cardInHand(@QueryParam("num") int playerPosition) throws IOException{
+		String json;
 		int cardInHand = deck.getPlayers().get(playerPosition).getHand().size();
-		String json = oWriter.writeValueAsString(cardInHand);
+		json = oWriter.writeValueAsString(cardInHand);
 		return json;
-	}//===========card-hand-end
+	}
 
-//===================LOAD STATISTICS==============
-/**
- * The method up dates the database variables ready for
- * retrieval.
- * @throws Exception
- */
-	public void loadStats() throws Exception{
-		db = new DatabaseConnect();
-		db.DatabaseOpen();
-		db.totalNumberGames();
-		db.totalHumanWins();
-		db.totalAIWins();
-		db.avgNumberDraws();
-		db.maxGameLength();
-		db.DatabaseClose();
-	}//====================load-stats-end
-	
-//===============GET STATISTICS======================
-/**
- * This method parses a database obj containing all
- * the statistics data in to a string and returns it.
- * @return
- * @throws Exception
- */
-	@GET 
-	@Path("/getStatistics")
-	public String getStatistics() throws Exception {
-		loadStats();
-		String dbString = oWriter.writeValueAsString(this.db);
-		return dbString;
-	}//===================get-stats-end
-	
-//===========================DELETE WHEN READY=====================================	
-	@GET
-	@Path("/helloJSONList")
+	//===================LOAD STATISTICS==============
 	/**
-	 * Here is an example of a simple REST get request that returns a String.
-	 * We also illustrate here how we can convert Java objects to JSON strings.
-	 * @return - List of words as JSON
-	 * @throws IOException
+	 * The method up dates the database variables ready for
+	 * retrieval.
+	 * @throws Exception
 	 */
-	public String helloJSONList() throws IOException {
-		
-		List<String> listOfWords = new ArrayList<String>();
-		listOfWords.add("Hello");
-		listOfWords.add("World!");
-		
-		// We can turn arbatory Java objects directly into JSON strings using
-		// Jackson seralization, assuming that the Java objects are not too complex.
-		String listAsJSONString = oWriter.writeValueAsString(listOfWords);
-		
-		return listAsJSONString;
-	}
-	
-	@GET
-	@Path("/helloWord")
+		public void loadStats() throws Exception{
+			db = new DatabaseConnect();
+			db.DatabaseOpen();
+			db.totalNumberGames();
+			db.totalHumanWins();
+			db.totalAIWins();
+			db.avgNumberDraws();
+			db.maxGameLength();
+			db.DatabaseClose();
+		}//====================load-stats-end
+///===============GET STATISTICS======================
 	/**
-	 * Here is an example of how to read parameters provided in an HTML Get request.
-	 * @param Word - A word
-	 * @return - A String
-	 * @throws IOException
+	 * This method parses a database obj containing all
+	 * the statistics data in to a string and returns it.
+	 * @return
+	 * @throws Exception
 	 */
-	public String helloWord(@QueryParam("Word") String Word) throws IOException {
-		return "Hello "+Word;
-	}
-//======================================================================DELETE ABOVE	
-	
-	
-	
-}//RESTAPI-END
+		@GET 
+		@Path("/getStatistics")
+		public String getStatistics() throws Exception {
+			loadStats();
+			String dbString = oWriter.writeValueAsString(this.db);
+			return dbString;
+		}//===================get-stats-end
+		
+	//===========================DELETE WHEN READY=====================================	
+		@GET
+		@Path("/helloJSONList")
+		/**
+		 * Here is an example of a simple REST get request that returns a String.
+		 * We also illustrate here how we can convert Java objects to JSON strings.
+		 * @return - List of words as JSON
+		 * @throws IOException
+		 */
+		public String helloJSONList() throws IOException {
+			
+			List<String> listOfWords = new ArrayList<String>();
+			listOfWords.add("Hello");
+			listOfWords.add("World!");
+			
+			// We can turn arbatory Java objects directly into JSON strings using
+			// Jackson seralization, assuming that the Java objects are not too complex.
+			String listAsJSONString = oWriter.writeValueAsString(listOfWords);
+			
+			return listAsJSONString;
+		}
+		
+		@GET
+		@Path("/helloWord")
+		/**
+		 * Here is an example of how to read parameters provided in an HTML Get request.
+		 * @param Word - A word
+		 * @return - A String
+		 * @throws IOException
+		 */
+		public String helloWord(@QueryParam("Word") String Word) throws IOException {
+			return "Hello "+Word;
+		}
+	//======================================================================DELETE ABOVE	
+		
+		
+		
+	}//RESTAPI-END
+
