@@ -202,7 +202,16 @@ public class TopTrumpsRESTAPI {
 		String json = oWriter.writeValueAsString(topTrumps);
 		return json;
 	}//==============play-round-end
-	
+
+//===================SHOW NUMBER OF CARDS IN HAND=============
+	@GET
+	@Path("/cardInHand")
+	public String cardInHand(@QueryParam("num") int playerPosition) throws IOException{
+		int cardInHand = deck.getPlayers().get(playerPosition).getHand().size();
+		String json = oWriter.writeValueAsString(cardInHand);
+		return json;
+	}//===========card-hand-end
+
 //===================LOAD STATISTICS==============
 /**
  * The method up dates the database variables ready for

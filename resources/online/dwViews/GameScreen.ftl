@@ -192,10 +192,10 @@
 			}
 			
 			function ShowCardInHand(cardLeft){document.getElementById("cardLeft").innerHTML = "Cards left:" + cardLeft;}
-			function ShowCardInHand1(cardLeft1){document.getElementById("cardLeft1").innerHTML = "Cards left:" + cardLeft1;}
-			function ShowCardInHand2(cardLeft2){document.getElementById("cardLeft2").innerHTML = "Cards left:" + cardLeft2;}
-			function ShowCardInHand3(cardLeft3){document.getElementById("cardLeft3").innerHTML = "Cards left:" + cardLeft3;}
-			function ShowCardInHand4(cardLeft4){document.getElementById("cardLeft4").innerHTML = "Cards left:" + cardLeft4;}
+			function ShowCardInHand1(cardLeft1){document.getElementById("cardLeft1").innerHTML = "Cards left: " + cardLeft1;}
+			function ShowCardInHand2(cardLeft2){document.getElementById("cardLeft2").innerHTML = "Cards left: " + cardLeft2;}
+			function ShowCardInHand3(cardLeft3){document.getElementById("cardLeft3").innerHTML = "Cards left: " + cardLeft3;}
+			function ShowCardInHand4(cardLeft4){document.getElementById("cardLeft4").innerHTML = "Cards left: " + cardLeft4;}
             //function playerOut() { document.getElementById("cardName").innerHTML = playerOut; }
             
 			// -----------------------------------------
